@@ -38,7 +38,7 @@
                         {% for label, messages in app.flashes %}
                             <div class="alert alert-{{ label }} mt-3">
                                 {% for message in messages %}
-                                    <p>{{ message | raw }}</p>
+                                    <p class="{{ loop.last ? "mb-0" : ""}}">{{ message | raw }}</p>
                                 {% endfor %}
                             </div>
                         {% endfor %}
