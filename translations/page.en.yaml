@@ -1,0 +1,9 @@
+page:
+    form:
+        page:
+            title: Title of the page
+            slug: Link of the page
+            content: Content of the page
+            submit: Save
+
+            helpSlug: If you do not fill in this field, it will be filled in automatically.

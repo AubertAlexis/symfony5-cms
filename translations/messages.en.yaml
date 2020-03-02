@@ -23,3 +23,9 @@ dashboard:
     title: 
         title: Dashboard
         h1: Dashboard
+
+page:
+    title: 
+        title: Listing - Pages
+        h1: Pages
+        form: General informations

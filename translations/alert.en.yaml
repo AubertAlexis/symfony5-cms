@@ -10,3 +10,6 @@ alert:
             warning: Warning
 
             localeChange: To see the language changement, you need to logout and login.
+    page:
+        success:
+            edit: The page informations has been changed.

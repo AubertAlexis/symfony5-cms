@@ -10,3 +10,6 @@ alert:
             warning: Attention
 
             localeChange: Pour que le changement soit pris en compte il faut vous déconnecter et vous reconnecter.
+    page:
+        success:
+            edit: Les informations de la page ont bien été modifiées.

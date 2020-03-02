@@ -3,3 +3,4 @@ navigation:
     setting: Settings
     profile: Profile
     logout: Logout
+    page: Pages

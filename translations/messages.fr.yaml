@@ -23,3 +23,9 @@ dashboard:
     title: 
         title: Tableau de bord
         h1: Tableau de bord
+
+page:
+    title: 
+        title: Liste - Pages
+        h1: Pages
+        form: Informations générales

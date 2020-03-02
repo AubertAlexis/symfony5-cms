@@ -1,0 +1,9 @@
+page:
+    form:
+        page:
+            title: Titre de la page
+            slug: Lien de la page
+            content: Contenu de la page
+            submit: Sauvegarder
+
+            helpSlug: Si vous ne remplissez pas ce champ, il sera rempli automatiquement.

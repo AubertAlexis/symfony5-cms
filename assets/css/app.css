@@ -1,0 +1,16 @@
+/* bootstrap override */
+label.required:after { 
+    content:"*";
+    margin-left: 5px;
+    color: var(--red);
+}
+
+.topbar .fa-user {
+    font-size: 17px;
+}
+
+.btn.rounded.with-icon {
+    border-radius: 50%!important;
+    width: 40px!important;
+    height: 40px!important;
+}
