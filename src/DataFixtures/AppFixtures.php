@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -14,9 +15,15 @@ class AppFixtures extends Fixture
      */
     private $encoder;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    /**
+     * @var ContainerInterface $container
+     */
+    private $container;
+
+    public function __construct(UserPasswordEncoderInterface $encoder, ContainerInterface $container)
     {
         $this->encoder = $encoder;
+        $this->container = $container;
     }
 
 
@@ -30,6 +37,7 @@ class AppFixtures extends Fixture
         $user->setUsername("admin");
         $user->setRoles(["ROLE_ADMIN"]);
         $user->setPassword($this->encoder->encodePassword($user, "admin"));
+        $user->setLocale($this->container->getParameter('locale'));
 
         $manager->persist($user);
 

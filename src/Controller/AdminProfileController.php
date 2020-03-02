@@ -4,20 +4,30 @@ namespace App\Controller;
 
 use App\Form\PasswordUserType;
 use App\Form\UserType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("admin/")
  */
-class AdminProfilController extends AbstractController
+class AdminProfileController extends AbstractController
 {
     /**
-     * @Route("profil", name="admin_profil_edit")
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @Route("profil", name="admin_profile_edit")
      * 
      * @return Response
      */
@@ -33,17 +43,17 @@ class AdminProfilController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash("success", "Vos informations ont bien été modifiées.");
+            $this->addFlash("success", $this->translator->trans("alert.profile.success.edit", [], "alert"));
         }
 
-        return $this->render('admin/profil/edit.html.twig', [
+        return $this->render('admin/profile/edit.html.twig', [
             "user" => $user,
             "form" => $form->createView()
         ]);
     }
 
     /**
-     * @Route("profil/mot-de-passe", name="admin_profil_password")
+     * @Route("profil/mot-de-passe", name="admin_profile_password")
      * 
      * @return Response
      */
@@ -63,15 +73,15 @@ class AdminProfilController extends AbstractController
                 $user->setPassword($encoder->encodePassword($user, $data["newPassword"]["first"]));
 
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash("success", "Votre mot de passe a bien été mis à jour.");
+                $this->addFlash("success", $this->translator->trans("alert.profile.success.passwordReset", [], "alert"));
 
-                return $this->redirectToRoute("admin_profil_edit");
+                return $this->redirectToRoute("admin_profile_edit");
             }
 
-            $this->addFlash("danger", "Le mot de passe actuel est erroné, merci de le corriger.");
+            $this->addFlash("danger", $this->translator->trans("alert.profile.danger.passwordReset", [], "alert"));
         }
 
-        return $this->render('admin/profil/password.html.twig', [
+        return $this->render('admin/profile/password.html.twig', [
             "user" => $user,
             "form" => $form->createView()
         ]);

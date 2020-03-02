@@ -63,6 +63,11 @@ class User implements UserInterface
     protected $resetToken;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $locale;
+
+    /**
      * Give the full name of user
      *
      * @return string
@@ -179,5 +184,17 @@ class User implements UserInterface
     public function setResetToken(?string $resetToken): void
     {
         $this->resetToken = $resetToken;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }

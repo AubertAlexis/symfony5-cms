@@ -1,0 +1,5 @@
+navigation:
+    dashboard: Dashboard
+    setting: Settings
+    profile: Profile
+    logout: Logout

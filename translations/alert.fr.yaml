@@ -1,0 +1,12 @@
+alert:
+    profile:
+        success:
+            edit: Vos informations ont bien été modifiées.
+            passwordReset: Votre mot de passe a bien été mis à jour.
+        danger:
+            passwordReset: Le mot de passe actuel est erroné, merci de le corriger.
+    setting:
+        warning:
+            warning: Attention
+
+            localeChange: Pour que le changement soit pris en compte il faut vous déconnecter et vous reconnecter.

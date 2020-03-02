@@ -1,0 +1,7 @@
+modal:
+    logout:
+        title: Êtes-vous sûr de vouloir vous déconnecter ?
+        content: Sélectionner "Déconnexion" seulement si vous êtes sûr de vouloir vous déconnecter.
+        buttons:
+            cancel: Annuler
+            action: Déconnexion

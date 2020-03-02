@@ -1,0 +1,20 @@
+user:
+    form:
+        profile:
+            firstName: First Name
+            lastName: Last Name
+            username: Username
+            email: Email
+            submit: Save
+        resetPassword:
+            password: Current password
+            newPassword: 
+                first: New password
+                second: Confirm the new password
+            submit: Reset
+        locale:
+            locale: Change the language of the administration area
+            localeChoices:
+                french: French
+                english: English
+            submit: Save

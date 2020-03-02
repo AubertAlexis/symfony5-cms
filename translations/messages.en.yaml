@@ -1,0 +1,25 @@
+profile:
+    title: 
+        title: Edit - Profile
+        h1: Edit your information
+        form: General informations
+
+    button:
+        resetPassword: Change my password
+
+profileResetPassword:
+    title: 
+        title: Password - Profile
+        h1: Reset your password
+        form: Reset
+
+setting:
+    title:
+        title: Edit - Settings 
+        h1: Edit administration settings
+        localeForm: Language setting
+
+dashboard:
+    title: 
+        title: Dashboard
+        h1: Dashboard

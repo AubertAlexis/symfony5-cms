@@ -1,0 +1,21 @@
+user:
+    form:
+        profile:
+            firstName: Prénom
+            lastName: Nom
+            username: Nom d'utilisateur
+            email: Adresse mail
+            submit: Sauvegarder
+        resetPassword:
+            password: Mot de passe actuel
+            newPassword: 
+                first: Nouveau mot de passe
+                second: Confirmer le nouveau mot de passe
+            submit: Réinitialiser
+        locale:
+            locale: Changer le langage de l'espace d'administration
+            localeChoices:
+                french: Français
+                english: Anglais
+            submit: Sauvegarder
+    
