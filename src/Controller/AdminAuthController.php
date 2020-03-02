@@ -17,10 +17,10 @@ class AdminAuthController extends AbstractController
      */
     public function login(AuthenticationUtils $utils) : Response
     {
-           return $this->render('admin/auth/login.html.twig', [
-                'error' => $utils->getLastAuthenticationError() !== null,
-                'username' => $utils->getLastUsername()
-           ]);
+        return $this->render('admin/auth/login.html.twig', [
+            'error' => $utils->getLastAuthenticationError() !== null,
+            'username' => $utils->getLastUsername()
+        ]);
     }
 
     /**
