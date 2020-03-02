@@ -1,16 +1,16 @@
 {% extends "admin/base.html.twig" %}
 
-{% block title "Édition - Profil" %}
+{% block title "profile.title.title"|trans %}
 
-{% block title_h1 "Éditer vos informations" %}
+{% block title_h1 "profile.title.h1"|trans %}
 
 {% block body %}
     <div class="card shadow mt-3">
         <div class="card-header d-flex align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Informations générales</h5>
-            <a href="{{ path('admin_profil_password') }}" class="btn btn-danger btn-icon-split btn-sm ml-auto">
+            <h6 class="m-0 font-weight-bold text-primary">{{ "profile.title.form"|trans }}</h5>
+            <a href="{{ path('admin_profile_password') }}" class="btn btn-danger btn-icon-split btn-sm ml-auto">
                 <span class="icon text-white-50"><i class="fas fa-key"></i></span>
-                <span class="text">Modifier mon mot de passe</span>
+                <span class="text">{{ "profile.button.resetPassword"|trans }}</span>
             </a>
         </div>
         <div class="card-body">

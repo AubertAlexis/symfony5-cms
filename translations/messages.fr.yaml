@@ -1,0 +1,25 @@
+profile:
+    title:
+        title: Édition - Profil 
+        h1: Éditer vos informations
+        form: Informations générales
+
+    button:
+        resetPassword: Modifier mon mot de passe
+
+profileResetPassword:
+    title: 
+        title: Mot de passe - Profil
+        h1: Réinitialiser votre mot de passe
+        form: Réinitialisation
+
+setting:
+    title:
+        title: Édition - Paramètres 
+        h1: Modifier les paramètres d'administration
+        localeForm: Paramètre de langue
+
+dashboard:
+    title: 
+        title: Tableau de bord
+        h1: Tableau de bord

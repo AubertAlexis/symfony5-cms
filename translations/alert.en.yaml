@@ -1,0 +1,12 @@
+alert:
+    profile:
+        success:
+            edit: Your information has been changed.
+            passwordReset: Your password has been successfully updated.
+        danger:
+            passwordReset: The current password is wrong, please correct it.
+    setting:
+        warning:
+            warning: Warning
+
+            localeChange: To see the language changement, you need to logout and login.
