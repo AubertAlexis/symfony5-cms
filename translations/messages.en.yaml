@@ -29,3 +29,6 @@ page:
         title: Listing - Pages
         h1: Pages
         form: General informations
+
+    buttons:
+        add: Add a page

@@ -14,3 +14,8 @@ label.required:after {
     width: 40px!important;
     height: 40px!important;
 }
+
+.form-group #page_slug {
+    width: auto;
+    margin-left: 10px;
+}

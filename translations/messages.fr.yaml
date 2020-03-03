@@ -29,3 +29,6 @@ page:
         title: Liste - Pages
         h1: Pages
         form: Informations générales
+
+    buttons:
+        add: Ajouter une page
