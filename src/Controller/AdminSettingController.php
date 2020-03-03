@@ -34,6 +34,8 @@ class AdminSettingController extends AbstractController
     {
         $user = $this->getUser();
 
+        $this->denyAccessUnlessGranted("USER_ADMIN", $user);
+
         $localeForm = $this->createForm(LocaleType::class, $user);
         $localeForm->handleRequest($request);
 

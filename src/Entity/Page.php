@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 /**
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
  */
 class Page
@@ -22,7 +25,7 @@ class Page
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
 
@@ -40,6 +43,22 @@ class Page
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setSlugAndUpdatedAt()
+    {
+        if (empty($this->slug)) $this->setSlug((new Slugify())->slugify($this->title));
+        
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -63,7 +82,7 @@ class Page
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
+    public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
 
@@ -87,22 +106,8 @@ class Page
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 }

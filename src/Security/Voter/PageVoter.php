@@ -2,19 +2,18 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\User;
+use App\Entity\Page;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserVoter extends Voter
+class PageVoter extends Voter
 {
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, [
-            'USER_PROFIL',
-            'USER_ADMIN'
-        ]) && $subject instanceof User;
+            'PAGE_EDIT'
+        ]) && ($subject instanceof Page || $subject === null);
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -26,11 +25,8 @@ class UserVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'USER_ADMIN':
+            case 'PAGE_EDIT':
                 return in_array("ROLE_ADMIN", $user->getRoles());
-                break;
-            case 'USER_PROFIL':
-                return in_array("ROLE_ADMIN", $user->getRoles()) && $user == $subject;
                 break;
         }
 

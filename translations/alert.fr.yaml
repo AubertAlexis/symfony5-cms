@@ -13,3 +13,4 @@ alert:
     page:
         success:
             edit: Les informations de la page ont bien été modifiées.
+            add: La page a bien été ajoutée.

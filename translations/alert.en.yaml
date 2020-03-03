@@ -13,3 +13,4 @@ alert:
     page:
         success:
             edit: The page informations has been changed.
+            add: The page has been added.

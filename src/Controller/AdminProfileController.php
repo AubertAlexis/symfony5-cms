@@ -29,6 +29,7 @@ class AdminProfileController extends AbstractController
     /**
      * @Route("profil", name="admin_profile_edit")
      * 
+     * @param Request $request
      * @return Response
      */
     public function edit(Request $request) : Response
@@ -55,6 +56,8 @@ class AdminProfileController extends AbstractController
     /**
      * @Route("profil/mot-de-passe", name="admin_profile_password")
      * 
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
      * @return Response
      */
     public function passwordReset(Request $request, UserPasswordEncoderInterface $encoder) : Response

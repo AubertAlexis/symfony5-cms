@@ -1,4 +1,5 @@
 {% extends "admin/base.html.twig" %}
+{% form_theme form _self %}
 
 {% block title "page.title.title"|trans %}
 
@@ -19,7 +20,7 @@
 			</div>
 
 			<div class="row">
-				<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="col-lg-8 col-md-12 col-sm-12">
 					{{ form_row(form.slug) }}
 				</div>
 			</div>
@@ -42,4 +43,11 @@
 	</div>
 
 
+{% endblock %}
+
+{% block _page_slug_widget %}
+	<div class="d-flex align-items-center mb-2">
+		<p class="font-weight-bold mb-0">{{ app.request.getSchemeAndHttpHost() ~ "/page/" }}</p>
+		{{ form_widget(form) }}
+	</div>
 {% endblock %}
