@@ -1,0 +1,3 @@
+validators:
+    page:
+        slug: Le lien est déjà utilisé pour une autre page, vérifier le lien ou le titre.
