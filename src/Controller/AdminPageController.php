@@ -21,9 +21,15 @@ class AdminPageController extends AbstractController
      */
     private $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    /**
+     * @var PageRepository
+     */
+    private $pageRepository;
+
+    public function __construct(TranslatorInterface $translator, PageRepository $pageRepository)
     {
         $this->translator = $translator;
+        $this->pageRepository = $pageRepository;
     }
 
     /**
@@ -32,12 +38,12 @@ class AdminPageController extends AbstractController
      * @param PageRepository $pageRepository
      * @return Response
      */
-    public function index(PageRepository $pageRepository): Response
+    public function index(): Response
     {
         $this->denyAccessUnlessGranted("USER_ADMIN", $this->getUser());
 
         return $this->render('admin/page/index.html.twig', [
-            'pages' => $pageRepository->findAll()
+            'pages' => $this->pageRepository->findAll()
         ]);
     }
 

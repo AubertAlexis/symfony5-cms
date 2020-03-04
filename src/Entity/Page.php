@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use App\Validator\Constraints as CustomAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 /**
  * @ORM\HasLifecycleCallbacks()
@@ -25,12 +25,13 @@ class Page
     private $title;
 
     /**
+     * @CustomAssert\UniqSlug(message="validators.page.slug")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", length=65535)
      */
     private $content;
 
