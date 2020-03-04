@@ -40,9 +40,9 @@
                             <td>{{ page.createdAt | date("d-m-Y H:i") }}</td>
                             <td>{{ page.updatedAt | date("d-m-Y H:i") }}</td>
                             <td>
-                                {# <a href="{{ path("admin_page_show", {"id": page.id}) }}" class="btn btn-info rounded with-icon">
+                                <a href="{{ path("page_index", {"slug": page.slug}) }}" class="btn btn-info rounded with-icon" target="_blank">
                                     <i class="far fa-eye"></i>
-                                </a> #}
+                                </a>
 								<a href="{{ path("admin_page_edit", {"id": page.id}) }}" class="btn btn-primary rounded with-icon">
 									<i class="far fa-edit"></i>
 								</a>
