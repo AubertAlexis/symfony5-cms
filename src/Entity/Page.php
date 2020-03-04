@@ -31,7 +31,7 @@ class Page
     private $slug;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", length=65535)
      */
     private $content;
 

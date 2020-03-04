@@ -1,5 +1,5 @@
 {% extends "admin/base.html.twig" %}
-{% form_theme form _self %}
+{% form_theme form "admin/form/_page.html.twig" %}
 
 {% block title "page.title.title"|trans %}
 
@@ -12,7 +12,7 @@
 		</div>
 		<div class="card-body">
 			{{ form_start(form) }}
-			
+
 			<div class="row">
 				<div class="col-lg-3 col-md-6 col-sm-12">
 					{{ form_row(form.title) }}
@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-lg-6 col-md-8 col-sm-12">
+				<div class="col-lg-12">
 					{{ form_row(form.content) }}
 				</div>
 			</div>
@@ -42,12 +42,11 @@
 		</div>
 	</div>
 
-
 {% endblock %}
 
-{% block _page_slug_widget %}
-	<div class="d-flex align-items-center mb-2">
-		<p class="font-weight-bold mb-0">{{ app.request.getSchemeAndHttpHost() ~ "/page/" }}</p>
-		{{ form_widget(form) }}
-	</div>
+{% block javascripts %}
+	<link href="{{ asset('build/js/skins/content/default/content.min.css') }}"></link>
+	<link href="{{ asset('build/js/skins/ui/oxide/skin.min.css') }}"></link>
+	
+	{{ encore_entry_script_tags("tinymce") }}
 {% endblock %}
