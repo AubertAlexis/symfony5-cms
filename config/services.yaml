@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    uploads_directory: '%kernel.project_dir%/public/uploads'
+    uploads_name_directory: '/uploads'
 
 services:
     # default configuration for services in *this* file
@@ -24,5 +26,7 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+        
+    App\Listeners\PageListener:
+        tags:
+            - { name: doctrine.orm.entity_listener }
