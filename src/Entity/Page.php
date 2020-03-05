@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Validator\Constraints as CustomAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\HasLifecycleCallbacks()
+ * @ORM\EntityListeners({"App\Listeners\PageListener"})
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
  */
 class Page
@@ -46,6 +49,11 @@ class Page
     private $updatedAt;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Asset", mappedBy="page")
+     */
+    private $assets;
+
+    /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
@@ -59,6 +67,7 @@ class Page
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->assets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -110,5 +119,36 @@ class Page
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return Collection|Asset[]
+     */
+    public function getAssets(): Collection
+    {
+        return $this->assets;
+    }
+
+    public function addAsset(Asset $asset): self
+    {
+        if (!$this->assets->contains($asset)) {
+            $this->assets[] = $asset;
+            $asset->setPage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAsset(Asset $asset): self
+    {
+        if ($this->assets->contains($asset)) {
+            $this->assets->removeElement($asset);
+            // set the owning side to null (unless already changed)
+            if ($asset->getPage() === $this) {
+                $asset->setPage(null);
+            }
+        }
+
+        return $this;
     }
 }

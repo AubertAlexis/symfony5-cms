@@ -11,32 +11,31 @@
 			<h6 class="m-0 font-weight-bold text-primary">{{ "page.title.form"|trans }}</h5>
 		</div>
 		<div class="card-body">
-			{{ form_start(form) }}
-
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-sm-12">
-					{{ form_row(form.title) }}
+			{{ form_start(form, {'attr': {'id': 'text_editor', 'data-page-id': app.request.attributes.get('id') }}) }}
+				<div class="row">
+					<div class="col-lg-3 col-md-6 col-sm-12">
+						{{ form_row(form.title) }}
+					</div>
 				</div>
-			</div>
 
-			<div class="row">
-				<div class="col-lg-8 col-md-12 col-sm-12">
-					{{ form_row(form.slug) }}
+				<div class="row">
+					<div class="col-lg-8 col-md-12 col-sm-12">
+						{{ form_row(form.slug) }}
+					</div>
 				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					{{ form_row(form.content) }}
+				<div class="row">
+					<div class="col-lg-12">
+						{{ form_row(form.content) }}
+					</div>
 				</div>
-			</div>
 
-			<div class="row">
-				<div class="col-12 text-center mt-3">
-					{{ form_row(form.submit) }}
+				<div class="row">
+					<div class="col-12 text-center mt-3">
+						{{ form_row(form.submit) }}
+					</div>
 				</div>
-			</div>
 
-			{{ form_row(form._token) }}
+				{{ form_row(form._token) }}
 
 			{{ form_end(form, {"render_rest": false}) }}
 		</div>
@@ -45,8 +44,8 @@
 {% endblock %}
 
 {% block javascripts %}
-	<link href="{{ asset('build/js/skins/content/default/content.min.css') }}"></link>
-	<link href="{{ asset('build/js/skins/ui/oxide/skin.min.css') }}"></link>
+	<link href="{{ asset('build/js/skins/content/default/content.min.css.map') }}"></link>
+	<link href="{{ asset('build/js/skins/ui/oxide/skin.min.css.map') }}"></link>
 	
 	{{ encore_entry_script_tags("tinymce") }}
 {% endblock %}
