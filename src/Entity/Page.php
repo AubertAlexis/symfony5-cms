@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\HasLifecycleCallbacks()
- * @ORM\EntityListeners({"App\Listeners\PageListener"})
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
  */
 class Page
