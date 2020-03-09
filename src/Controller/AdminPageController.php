@@ -64,7 +64,7 @@ class AdminPageController extends AbstractController
      * @param Page $page
      * @return Response
      */
-    public function edit(Page $page = null): Response
+    public function edit(Page $page = null, FileManager $fileManager): Response
     {
         $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
 
@@ -78,6 +78,24 @@ class AdminPageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             !$editMode && $this->getDoctrine()->getManager()->persist($page);
+
+            // TEST
+            $regex = '/uploads\/[a-zA-Z0-9]+\.[a-z]{3,4}/';
+            $matches = [];
+
+            if (preg_match_all($regex, $page->getContent(), $matches)) {
+                $filenames = array_map(function ($match) {
+                    return basename($match);
+                }, $matches[0]);
+
+                $assets = $this->getDoctrine()->getManager()->getRepository(Asset::class)->findAssetToRemove($filenames, $page->getId());
+
+                foreach ($assets as $asset) {
+                    $this->getDoctrine()->getManager()->remove($asset);
+                    $fileManager->removeFile($asset->getFileName());
+                }
+            }
+            // FIN TEST 
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.page.success.{$modeName}", [], "alert"));

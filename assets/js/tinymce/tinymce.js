@@ -6,11 +6,9 @@ import "tinymce/plugins/code";
 
 let form = document.querySelector("#text_editor");
 
-let language = document.querySelector("#userLocale").textContent == "fr" ? "fr_FR" : document.querySelector("#userLocale").textContent
-
 tinymce.init({
     selector: "textarea",
-    language: language,
+    language: document.querySelector("#userLocale").textContent,
     plugins: 'image code',
     menubar: false,
     height: '480',

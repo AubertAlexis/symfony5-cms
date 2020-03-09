@@ -25,12 +25,13 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('tinymce', './assets/js/tinymce.js')
+    .addEntry('tinymce', './assets/js/tinymce/tinymce.js')
     .addEntry('datatable_page', './assets/js/datatable/page.js')
 
     .addPlugin(new CopyWebpackPlugin([
         // Copy the skins from tinymce to the build/skins directory
         { from: 'node_modules/tinymce/skins', to: 'skins' },
+        { from: 'assets/js/tinymce/langs', to: 'langs' }
     ]))
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
