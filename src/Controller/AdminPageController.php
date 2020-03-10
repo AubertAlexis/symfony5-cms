@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Asset;
 use App\Entity\Page;
 use App\Form\PageType;
+use App\Repository\AssetRepository;
 use App\Repository\PageRepository;
 use App\Services\FileManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,11 +36,36 @@ class AdminPageController extends AbstractController
      */
     private $request;
 
-    public function __construct(TranslatorInterface $translator, PageRepository $pageRepository, RequestStack $requestStack)
+    /**
+     * @var FileManager
+     */
+    private $fileManager;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $manager;
+
+    /**
+     * @var AssetRepository
+     */
+    private $assetRepository;
+
+    public function __construct(
+        TranslatorInterface $translator, 
+        PageRepository $pageRepository, 
+        RequestStack $requestStack, 
+        FileManager $fileManager,
+        AssetRepository $assetRepository,
+        EntityManagerInterface $manager
+    )
     {
         $this->translator = $translator;
         $this->pageRepository = $pageRepository;
         $this->request = $requestStack->getCurrentRequest();
+        $this->fileManager = $fileManager;
+        $this->manager = $manager;
+        $this->assetRepository = $assetRepository;
     }
 
     /**
@@ -60,11 +87,11 @@ class AdminPageController extends AbstractController
      * @Route("nouveau", name="admin_page_add")
      * @Route("{id}", name="admin_page_edit", requirements={"id": "\d+"})
      * 
-     * @param Request $request
      * @param Page $page
+     * @param AssetRepository $assetRepository
      * @return Response
      */
-    public function edit(Page $page = null, FileManager $fileManager): Response
+    public function edit(Page $page = null): Response
     {
         $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
 
@@ -77,26 +104,9 @@ class AdminPageController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            !$editMode && $this->getDoctrine()->getManager()->persist($page);
-
-            // TEST
-            $regex = '/uploads\/[a-zA-Z0-9]+\.[a-z]{3,4}/';
-            $matches = [];
-
-            if (preg_match_all($regex, $page->getContent(), $matches)) {
-                $filenames = array_map(function ($match) {
-                    return basename($match);
-                }, $matches[0]);
-
-                $assets = $this->getDoctrine()->getManager()->getRepository(Asset::class)->findAssetToRemove($filenames, $page->getId());
-
-                foreach ($assets as $asset) {
-                    $this->getDoctrine()->getManager()->remove($asset);
-                    $fileManager->removeFile($asset->getFileName());
-                }
-            }
-            // FIN TEST 
-            $this->getDoctrine()->getManager()->flush();
+            !$editMode && $this->manager->persist($page);
+            $this->manageAssets($page);
+            $this->manager->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.page.success.{$modeName}", [], "alert"));
 
@@ -113,23 +123,53 @@ class AdminPageController extends AbstractController
      *
      * @Route("image/{id}", name="admin_page_upload_image", requirements={"id": "\d+"})
      * 
-     * @param FileManager $fileManager
+     * @param Page $page
      * @return Response
      */
-    public function uploadImage(Page $page, FileManager $fileManager): Response
+    public function uploadImage(Page $page): Response
     {
-        $file = $fileManager->uploadFile($this->request->files->get('file'));
+        $file = $this->fileManager->uploadFile($this->request->files->get('file'));
 
         $asset = new Asset();
         $asset->setFileName($file['filename']);
         $asset->setPage($page);
 
-        $this->getDoctrine()->getManager()->persist($asset);
-        $this->getDoctrine()->getManager()->flush();
+        $this->manager->persist($asset);
+        $this->manager->flush();
 
         return $this->json([
                 'location' => $file['path']
             ]
         );
+    }
+
+    /**
+     * Manage assets from the content
+     *
+     * @param Page $page
+     * @return void
+     */
+    public function manageAssets(Page $page): void
+    {
+        $regex = '/uploads\/[a-zA-Z0-9]+\.[a-z]{3,4}/';
+        $matches = [];
+
+        if (preg_match_all($regex, $page->getContent(), $matches)) {
+            $filenames = array_map(function ($match) {
+                return basename($match);
+            }, $matches[0]);
+
+            $assets = $this->assetRepository->findAssetToRemove($filenames, $page->getId());
+
+            foreach ($assets as $asset) {
+                $this->manager->remove($asset);
+                $this->fileManager->removeFile($asset->getFileName());
+            }
+        } else if ($page->getAssets()->count() > 0 && $matches) {
+            foreach ($page->getAssets() as $asset) {
+                $this->manager->remove($asset);
+                $this->fileManager->removeFile($asset->getFileName());
+            }
+        }
     }
 }

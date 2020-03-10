@@ -33,7 +33,7 @@ class Page
     private $slug;
 
     /**
-     * @ORM\Column(type="text", length=65535)
+     * @ORM\Column(type="text", length=65535, nullable=true)
      */
     private $content;
 
@@ -103,7 +103,7 @@ class Page
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 

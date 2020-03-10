@@ -30,8 +30,7 @@ Encore
 
     .addPlugin(new CopyWebpackPlugin([
         // Copy the skins from tinymce to the build/skins directory
-        { from: 'node_modules/tinymce/skins', to: 'skins' },
-        { from: 'assets/js/tinymce/langs', to: 'langs' }
+        { from: 'node_modules/tinymce/skins', to: 'skins' }
     ]))
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

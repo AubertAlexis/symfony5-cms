@@ -23,10 +23,10 @@ class PageType extends AbstractType
                 "required" => false,
                 "help" => "page.form.page.helpSlug"
             ]))
-            ->add('content', TextareaType::class, $this->setOptions('page.%name%'))
+            ->add('content', TextareaType::class, $this->setOptions('page.%name%', [
+                'required' => false
+            ]))
             ->add('submit', SubmitType::class, $this->setOptions('page.%name%'))
-            // ->add('createdAt')
-            // ->add('updatedAt')
         ;
     }
 
