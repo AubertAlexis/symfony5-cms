@@ -126,13 +126,14 @@ class AdminPageController extends AbstractController
      * @param Page $page
      * @return Response
      */
-    public function uploadImage(Page $page): Response
+    public function uploadImage(Page $page = null): Response
     {
         $file = $this->fileManager->uploadFile($this->request->files->get('file'));
 
         $asset = new Asset();
         $asset->setFileName($file['filename']);
-        $asset->setPage($page);
+        
+        if ($page) $asset->setPage($page);
 
         $this->manager->persist($asset);
         $this->manager->flush();
