@@ -1,6 +1,11 @@
 {% extends "admin/base.html.twig" %}
 {% form_theme form "admin/form/_page.html.twig" %}
 
+{% block stylesheets %}
+	<link href="{{ asset('build/skins/content/default/content.min.css') }}"></link>
+	<link href="{{ asset('build/skins/ui/oxide/skin.min.css') }}"></link>
+{% endblock %}
+
 {% block title "page.title.title"|trans %}
 
 {% block title_h1 "page.title.h1"|trans %}
@@ -44,8 +49,5 @@
 {% endblock %}
 
 {% block javascripts %}
-	<link href="{{ asset('build/js/skins/content/default/content.min.css.map') }}"></link>
-	<link href="{{ asset('build/js/skins/ui/oxide/skin.min.css.map') }}"></link>
-	
 	{{ encore_entry_script_tags("tinymce") }}
 {% endblock %}
