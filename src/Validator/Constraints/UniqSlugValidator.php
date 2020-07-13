@@ -2,9 +2,12 @@
 
 namespace App\Validator\Constraints;
 
+use App\Entity\Page;
 use App\Repository\PageRepository;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -22,6 +25,10 @@ class UniqSlugValidator extends ConstraintValidator
      */
     private $requestStack;
 
+    /**
+     * @param RequestStack $requestStack
+     * @param PageRepository $pageRepository
+     */
     public function __construct(RequestStack $requestStack, PageRepository $pageRepository)
     {
         $this->pageRepository = $pageRepository;
@@ -38,14 +45,22 @@ class UniqSlugValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        $page = $this->requestStack->getCurrentRequest()->get('page');
+        $editPageId = $this->requestStack->getCurrentRequest()->attributes->get('id') != null ? (int) $this->requestStack->getCurrentRequest()->attributes->get('id') : null;
 
-        $pageExisting = (null === $value) ? $this->pageRepository->findOneBySlug((new Slugify())->slugify($page->getTitle())) : $this->pageRepository->findOneBySlug($page->getSlug());
+        $page = $this->requestStack->getCurrentRequest()->request->get('page');
+
+        $pageExisting = (null === $value) ? $this->pageRepository->findOneBySlug((new Slugify())->slugify($page['title'])) : $this->pageRepository->findOneBySlug($page['slug']);
         
-        if (null !== $pageExisting && $page->getId() != $pageExisting->getId()) {
-            $this->context->buildViolation($constraint->message)
-                ->addViolation();
+        if (null !== $editPageId && null !== $pageExisting) {
+            if ($editPageId != $pageExisting->getId()) {
+                $this->context->buildViolation($constraint->message)
+                    ->addViolation();
+            }
+        } else {
+            if (null !== $pageExisting) {
+                $this->context->buildViolation($constraint->message)
+                    ->addViolation();
+            }
         }
-        
     }
 }

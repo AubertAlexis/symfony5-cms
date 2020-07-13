@@ -6,7 +6,10 @@ use App\Form\LocaleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -30,7 +33,7 @@ class AdminSettingController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request, TokenStorageInterface $tokenStorage, SessionInterface $session): Response
     {
         $user = $this->getUser();
 
@@ -41,8 +44,10 @@ class AdminSettingController extends AbstractController
 
         if ($localeForm->isSubmitted() && $localeForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            
+            $this->addFlash("success", "{$this->translator->trans("alert.setting.success.localeChange", [], "alert", $user->getLocale())}");
 
-            $this->addFlash("warning", "<span class='font-weight-bold mr-2'><i class='fas fa-exclamation-triangle'></i></span>{$this->translator->trans("alert.setting.warning.warning", [], "alert")} </br>{$this->translator->trans("alert.setting.warning.localeChange", [], "alert")}");
+            return $this->redirectToRoute("admin_dashboard_index");
         }
 
         return $this->render('admin/setting/edit.html.twig', [

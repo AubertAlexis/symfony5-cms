@@ -2,21 +2,21 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Page;
+use App\Entity\Nav;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class PageVoter extends Voter
+class NavVoter extends Voter
 {
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, [
-            'PAGE_LIST',
-            'PAGE_ADD',
-            'PAGE_EDIT',
-            'PAGE_DELETE'
-        ]) && ($subject instanceof Page || $subject === null);
+            'NAV_LIST',
+            'NAV_ADD',
+            'NAV_EDIT',
+            'NAV_DELETE'
+        ]) && ($subject instanceof Nav || $subject === null);
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -28,16 +28,16 @@ class PageVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'PAGE_LIST':
+            case 'NAV_LIST':
                 return in_array("ROLE_ADMIN", $user->getRoles());
                 break;
-            case 'PAGE_ADD':
+            case 'NAV_ADD':
                 return in_array("ROLE_ADMIN", $user->getRoles());
                 break;
-            case 'PAGE_EDIT':
+            case 'NAV_EDIT':
                 return in_array("ROLE_ADMIN", $user->getRoles());
                 break;
-            case 'PAGE_DELETE':
+            case 'NAV_DELETE':
                 return in_array("ROLE_ADMIN", $user->getRoles());
                 break;
         }

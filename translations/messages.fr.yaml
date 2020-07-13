@@ -20,15 +20,64 @@ setting:
         localeForm: Paramètre de langue
 
 dashboard:
-    title: 
+    list: 
         title: Tableau de bord
         h1: Tableau de bord
 
 page:
-    title: 
+    list:
         title: Liste - Pages
-        h1: Pages
-        form: Informations générales
+        h1: Liste des pages
 
-    buttons:
-        add: Ajouter une page
+    add:
+        title: Ajout - Pages
+        h1: Nouvelle page
+
+
+    edit:
+        title: Édition - Pages
+        h1: Modifier la page
+
+    table:
+        title: Pages
+
+nav:
+    list:
+        title: Liste - Navigations
+        h1: Liste des navigations
+
+    add:
+        title: Ajout - Navigations
+        h1: Nouvelle navigation
+
+
+    edit:
+        title: Édition - Navigations
+        h1: Modifier la navigation
+
+    table:
+        title: Navigations
+
+form:
+    title: 
+        content: Informations générales
+        aside: Informations complémentaires
+
+button: 
+    add: Ajouter
+
+table:
+    title: Titre
+    slug: Url
+    visible: Visible ? 
+    createdAt: Créé le
+    updatedAt: Modifié le
+    action: Actions
+
+    keyname: Clé
+    numberElement: Nombre d'élément
+
+tooltip:
+    edit: Éditer
+    remove: Supprimer
+    view: Visualiser

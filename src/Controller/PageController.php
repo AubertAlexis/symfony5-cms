@@ -6,6 +6,7 @@ use App\Entity\Page;
 use App\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -32,6 +33,8 @@ class PageController extends AbstractController
      */
     public function index(Page $page): Response
     {
+        if (!$page->getEnabled()) throw new NotFoundHttpException();
+
         return $this->render('page/index.html.twig', compact('page'));
     }
 }

@@ -5,15 +5,17 @@ import "tinymce/plugins/image";
 import "tinymce/plugins/code";
 
 let form = document.querySelector("#text_editor");
+let currentLanguage = document.querySelector("#userLocale").textContent == "fr" ? "fr_FR" : "en";
 
 tinymce.init({
     selector: "textarea",
-    language: document.querySelector("#userLocale").textContent,
+    language: currentLanguage,
     plugins: 'image code',
     menubar: false,
     height: '480',
-    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | image | code',
+    toolbar: 'undo redo | bold italic underline strikethrough forecolor backcolor | fontselect fontsizeselect  | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | image | styleselect | code',
     toolbar_sticky: true,
+    fontsize_formats: "8px 10px 12px 14px 18px 24px 36px 48px 56px 64px 72px 80px 88px 92px 100px 110px 120px",
     branding: false,
     automatic_uploads: true,
     images_upload_url: `image/${+form.dataset.pageId}`,

@@ -3,7 +3,9 @@ page:
         page:
             title: Titre de la page
             slug: Lien de la page
+            enabled: Rendre la page visible ?
             content: Contenu de la page
             submit: Sauvegarder
 
             helpSlug: Si vous ne remplissez pas ce champ, il sera rempli automatiquement.
+            helpEnabled: En rendant la page visible, les utilisateurs pourront y accéder.

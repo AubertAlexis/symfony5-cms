@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Page;
 use App\Traits\FormTrait;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,6 +23,10 @@ class PageType extends AbstractType
             ->add('slug', TextType::class, $this->setOptions('page.%name%', [
                 "required" => false,
                 "help" => "page.form.page.helpSlug"
+            ]))
+            ->add('enabled', CheckboxType::class, $this->setOptions('page.%name%', [
+                "required" => false,
+                "help" => "page.form.page.helpEnabled"
             ]))
             ->add('content', TextareaType::class, $this->setOptions('page.%name%', [
                 'required' => false

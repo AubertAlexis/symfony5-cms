@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use App\Validator\Constraints as CustomAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
 
 /**
  * @ORM\HasLifecycleCallbacks()
@@ -23,17 +25,32 @@ class Page
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="validators.notNull")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 255,
+     *      minMessage = "validators.length.min",
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $title;
 
     /**
      * @CustomAssert\UniqSlug(message="validators.page.slug")
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
 
     /**
      * @ORM\Column(type="text", length=65535, nullable=true)
+     * @Assert\Length(
+     *      max = 65535,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $content;
 
@@ -53,6 +70,16 @@ class Page
     private $assets;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled;
+
+    /**
+     * @ORM\OneToMany(targetEntity=NavLink::class, mappedBy="page")
+     */
+    private $navLinks;
+
+    /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
@@ -67,6 +94,7 @@ class Page
     {
         $this->createdAt = new \DateTime();
         $this->assets = new ArrayCollection();
+        $this->navLinks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +173,49 @@ class Page
             // set the owning side to null (unless already changed)
             if ($asset->getPage() === $this) {
                 $asset->setPage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NavLink[]
+     */
+    public function getNavLinks(): Collection
+    {
+        return $this->navLinks;
+    }
+
+    public function addNavLink(NavLink $navLink): self
+    {
+        if (!$this->navLinks->contains($navLink)) {
+            $this->navLinks[] = $navLink;
+            $navLink->setPage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNavLink(NavLink $navLink): self
+    {
+        if ($this->navLinks->contains($navLink)) {
+            $this->navLinks->removeElement($navLink);
+            // set the owning side to null (unless already changed)
+            if ($navLink->getPage() === $this) {
+                $navLink->setPage(null);
             }
         }
 

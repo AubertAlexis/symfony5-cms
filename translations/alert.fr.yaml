@@ -9,8 +9,15 @@ alert:
         warning:
             warning: Attention
 
-            localeChange: Pour que le changement soit pris en compte il faut vous déconnecter et vous reconnecter.
+        success:
+            localeChange: La langue a été modifiée avec succès.
     page:
         success:
             edit: Les informations de la page ont bien été modifiées.
             add: La page a bien été ajoutée.
+            delete: La page a bien été supprimée.
+    nav:
+        success:
+            edit: Les informations de la navigation ont bien été modifiées.
+            add: La navigation a bien été ajoutée.
+            delete: La navigation a bien été supprimée.
