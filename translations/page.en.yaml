@@ -1,0 +1,11 @@
+page:
+    form:
+        page:
+            title: Title of the page
+            slug: Link of the page
+            enabled: Make the page visible ?
+            content: Content of the page
+            submit: Save
+
+            helpSlug: If you do not fill in this field, it will be filled in automatically.
+            helpEnabled: By making the page visible, users will be able to access it.

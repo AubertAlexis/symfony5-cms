@@ -1,0 +1,23 @@
+alert:
+    profile:
+        success:
+            edit: Your information has been changed.
+            passwordReset: Your password has been successfully updated.
+        danger:
+            passwordReset: The current password is wrong, please correct it.
+    setting:
+        warning:
+            warning: Warning
+
+        success:
+            localeChange: The language has been successfully changed.
+    page:
+        success:
+            edit: The page informations has been changed.
+            add: The page has been added.
+            delete: The page has been deleted.
+    nav:
+        success:
+            edit: The navigation informations has been changed.
+            add: The navigation has been added.
+            delete: The navigation has been deleted.

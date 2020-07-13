@@ -1,0 +1,81 @@
+profile:
+    title: 
+        title: Edit - Profile
+        h1: Edit your information
+        form: General informations
+
+    button:
+        resetPassword: Change my password
+
+profileResetPassword:
+    title: 
+        title: Password - Profile
+        h1: Reset your password
+        form: Reset
+
+setting:
+    title:
+        title: Edit - Settings 
+        h1: Edit administration settings
+        localeForm: Language setting
+
+dashboard:
+    list: 
+        title: Dashboard
+        h1: Dashboard
+
+page:
+    list:
+        title: List - Pages
+        h1: List of pages
+
+    add:
+        title: Add - Pages
+        h1: New page
+
+    edit:
+        title: Edit - Pages
+        h1: Edit the page
+
+    table:
+        title: Pages
+
+nav:
+    list:
+        title: List - Navigations
+        h1: List of navigations
+
+    add:
+        title: Add - Navigations
+        h1: New navigation
+
+    edit:
+        title: Edit - Navigations
+        h1: Edit the navigation
+
+    table:
+        title: Navigations
+
+form:
+    title: 
+        content: General informations
+        aside: Further information
+
+button:
+    add: Add
+
+table:
+    title: Title
+    slug: Url
+    visible: Visible ?
+    createdAt: Created on
+    updatedAt: Modified on
+    action: Actions
+
+    keyname: Key
+    numberElement: Number of element
+
+tooltip:
+    edit: Edit
+    remove: Remove
+    view: View

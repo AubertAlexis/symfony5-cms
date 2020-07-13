@@ -1,0 +1,83 @@
+profile:
+    title:
+        title: Édition - Profil 
+        h1: Éditer vos informations
+        form: Informations générales
+
+    button:
+        resetPassword: Modifier mon mot de passe
+
+profileResetPassword:
+    title: 
+        title: Mot de passe - Profil
+        h1: Réinitialiser votre mot de passe
+        form: Réinitialisation
+
+setting:
+    title:
+        title: Édition - Paramètres 
+        h1: Modifier les paramètres d'administration
+        localeForm: Paramètre de langue
+
+dashboard:
+    list: 
+        title: Tableau de bord
+        h1: Tableau de bord
+
+page:
+    list:
+        title: Liste - Pages
+        h1: Liste des pages
+
+    add:
+        title: Ajout - Pages
+        h1: Nouvelle page
+
+
+    edit:
+        title: Édition - Pages
+        h1: Modifier la page
+
+    table:
+        title: Pages
+
+nav:
+    list:
+        title: Liste - Navigations
+        h1: Liste des navigations
+
+    add:
+        title: Ajout - Navigations
+        h1: Nouvelle navigation
+
+
+    edit:
+        title: Édition - Navigations
+        h1: Modifier la navigation
+
+    table:
+        title: Navigations
+
+form:
+    title: 
+        content: Informations générales
+        aside: Informations complémentaires
+
+button: 
+    add: Ajouter
+
+table:
+    title: Titre
+    slug: Url
+    visible: Visible ? 
+    createdAt: Créé le
+    updatedAt: Modifié le
+    action: Actions
+
+    keyname: Clé
+    numberElement: Nombre d'élément
+
+tooltip:
+    edit: Éditer
+    remove: Supprimer
+    view: Visualiser

@@ -1,0 +1,79 @@
+/* bootstrap override */
+label.required:after { 
+    content:"*";
+    margin-left: 5px;
+    color: var(--red);
+}
+
+.topbar .fa-user {
+    font-size: 17px;
+}
+
+.btn.rounded.with-icon {
+    border-radius: 50%!important;
+    width: 40px!important;
+    height: 40px!important;
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    padding: 0;
+}
+
+.btn.rounded.with-icon *{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.btn.rounded.with-icon:last-child {
+    margin-right: 0;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table .entry-date {
+    width: 180px!important;
+}
+
+.table .action {
+    width: 150px!important;
+}
+
+.table th.visible {
+    width: 100px!important;
+    text-align: center;
+}
+
+.table td.visible {
+    text-align: center;
+}
+
+.table th.number-element {
+    width: 175px!important;
+    text-align: center;
+}
+
+.table td.number-element {
+    text-align: center;
+}
+
+.status-icon {
+    font-size: 1.2rem;
+}
+
+.status-icon.check-icon i {
+    color: var(--success);
+}
+
+.status-icon.cross-icon i {
+    color: var(--danger);
+}
+
+.badge {
+    padding: .30em .5em!important;
+}

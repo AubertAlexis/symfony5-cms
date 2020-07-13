@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	{% include "partials/_navbar.html.twig" %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h1>{{ page.title }}</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				{{ page.content|raw }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

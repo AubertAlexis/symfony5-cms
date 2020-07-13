@@ -1,0 +1,7 @@
+modal:
+    logout:
+        title: Are you sure you want to logout ?
+        content: Select "Logout" only if you are sure you want to logout.
+        buttons:
+            cancel: Cancel
+            action: Logout

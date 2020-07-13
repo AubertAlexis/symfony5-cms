@@ -1,0 +1,23 @@
+alert:
+    profile:
+        success:
+            edit: Vos informations ont bien été modifiées.
+            passwordReset: Votre mot de passe a bien été mis à jour.
+        danger:
+            passwordReset: Le mot de passe actuel est erroné, merci de le corriger.
+    setting:
+        warning:
+            warning: Attention
+
+        success:
+            localeChange: La langue a été modifiée avec succès.
+    page:
+        success:
+            edit: Les informations de la page ont bien été modifiées.
+            add: La page a bien été ajoutée.
+            delete: La page a bien été supprimée.
+    nav:
+        success:
+            edit: Les informations de la navigation ont bien été modifiées.
+            add: La navigation a bien été ajoutée.
+            delete: La navigation a bien été supprimée.
