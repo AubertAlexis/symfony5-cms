@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, EquatableInterface
 {
     /**
      * @ORM\Id()
@@ -81,6 +82,15 @@ class User implements UserInterface
     {
         if(in_array("ROLE_ADMIN", $this->roles)) return "Administrateur";
         else return "Utilisateur";
+    }
+
+    public function isEqualTo(UserInterface $user)
+    {
+        if ($user instanceof self) {
+            if ($user->getLocale() != $this->locale) return false;
+        }
+
+        return true;
     }
 
     public function __construct()

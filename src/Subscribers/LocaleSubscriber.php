@@ -3,8 +3,11 @@
 namespace App\Subscribers;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
@@ -13,9 +16,15 @@ class LocaleSubscriber implements EventSubscriberInterface
      */
     private $defaultLocale;
 
-    public function __construct(string $defaultLocale = "fr")
+    /**
+     * @var SessionInterface $session
+     */
+    private $session;
+
+    public function __construct(string $defaultLocale = "fr", SessionInterface $session)
     {
         $this->defaultLocale = $defaultLocale;
+        $this->session = $session;
     }
 
     /**
@@ -30,7 +39,9 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($locale = $request->attributes->get('_locale')) {
+        $locale = $request->request->get('locale')['locale'] ?? false;
+
+        if ($locale) {
             $request->getSession()->set('_locale', $locale);
         } else {
             $request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));
@@ -41,7 +52,7 @@ class LocaleSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => [
-                ['onKernelRequest', 17]
+                ['onKernelRequest', 20]
             ]
         ];
     }

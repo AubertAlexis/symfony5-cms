@@ -1,0 +1,2 @@
+error:
+    invalidCsrf: Invalid CSRF token.

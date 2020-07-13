@@ -21,6 +21,15 @@
 
     <hr class="sidebar-divider my-0">
 
+    <li class="nav-item {{ macros.is_active('admin_nav') }}">
+        <a class="nav-link" href="{{ path('admin_nav_index') }}">
+            <i class="fas fa-fw fa-ellipsis-v"></i>
+            <span>{{ "navigation.nav"|trans }}</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+
     <li class="nav-item {{ macros.is_active('admin_page') }}">
         <a class="nav-link" href="{{ path('admin_page_index') }}">
             <i class="fas fa-fw fa-folder"></i>

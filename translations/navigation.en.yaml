@@ -4,3 +4,4 @@ navigation:
     profile: Profile
     logout: Logout
     page: Pages
+    nav: Navigations

@@ -20,15 +20,62 @@ setting:
         localeForm: Language setting
 
 dashboard:
-    title: 
+    list: 
         title: Dashboard
         h1: Dashboard
 
 page:
-    title: 
-        title: Listing - Pages
-        h1: Pages
-        form: General informations
+    list:
+        title: List - Pages
+        h1: List of pages
 
-    buttons:
-        add: Add a page
+    add:
+        title: Add - Pages
+        h1: New page
+
+    edit:
+        title: Edit - Pages
+        h1: Edit the page
+
+    table:
+        title: Pages
+
+nav:
+    list:
+        title: List - Navigations
+        h1: List of navigations
+
+    add:
+        title: Add - Navigations
+        h1: New navigation
+
+    edit:
+        title: Edit - Navigations
+        h1: Edit the navigation
+
+    table:
+        title: Navigations
+
+form:
+    title: 
+        content: General informations
+        aside: Further information
+
+button:
+    add: Add
+
+table:
+    title: Title
+    slug: Url
+    visible: Visible ?
+    createdAt: Created on
+    updatedAt: Modified on
+    action: Actions
+
+    keyname: Key
+    numberElement: Number of element
+
+tooltip:
+    edit: Edit
+    remove: Remove
+    view: View

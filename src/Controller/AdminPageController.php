@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -52,14 +53,13 @@ class AdminPageController extends AbstractController
     private $assetRepository;
 
     public function __construct(
-        TranslatorInterface $translator, 
-        PageRepository $pageRepository, 
-        RequestStack $requestStack, 
+        TranslatorInterface $translator,
+        PageRepository $pageRepository,
+        RequestStack $requestStack,
         FileManager $fileManager,
         AssetRepository $assetRepository,
         EntityManagerInterface $manager
-    )
-    {
+    ) {
         $this->translator = $translator;
         $this->pageRepository = $pageRepository;
         $this->request = $requestStack->getCurrentRequest();
@@ -71,12 +71,11 @@ class AdminPageController extends AbstractController
     /**
      * @Route("", name="admin_page_index")
      * 
-     * @param PageRepository $pageRepository
      * @return Response
      */
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted("USER_ADMIN", $this->getUser());
+        $this->denyAccessUnlessGranted("PAGE_LIST");
 
         return $this->render('admin/page/index.html.twig', [
             'pages' => $this->pageRepository->findAll()
@@ -85,30 +84,56 @@ class AdminPageController extends AbstractController
 
     /**
      * @Route("nouveau", name="admin_page_add")
-     * @Route("{id}", name="admin_page_edit", requirements={"id": "\d+"})
      * 
-     * @param Page $page
-     * @param AssetRepository $assetRepository
      * @return Response
      */
-    public function edit(Page $page = null): Response
+    public function add(): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
+        $this->denyAccessUnlessGranted("PAGE_ADD");
 
-        $modeName = explode('_', $this->request->attributes->get('_route'))[2];
-        $editMode = $modeName === "edit";
-
-        !$editMode && $page = new Page();
+        $page = new Page();
 
         $form = $this->createForm(PageType::class, $page);
+
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            !$editMode && $this->manager->persist($page);
-            $this->manageAssets($page);
+            $this->manager->persist($page);
             $this->manager->flush();
 
-            $this->addFlash("success", $this->translator->trans("alert.page.success.{$modeName}", [], "alert"));
+            $this->addFlash("success", $this->translator->trans("alert.page.success.add", [], "alert"));
+
+            return $this->redirectToRoute("admin_page_index");
+        }
+
+        return $this->render('admin/page/add.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("{id}", name="admin_page_edit", requirements={"id": "\d+"})
+     * 
+     * @param Page $page
+     * @return Response
+     */
+    public function edit(Page $page): Response
+    {
+        $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
+
+        $form = $this->createForm(PageType::class, $page);
+
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $uselessAssets = $this->assetRepository->findByPage(null);
+
+            $this->removeAssets($uselessAssets);
+            $this->manageAssets($page);
+            
+            $this->manager->flush();
+
+            $this->addFlash("success", $this->translator->trans("alert.page.success.edit", [], "alert"));
 
             return $this->redirectToRoute("admin_page_index");
         }
@@ -116,6 +141,35 @@ class AdminPageController extends AbstractController
         return $this->render('admin/page/edit.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("{id}/suppression", name="admin_page_delete", requirements={"id": "\d+"}, methods="POST")
+     * 
+     * @param Request $request
+     * @param Page $page
+     * @return Response
+     */
+    public function delete(Request $request, Page $page) : Response
+    {
+        $this->denyAccessUnlessGranted("PAGE_DELETE", $page);
+
+        if ($this->isCsrfTokenValid("delete-page", $request->request->get('token'))) {
+            $pageAssets = $this->assetRepository->findByPage($page->getId());
+
+            $this->removeAssets($pageAssets);
+            $this->manager->remove($page);
+
+            $this->manager->flush();
+
+            $this->addFlash("success", $this->translator->trans("alert.page.success.delete", [], "alert"));
+
+            return $this->redirectToRoute("admin_page_index");
+        }
+
+        $this->addFlash("danger", $this->translator->trans("error.invalidCsrf", [], "error"));
+
+        return $this->redirectToRoute("admin_page_index");
     }
 
     /**
@@ -132,13 +186,14 @@ class AdminPageController extends AbstractController
 
         $asset = new Asset();
         $asset->setFileName($file['filename']);
-        
+
         if ($page) $asset->setPage($page);
 
         $this->manager->persist($asset);
         $this->manager->flush();
 
-        return $this->json([
+        return $this->json(
+            [
                 'location' => $file['path']
             ]
         );
@@ -162,15 +217,26 @@ class AdminPageController extends AbstractController
 
             $assets = $this->assetRepository->findAssetToRemove($filenames, $page->getId());
 
-            foreach ($assets as $asset) {
-                $this->manager->remove($asset);
-                $this->fileManager->removeFile($asset->getFileName());
-            }
+            $this->removeAssets($assets);
         } else if ($page->getAssets()->count() > 0 && $matches) {
             foreach ($page->getAssets() as $asset) {
                 $this->manager->remove($asset);
                 $this->fileManager->removeFile($asset->getFileName());
             }
+        }
+    }
+
+    /**
+     * Remove assets from database and upload dir
+     *
+     * @param array $assets
+     * @return void
+     */
+    private function removeAssets(array $assets)
+    {
+        foreach ($assets as $asset) {
+            $this->manager->remove($asset);
+            $this->fileManager->removeFile($asset->getFileName());
         }
     }
 }

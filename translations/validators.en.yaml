@@ -1,3 +1,7 @@
 validators:      
+    notNull: This field cannot be empty.
+    length:
+        min: The value {{ value }} must be at least {{ limit }} characters long.
+        max: The value {{ value }} cannot be longer than {{ limit }} characters.
     page:
         slug: The link is already used for another page, check the link or title.

@@ -13,3 +13,10 @@ inputs.forEach(((input) => {
             .html(inputFile.files[0].name);
     });
 }));
+
+// Enable tooltip
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip({
+        container: '.table'
+    })
+})
