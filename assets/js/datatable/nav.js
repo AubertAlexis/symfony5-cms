@@ -7,6 +7,24 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function() {
+    $('#navLinkTable').DataTable({
+        "order": [
+            [ 2, "asc" ]
+        ],
+        "language": { "url": `//cdn.datatables.net/plug-ins/1.10.7/i18n/${getLanguageTraduction()}.json` }
+    });
+});
+
+$(document).ready(function() {
+    $('.subNavLinkTable').DataTable({
+        "order": [
+            [ 2, "asc" ]
+        ],
+        "language": { "url": `//cdn.datatables.net/plug-ins/1.10.7/i18n/${getLanguageTraduction()}.json` }
+    });
+});
+
 const getLanguageTraduction = () => 
 {
     const userLocale = document.querySelector("#userLocale").textContent;

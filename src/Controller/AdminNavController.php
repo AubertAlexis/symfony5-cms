@@ -2,22 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Asset;
 use App\Entity\Nav;
-use App\Entity\Page;
+use App\Entity\NavLink;
+use App\Entity\SubNav;
+use App\Form\NavLinkItemType;
 use App\Form\NavType;
-use App\Form\PageType;
-use App\Repository\AssetRepository;
+use App\Form\SubNavType;
 use App\Repository\NavRepository;
-use App\Repository\PageRepository;
-use App\Services\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -82,12 +80,24 @@ class AdminNavController extends AbstractController
 
         $nav = new Nav();
 
-        $form = $this->createForm(NavType::class, $nav);
+        $form = $this->createForm(NavType::class, $nav, [
+            'isEnabled' => true
+        ]);
 
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->persist($nav);
+
+            /**
+             * @var NavLink $navLink
+             */
+            foreach ($nav->getNavLinks() as $index => $navLink) {
+                $navLink->setNav($nav);
+
+                $this->manager->persist($navLink);
+            }
+            
             $this->manager->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.nav.success.add", [], "alert"));
@@ -100,64 +110,181 @@ class AdminNavController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("{id}", name="admin_page_edit", requirements={"id": "\d+"})
-    //  * 
-    //  * @param Page $page
-    //  * @return Response
-    //  */
-    // public function edit(Page $page): Response
-    // {
-    //     $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
+    /**
+     * @Route("{id}", name="admin_nav_edit", requirements={"id": "\d+"})
+     * 
+     * @param Nav $nav
+     * @return Response
+     */
+    public function edit(Nav $nav): Response
+    {
+        $this->denyAccessUnlessGranted("NAV_EDIT");
 
-    //     $form = $this->createForm(PageType::class, $page);
+        $form = $this->createForm(NavType::class, $nav, [
+            'isEnabled' => $nav->getEnabled()
+        ]);
 
-    //     $form->handleRequest($this->request);
+        $form->handleRequest($this->request);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $uselessAssets = $this->assetRepository->findByPage(null);
-
-    //         $this->removeAssets($uselessAssets);
-    //         $this->manageAssets($page);
+        if ($form->isSubmitted() && $form->isValid()) {
             
-    //         $this->manager->flush();
+            /**
+             * @var NavLink $navLink
+             */
+            foreach ($nav->getNavLinks() as $navLink) {
+                $navLink->setNav($nav);
 
-    //         $this->addFlash("success", $this->translator->trans("alert.page.success.edit", [], "alert"));
+                $this->manager->persist($navLink);
+            }
 
-    //         return $this->redirectToRoute("admin_page_index");
-    //     }
+            $this->manager->flush();
 
-    //     return $this->render('admin/page/edit.html.twig', [
-    //         'form' => $form->createView()
-    //     ]);
-    // }
+            $this->addFlash("success", $this->translator->trans("alert.nav.success.edit", [], "alert"));
 
-    // /**
-    //  * @Route("{id}/suppression", name="admin_page_delete", requirements={"id": "\d+"}, methods="POST")
-    //  * 
-    //  * @param Request $request
-    //  * @param Page $page
-    //  * @return Response
-    //  */
-    // public function delete(Request $request, Page $page) : Response
-    // {
-    //     $this->denyAccessUnlessGranted("PAGE_DELETE", $page);
+            return $this->redirectToRoute("admin_nav_index");
+        }
 
-    //     if ($this->isCsrfTokenValid("delete-page", $request->request->get('token'))) {
-    //         $pageAssets = $this->assetRepository->findByPage($page->getId());
+        return $this->render('admin/nav/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 
-    //         $this->removeAssets($pageAssets);
-    //         $this->manager->remove($page);
+    /**
+     * @Route("{id}/suppression", name="admin_nav_delete", requirements={"id": "\d+"}, methods="POST")
+     * 
+     * @param Request $request
+     * @param Nav $nav
+     * @return Response
+     */
+    public function delete(Request $request, Nav $nav) : Response
+    {
+        $this->denyAccessUnlessGranted("NAV_DELETE");
 
-    //         $this->manager->flush();
+        if ($this->isCsrfTokenValid("delete-nav", $request->request->get('token'))) {
+            $this->manager->remove($nav);
 
-    //         $this->addFlash("success", $this->translator->trans("alert.page.success.delete", [], "alert"));
+            $this->manager->flush();
 
-    //         return $this->redirectToRoute("admin_page_index");
-    //     }
+            $this->addFlash("success", $this->translator->trans("alert.nav.success.delete", [], "alert"));
 
-    //     $this->addFlash("danger", $this->translator->trans("error.invalidCsrf", [], "error"));
+            return $this->redirectToRoute("admin_nav_index");
+        }
 
-    //     return $this->redirectToRoute("admin_page_index");
-    // }
+        $this->addFlash("danger", $this->translator->trans("error.invalidCsrf", [], "error"));
+
+        return $this->redirectToRoute("admin_nav_index");
+    }
+
+     /**
+     * @Route("liens/{id}", name="admin_nav_details", requirements={"id": "\d+"})
+     * @param Nav $nav
+     * @return Response
+     */
+    public function navDetails(Nav $nav): Response
+    {
+        $this->denyAccessUnlessGranted("NAV_LIST");
+
+        return $this->render('admin/nav/navlink/index.html.twig', [
+            'nav' => $nav
+        ]);
+    }
+
+    /**
+     * @Route("liens/{id}/suppression", name="admin_nav_link_delete", requirements={"id": "\d+"}, methods="POST")
+     * 
+     * @param Request $request
+     * @param NavLink $navLink
+     * @return Response
+     */
+    public function deleteLink(NavLink $navLink, Request $request) : Response
+    {
+        $this->denyAccessUnlessGranted("NAV_DELETE");
+
+        if ($this->isCsrfTokenValid("delete-nav-link", $request->request->get('token'))) {
+
+            if ($navLink->getSubNav() !== null) {
+
+                $subNavLinks = $navLink->getSubNav()->getNavlinks();
+
+                /**
+                 * @var NavLink $navLink
+                 */
+                foreach ($subNavLinks as $subNavLink) {
+                    $this->manager->remove($subNavLink);
+                }
+
+                $this->manager->remove($navLink->getSubNav());
+
+            }
+
+            $this->manager->remove($navLink);
+
+            $this->manager->flush();
+
+            $this->addFlash("success", $this->translator->trans("alert.navLink.success.delete", [], "alert"));
+
+            return $this->redirectToRoute("admin_nav_index");
+        }
+
+        $this->addFlash("danger", $this->translator->trans("error.invalidCsrf", [], "error"));
+
+        return $this->redirectToRoute("admin_nav_details", ["id" => $navLink->getNav()->getId()]);
+    }
+
+    /**
+     * @Route("sous-menu/{id}/nouveau", name="admin_sub_nav_add")
+     * 
+     * @param NavLink $navLink
+     * @return Response
+     */
+    public function subNavAdd(NavLink $navLink): Response
+    {
+        $this->denyAccessUnlessGranted("NAV_ADD");
+
+        $subNav = new SubNav();
+
+        $form = $this->createForm(SubNavType::class, $subNav);
+
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $subNav->setParent($navLink);
+            
+            $this->manager->persist($subNav);
+
+            /**
+             * @var NavLink $navLinkChildren
+             */
+            foreach ($subNav->getNavLinks() as $navLinkChildren) {
+                $subNav->addNavlink($navLinkChildren);
+                $navLinkChildren->setSubNav($subNav);
+                $this->manager->persist($navLinkChildren);
+            }
+            
+            $this->manager->flush();
+
+            $this->addFlash("success", $this->translator->trans("alert.subNav.success.add", [], "alert"));
+
+            return $this->redirectToRoute("admin_sub_nav_details", ["id" => $navLink->getId()]);
+        }
+
+        return $this->render('admin/nav/subnav/add.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
+    /**
+    * @Route("sous-menu/liens/{id}", name="admin_sub_nav_details", requirements={"id": "\d+"})
+    * @param NavLink $navLink
+    * @return Response
+    */
+    public function subNavDetails(NavLink $navLink): Response
+    {
+        $this->denyAccessUnlessGranted("NAV_LIST");
+
+        return $this->render('admin/nav/subnav/index.html.twig', [
+            'subNavs' => $navLink->getSubNavs()
+        ]);
+    }
 }

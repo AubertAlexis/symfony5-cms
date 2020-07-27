@@ -119,7 +119,7 @@ class AdminPageController extends AbstractController
      */
     public function edit(Page $page): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
+        $this->denyAccessUnlessGranted("PAGE_EDIT");
 
         $form = $this->createForm(PageType::class, $page);
 
@@ -152,7 +152,7 @@ class AdminPageController extends AbstractController
      */
     public function delete(Request $request, Page $page) : Response
     {
-        $this->denyAccessUnlessGranted("PAGE_DELETE", $page);
+        $this->denyAccessUnlessGranted("PAGE_DELETE");
 
         if ($this->isCsrfTokenValid("delete-page", $request->request->get('token'))) {
             $pageAssets = $this->assetRepository->findByPage($page->getId());

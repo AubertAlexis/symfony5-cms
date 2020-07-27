@@ -21,7 +21,7 @@
 
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item {{ macros.is_active('admin_nav') }}">
+    <li class="nav-item {{ macros.is_active('admin_nav') }} {{ macros.is_active('admin_sub') }}">
         <a class="nav-link" href="{{ path('admin_nav_index') }}">
             <i class="fas fa-fw fa-ellipsis-v"></i>
             <span>{{ "navigation.nav"|trans }}</span>

@@ -13,6 +13,7 @@ class NavVoter extends Voter
     {
         return in_array($attribute, [
             'NAV_LIST',
+            'NAV_MANAGE',
             'NAV_ADD',
             'NAV_EDIT',
             'NAV_DELETE'
@@ -29,6 +30,9 @@ class NavVoter extends Voter
 
         switch ($attribute) {
             case 'NAV_LIST':
+                return in_array("ROLE_ADMIN", $user->getRoles());
+                break;
+            case 'NAV_MANAGE':
                 return in_array("ROLE_ADMIN", $user->getRoles());
                 break;
             case 'NAV_ADD':

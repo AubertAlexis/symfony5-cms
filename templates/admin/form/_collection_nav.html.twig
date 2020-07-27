@@ -1,0 +1,46 @@
+{% block _nav_navLinks_entry_widget %}
+
+    {{ block("navLinks_entry") }}
+
+{% endblock %}
+
+{% block _sub_nav_navLinks_entry_widget %}
+
+    {{ block("navLinks_entry") }}
+
+{% endblock %}
+
+{% block navLinks_entry %}
+
+    <span class="move-icon">
+        <i class="fas fa-arrows-alt"></i>
+    </span>
+
+    <div class="nav-item nav-item-sortable">
+
+        <div class="bullet nav-bullet-position"></div>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                {{ form_row(form.internal) }}
+            </div>
+        </div>
+        <div class="row nav-item-content">
+            <div class="col-lg-4 col-md-4 col-sm-12 nav-input-title">
+                {{ form_row(form.title) }}
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 nav-input-link">
+                {{ form_row(form.link) }}
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 nav-input-page">
+                {{ form_row(form.page) }}
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 nav-input-position d-none">
+                {{ form_row(form.position) }}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+{% endblock %}
