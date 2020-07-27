@@ -2,12 +2,9 @@
 
 namespace App\Validator\Constraints;
 
-use App\Entity\Page;
 use App\Repository\PageRepository;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

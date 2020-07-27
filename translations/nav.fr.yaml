@@ -5,8 +5,25 @@ nav:
             title: Titre de la navigation
             main: Est-ce la navigation principale ?
             enabled: Voulez-vous activer cette navigation ?
+
+            navLinks: Gérer les liens
+
             submit: Enregistrer
 
             helpKeyname: Cette clé servira aux développeurs pour afficher la navigation aux utilisateurs.
             helpMain: Une seule navigation seulement peut être définie en tant que principale.
             helpEnabled: Si vous la désactiver, elle ne pourra pas être affiché pour les utilisateurs.
+
+        navLink: 
+            internal: Voulez-vous associer ce lien à une page interne ?
+            title: Titre du lien
+            link: Url du lien externe
+            page: Quelle page voulez-vous associer à ce lien ?
+
+            helpTitle: Si vous choisissez une page interne, le titre est facultatif.
+
+            yes: Oui
+            no: Non
+
+        subNav:
+            submit: Enregistrer

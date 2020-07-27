@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class UniqSlug extends Constraint
+class UniqMain extends Constraint
 {
     /**
      * @var string

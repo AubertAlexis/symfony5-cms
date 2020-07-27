@@ -5,9 +5,27 @@ nav:
             title: Navigation title
             main: Is this the main navigation ?
             enabled: Do you want to activate this navigation?
+
+            navLinks: Manage links
+
             submit: Save
 
             helpKeyname: This key will be used by developers to display navigation to users.
             helpMain: Only one navigation can be defined as main.
             helpEnabled: If you deactivate it, it cannot be displayed to users.
+        
+        navLink: 
+            internal: Do you want to associate this link to an internal page?
+            title: Link title
+            link: Url link
+            page: Which page do you want to associate with this link?
+
+            helpTitle: If you choose an internal page, the title is optional.
+
+            yes: Yes
+            no: No
+
+        subNav:
+            submit: Save
+
 

@@ -1,0 +1,96 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title "subNav.list.title"|trans %}
+
+{% block title_h1 "subNav.list.h1"|trans %}
+
+{% block stylesheets %}
+  <link href="{{ asset("sbadmin2/vendor/datatables/dataTables.bootstrap4.min.css") }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+	<div class="card shadow my-4">
+        <div class="card-header py-2 d-flex align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">{{ "subNav.table.title"|trans }}</h6>
+            {# <a href="{{ path("admin_nav_add") }}" class="btn btn-success btn-icon-split ml-auto btn-sm">
+                <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">{{ "button.add"|trans }}</span>
+            </a> #}
+        </div>
+        <div class="card-body">
+            {% for subNav in subNavs %}
+
+                {% if loop.index != 1 %}
+                    <hr class="my-4">
+                {% endif %}
+
+                <div class="table-responsive">
+                    <table class="table table-bordered subNavLinkTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>{{ "table.title"|trans }}</th>
+                                <th>{{ "table.link"|trans }}</th>
+                                <th class="number-element">{{ "table.numberSubnavs"|trans }}</th>
+                                <th class="entry-position">{{ "table.position"|trans }}</th>
+                                <th class="entry-date">{{ "table.createdAt"|trans }}</th>
+                                <th class="entry-date">{{ "table.updatedAt"|trans }}</th>
+                                <th class="action">{{ "table.action"|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for navLink in subNav.navLinks %}
+                            <tr>
+                                <td><span class="font-weight-bold">{{ navLink.title }}</span></td>
+                                <td>
+                                    {% if navLink.page %}
+                                        <a href="{{ path("page_index", {slug: navLink.page.slug}) }}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.view"|trans }}">
+                                            /{{ navLink.page.slug }}
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ navLink.link }}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.view"|trans }}">
+                                            {{ navLink.link }}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td class="number-element">
+                                    <a href="{{ path('admin_sub_nav_details', { id: navLink.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ navLink.subNavs|length }}</a>
+                                </td>
+                                <td class="entry-position">
+                                    <div class="bullet">{{ navLink.position }}</div>
+                                </td>
+                                <td>{{ navLink.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                                <td>{{ navLink.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                                <td>
+                                    <a href="{{ path('admin_sub_nav_add', { id: navLink.id }) }}" class="btn btn-success rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.addSubNav"|trans }}">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </a>
+                                    <form class="d-inline-block" action="{{ url('admin_nav_link_delete', { id: navLink.id }) }}" method="post">
+                                    
+                                        <input type="hidden" name="token" value="{{ csrf_token('delete-nav-link') }}"/>
+
+                                        <button class="btn btn-danger rounded with-icon" type="submit" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.remove"|trans }}">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{{ asset("sbadmin2/vendor/datatables/jquery.dataTables.min.js") }}"></script>
+  <script src="{{ asset("sbadmin2/vendor/datatables/dataTables.bootstrap4.min.js") }}"></script>
+
+  {{ encore_entry_script_tags('datatable_nav') }}
+{% endblock %}

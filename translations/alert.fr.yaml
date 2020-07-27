@@ -21,3 +21,13 @@ alert:
             edit: Les informations de la navigation ont bien été modifiées.
             add: La navigation a bien été ajoutée.
             delete: La navigation a bien été supprimée.
+
+    subNav:
+        success:
+            edit: Les informations du sous-menu ont bien été modifiées.
+            add: Le sous-menu a bien été ajouté.
+            delete: Le sous-menu a bien été supprimé.
+
+    navLink:
+        success:
+            delete: Le lien de la navigation a bien été supprimé.

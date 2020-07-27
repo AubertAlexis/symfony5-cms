@@ -58,26 +58,61 @@ nav:
     table:
         title: Navigations
 
+navLink:
+    list:
+        title: Liste - Navigations
+        h1: Liste des liens pour la navigation 
+
+    table:
+        title: Les liens de la navigation
+
+    empty: Pour ajouter des liens au menu, cliquez sur le bouton "Ajouter" ci-dessus.
+
+subNav:
+    add:
+        title: Ajout - Sous menu
+        h1: Nouveau sous-menu
+
+    list:
+        title: Liste - Sous menu
+        h1: Liste des sous menu
+
+    table:
+        title: Les sous menu
+
 form:
     title: 
         content: Informations générales
         aside: Informations complémentaires
 
+        navLinks: Gérer les liens
+
 button: 
     add: Ajouter
+    addEdit: Ajouter / Editer
+    remove: Supprimer
 
 table:
     title: Titre
     slug: Url
+    link: Url
+    parent: Élément parent
     visible: Visible ? 
+    position: Position
     createdAt: Créé le
     updatedAt: Modifié le
     action: Actions
 
     keyname: Clé
-    numberElement: Nombre d'élément
+    main: Navigation principale
+    numberLinks: Nombre de liens
+    numberSubnavs: Nombre de sous-menus
 
 tooltip:
     edit: Éditer
     remove: Supprimer
     view: Visualiser
+    details: Détails
+
+    addLink: Gérer les liens
+    addSubNav: Ajouter un sous-menu
