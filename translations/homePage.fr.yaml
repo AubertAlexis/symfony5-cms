@@ -1,0 +1,11 @@
+homePage:
+    form:
+        homePage:
+            title: Titre de la page d'accueil
+
+            aboutTitle: Titre de la section "À propos"
+            aboutImageFile: Image de la section "À propos"
+            aboutText: Contenu de la section "À propos"
+
+            submit: Enregistrer
+            

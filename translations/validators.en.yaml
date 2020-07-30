@@ -6,6 +6,7 @@ validators:
         max: The value {{ value }} cannot be longer than {{ limit }} characters.
     page:
         slug: The link is already used for another page, check the link or title.
+        forbiddenSlug: The link is forbidden, please change it.
     nav:
         main: A navigation is already defined as main.
         callback:

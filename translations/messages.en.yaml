@@ -78,12 +78,21 @@ subNav:
     table:
         title: The sub-navigation
 
+homePage:
+    edit:
+        title: Edit - Home Page
+        h1: Edit the home page
+
+
 form:
     title: 
         content: General informations
         aside: Further information
 
         navLinks: Manage links
+    
+    homePage:
+        aboutSection: Section "About"
 
 button:
     add: Add
@@ -95,6 +104,7 @@ table:
     title: Title
     slug: Url
     link: Url
+    templateName: Page template
     parent: Parent element
     visible: Visible ?
     position: Position

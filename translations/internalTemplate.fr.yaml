@@ -1,0 +1,4 @@
+internalTemplate:
+    form:
+        internalTemplate:
+            content: Contenu de la page

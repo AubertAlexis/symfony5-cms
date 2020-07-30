@@ -16,6 +16,12 @@ use Doctrine\Common\Collections\Collection;
  */
 class Page
 {
+    const FORBIDDEN_SLUG = [
+        "admin",
+        "/",
+        "/admin"
+    ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -36,7 +42,7 @@ class Page
     private $title;
 
     /**
-     * @CustomAssert\UniqSlug(message="validators.page.slug")
+     * @CustomAssert\UniqSlug(message="validators.page.slug", forbiddenMessage="validators.page.forbiddenSlug")
      * @Assert\Length(
      *      max = 255,
      *      maxMessage = "validators.length.max"
@@ -44,15 +50,6 @@ class Page
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
-
-    /**
-     * @ORM\Column(type="text", length=65535, nullable=true)
-     * @Assert\Length(
-     *      max = 65535,
-     *      maxMessage = "validators.length.max"
-     * )
-     */
-    private $content;
 
     /**
      * @ORM\Column(type="datetime")
@@ -65,11 +62,6 @@ class Page
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Asset", mappedBy="page")
-     */
-    private $assets;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $enabled;
@@ -78,6 +70,26 @@ class Page
      * @ORM\OneToMany(targetEntity=NavLink::class, mappedBy="page")
      */
     private $navLinks;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="pages")
+     */
+    private $template;
+
+    /**
+     * @ORM\OneToOne(targetEntity=InternalTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     */
+    private $internalTemplate;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ArticleTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     */
+    private $articleTemplate;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Seo::class, inversedBy="page", cascade={"persist", "remove"})
+     */
+    private $seo;
 
     /**
      * @ORM\PrePersist
@@ -126,18 +138,6 @@ class Page
         return $this;
     }
 
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(?string $content): self
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -146,37 +146,6 @@ class Page
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * @return Collection|Asset[]
-     */
-    public function getAssets(): Collection
-    {
-        return $this->assets;
-    }
-
-    public function addAsset(Asset $asset): self
-    {
-        if (!$this->assets->contains($asset)) {
-            $this->assets[] = $asset;
-            $asset->setPage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAsset(Asset $asset): self
-    {
-        if ($this->assets->contains($asset)) {
-            $this->assets->removeElement($asset);
-            // set the owning side to null (unless already changed)
-            if ($asset->getPage() === $this) {
-                $asset->setPage(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getEnabled(): ?bool
@@ -218,6 +187,54 @@ class Page
                 $navLink->setPage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTemplate(): ?Template
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?Template $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getInternalTemplate(): ?InternalTemplate
+    {
+        return $this->internalTemplate;
+    }
+
+    public function setInternalTemplate(?InternalTemplate $internalTemplate): self
+    {
+        $this->internalTemplate = $internalTemplate;
+
+        return $this;
+    }
+
+    public function getArticleTemplate(): ?ArticleTemplate
+    {
+        return $this->articleTemplate;
+    }
+
+    public function setArticleTemplate(?ArticleTemplate $articleTemplate): self
+    {
+        $this->articleTemplate = $articleTemplate;
+
+        return $this;
+    }
+
+    public function getSeo(): ?Seo
+    {
+        return $this->seo;
+    }
+
+    public function setSeo(?Seo $seo): self
+    {
+        $this->seo = $seo;
 
         return $this;
     }

@@ -31,3 +31,7 @@ alert:
     navLink:
         success:
             delete: Le lien de la navigation a bien été supprimé.
+
+    homePage:
+        success:
+            edit: Les informations de la page d'accueil ont bien été modifiées.

@@ -4,7 +4,7 @@ page:
             title: Title of the page
             slug: Link of the page
             enabled: Make the page visible ?
-            content: Content of the page
+            template: Page template
             submit: Save
 
             helpSlug: If you do not fill in this field, it will be filled in automatically.

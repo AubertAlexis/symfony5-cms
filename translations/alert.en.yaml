@@ -31,3 +31,7 @@ alert:
     navLink:
         success:
             delete: Navigation link has been deleted.
+
+    homePage:
+        success:
+            edit: The home page informations has been changed.
