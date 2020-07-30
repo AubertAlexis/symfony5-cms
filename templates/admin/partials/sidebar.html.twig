@@ -21,7 +21,16 @@
 
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item {{ macros.is_active('admin_nav') }}">
+    <li class="nav-item {{ macros.is_active('admin_home_page') }}">
+        <a class="nav-link" href="{{ path('admin_home_page_edit', { id: 1 }) }}">
+            <i class="fas fa-fw fa-home"></i>
+            <span>{{ "navigation.homePage"|trans }}</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item {{ macros.is_active('admin_nav') }} {{ macros.is_active('admin_sub') }}">
         <a class="nav-link" href="{{ path('admin_nav_index') }}">
             <i class="fas fa-fw fa-ellipsis-v"></i>
             <span>{{ "navigation.nav"|trans }}</span>

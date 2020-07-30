@@ -17,7 +17,8 @@ setting:
     title:
         title: Édition - Paramètres 
         h1: Modifier les paramètres d'administration
-        localeForm: Paramètre de langue
+        parameter: Paramètres
+        module: Modules
 
 dashboard:
     list: 
@@ -58,26 +59,82 @@ nav:
     table:
         title: Navigations
 
+navLink:
+    list:
+        title: Liste - Navigations
+        h1: Liste des liens pour la navigation 
+
+    table:
+        title: Les liens de la navigation
+
+    empty: Pour ajouter des liens au menu, cliquez sur le bouton "Ajouter" ci-dessus.
+
+subNav:
+    add:
+        title: Ajout - Sous menu
+        h1: Nouveau sous-menu
+
+    list:
+        title: Liste - Sous menu
+        h1: Liste des sous menu
+
+    table:
+        title: Les sous menu
+
+homePage:
+    edit:
+        title: Édition - Accueil
+        h1: Modifier la page d'accueil
+
+module:
+    add:
+        title: Ajout - Module
+        h1: Nouveau module
+
+
+    edit:
+        title: Édition - Module
+        h1: Modifier le module
+
 form:
     title: 
         content: Informations générales
         aside: Informations complémentaires
 
+        navLinks: Gérer les liens
+
+    homePage:
+        aboutSection: Section "À propos"
+
 button: 
     add: Ajouter
+    addEdit: Ajouter / Editer
+    remove: Supprimer
+
+    addModule: Ajouter un module
 
 table:
     title: Titre
     slug: Url
+    link: Url
+    templateName: Type de page
+    parent: Élément parent
     visible: Visible ? 
+    position: Position
     createdAt: Créé le
     updatedAt: Modifié le
     action: Actions
 
     keyname: Clé
-    numberElement: Nombre d'élément
+    main: Navigation principale
+    numberLinks: Nombre de liens
+    numberSubnavs: Nombre de sous-menus
 
 tooltip:
     edit: Éditer
     remove: Supprimer
     view: Visualiser
+    details: Détails
+
+    addLink: Gérer les liens
+    addSubNav: Ajouter un sous-menu

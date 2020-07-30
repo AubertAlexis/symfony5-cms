@@ -6,8 +6,6 @@ use App\Entity\Page;
 use App\Repository\PageRepository;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -51,6 +49,15 @@ class UniqSlugValidator extends ConstraintValidator
 
         $pageExisting = (null === $value) ? $this->pageRepository->findOneBySlug((new Slugify())->slugify($page['title'])) : $this->pageRepository->findOneBySlug($page['slug']);
         
+        foreach (Page::FORBIDDEN_SLUG as $forbiddenSlug) {
+            if (strpos($value, $forbiddenSlug) !== false) {
+                $this->context->buildViolation($constraint->forbiddenMessage)
+                    ->addViolation();
+
+                return;
+            }
+        }
+
         if (null !== $editPageId && null !== $pageExisting) {
             if ($editPageId != $pageExisting->getId()) {
                 $this->context->buildViolation($constraint->message)

@@ -19,7 +19,7 @@ class AssetRepository extends ServiceEntityRepository
         parent::__construct($registry, Asset::class);
     }
 
-    public function findAssetToRemove(array $filenames, int $pageId)
+    public function findAssetToRemove(array $filenames, int $internalTemplateId)
     {
         $qb = $this->createQueryBuilder('a');
 
@@ -27,7 +27,7 @@ class AssetRepository extends ServiceEntityRepository
             ->select()
             ->where(
                 $qb->expr()->andX(
-                    $qb->expr()->eq('a.page', $pageId),
+                    $qb->expr()->eq('a.internalTemplate', $internalTemplateId),
                     $qb->expr()->notIn('a.fileName', $filenames)
                 )
             );

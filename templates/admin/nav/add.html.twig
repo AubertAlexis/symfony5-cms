@@ -1,9 +1,5 @@
 {% extends "admin/base.html.twig" %}
-
-{% block stylesheets %}
-	<link href="{{ asset('build/skins/content/default/content.min.css') }}"></link>
-	<link href="{{ asset('build/skins/ui/oxide/skin.min.css') }}"></link>
-{% endblock %}
+{% form_theme form "admin/form/_collection_nav.html.twig" %}
 
 {% block title "nav.add.title"|trans %}
 
@@ -67,7 +63,25 @@
 			</div>
 		</div>
 
-		{{ form_row(form._token) }}
+		<div class="col-12">
+			<hr>
+		</div>
+
+		<div class="col-12">
+			<div class="card shadow collection">
+				<div class="card-header d-flex align-items-center">
+					<h6 class="m-0 font-weight-bold text-primary collection-title">{{ "form.title.navLinks"|trans }}</h5>
+				</div>
+				<div class="card-body">
+					<ul class="collection nav-links-collection pl-0 mb-0" id="sort" data-prototype="{{ form_widget(form.navLinks.vars.prototype)|e('html_attr') }}">
+						<p class="mb-0 unsortable empty-navlink">{{ "navLink.empty"|trans }}</p>
+					</ul>
+				</div>
+			</div>
+
+			{{ form_row(form._token) }}
+
+		</div>
 
 		<div class="col-12">
 			<hr>
@@ -86,5 +100,20 @@
 	</div>
 	
 	{{ form_end(form, {"render_rest": false}) }}
+
+{% endblock %}
+
+{% block javascripts %}
+
+	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+	<script>
+		var collectionButtonTextAdd = '{{ "button.add"|trans }}';
+		var collectionButtonTextRemove = '{{ "button.remove"|trans }}';
+	</script>
+
+	{{ encore_entry_script_tags('manageNavForm') }}
+	{{ encore_entry_script_tags('collection') }}
+	{{ encore_entry_script_tags('sort') }}
 
 {% endblock %}

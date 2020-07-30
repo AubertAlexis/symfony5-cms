@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ArticleTemplate;
 use App\Entity\Asset;
+use App\Entity\InternalTemplate;
 use App\Entity\Page;
 use App\Form\PageType;
 use App\Repository\AssetRepository;
@@ -14,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -98,12 +99,15 @@ class AdminPageController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->handleTemplate($page);
+
             $this->manager->persist($page);
             $this->manager->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.page.success.add", [], "alert"));
 
-            return $this->redirectToRoute("admin_page_index");
+            return $this->redirectToRoute("admin_page_edit", ["id" => $page->getId()]);
         }
 
         return $this->render('admin/page/add.html.twig', [
@@ -119,18 +123,22 @@ class AdminPageController extends AbstractController
      */
     public function edit(Page $page): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_EDIT", $page);
+        $this->denyAccessUnlessGranted("PAGE_EDIT");
 
         $form = $this->createForm(PageType::class, $page);
 
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $uselessAssets = $this->assetRepository->findByPage(null);
+            $templateName = $page->getTemplate()->getKeyname();
 
-            $this->removeAssets($uselessAssets);
-            $this->manageAssets($page);
-            
+            if ($templateName === "internal") {
+                $uselessAssets = $this->assetRepository->findByInternalTemplate(null);
+
+                $this->removeAssets($uselessAssets);
+                $this->manageAssets($page->getInternalTemplate());
+            }
+
             $this->manager->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.page.success.edit", [], "alert"));
@@ -139,6 +147,7 @@ class AdminPageController extends AbstractController
         }
 
         return $this->render('admin/page/edit.html.twig', [
+            "page" => $page,
             'form' => $form->createView()
         ]);
     }
@@ -150,16 +159,20 @@ class AdminPageController extends AbstractController
      * @param Page $page
      * @return Response
      */
-    public function delete(Request $request, Page $page) : Response
+    public function delete(Request $request, Page $page): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_DELETE", $page);
+        $this->denyAccessUnlessGranted("PAGE_DELETE");
 
         if ($this->isCsrfTokenValid("delete-page", $request->request->get('token'))) {
-            $pageAssets = $this->assetRepository->findByPage($page->getId());
+            $templateName = $page->getTemplate()->getKeyname();
 
-            $this->removeAssets($pageAssets);
+            if ($templateName === "internal") {
+                $pageAssets = $this->assetRepository->findByInternalTemplate($page->getInternalTemplate());
+
+                $this->removeAssets($pageAssets);
+            }
+
             $this->manager->remove($page);
-
             $this->manager->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.page.success.delete", [], "alert"));
@@ -177,17 +190,19 @@ class AdminPageController extends AbstractController
      *
      * @Route("image/{id}", name="admin_page_upload_image", requirements={"id": "\d+"})
      * 
-     * @param Page $page
+     * @param InternalTemplate $internalTemplate
      * @return Response
      */
-    public function uploadImage(Page $page = null): Response
+    public function uploadImage(InternalTemplate $internalTemplate = null): Response
     {
+        $templateName = $internalTemplate->getTemplate()->getKeyname();
+
         $file = $this->fileManager->uploadFile($this->request->files->get('file'));
 
         $asset = new Asset();
         $asset->setFileName($file['filename']);
 
-        if ($page) $asset->setPage($page);
+        if ($templateName === "internal") $asset->setInternalTemplate($internalTemplate);
 
         $this->manager->persist($asset);
         $this->manager->flush();
@@ -202,24 +217,24 @@ class AdminPageController extends AbstractController
     /**
      * Manage assets from the content
      *
-     * @param Page $page
+     * @param $template
      * @return void
      */
-    public function manageAssets(Page $page): void
+    public function manageAssets($template): void
     {
         $regex = '/uploads\/[a-zA-Z0-9]+\.[a-z]{3,4}/';
         $matches = [];
 
-        if (preg_match_all($regex, $page->getContent(), $matches)) {
+        if (preg_match_all($regex, $template->getContent(), $matches)) {
             $filenames = array_map(function ($match) {
                 return basename($match);
             }, $matches[0]);
 
-            $assets = $this->assetRepository->findAssetToRemove($filenames, $page->getId());
+            $assets = $this->assetRepository->findAssetToRemove($filenames, $template->getId());
 
             $this->removeAssets($assets);
-        } else if ($page->getAssets()->count() > 0 && $matches) {
-            foreach ($page->getAssets() as $asset) {
+        } else if ($template->getAssets()->count() > 0 && $matches) {
+            foreach ($template->getAssets() as $asset) {
                 $this->manager->remove($asset);
                 $this->fileManager->removeFile($asset->getFileName());
             }
@@ -238,5 +253,24 @@ class AdminPageController extends AbstractController
             $this->manager->remove($asset);
             $this->fileManager->removeFile($asset->getFileName());
         }
+    }
+
+    private function handleTemplate(Page $page)
+    {
+        $templateName = $page->getTemplate()->getKeyname();
+
+        if ($templateName == 'internal') {
+            $template = new InternalTemplate();
+            $page->setInternalTemplate($template);
+        } else if ($templateName == 'article') {
+            $template = new ArticleTemplate();
+            $page->setArticleTemplate($template);
+        }
+
+
+        $this->manager->persist($template);
+        $this->manager->flush();
+
+        $template->setTemplate($page->getTemplate());
     }
 }

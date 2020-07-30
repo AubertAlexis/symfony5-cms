@@ -30,7 +30,11 @@ trait FormTrait
      */
     public function setOptions(string $label, array $options = null, bool $date = false): array
     {
-        $optionsToMerge = ($date === false) ? ['label_format' => "{$this->domain}.form.{$label}"] : ['label_format' => "{$this->domain}.form.{$label}", 'widget' => 'single_text', 'html5' => true, 'attr' => ['class' => 'datepicker']];
+        if ($date === false) {  
+            $optionsToMerge = ($label != false) ? ['label_format' => "{$this->domain}.form.{$label}"] : ['label_format' => false];
+        } else {
+            $optionsToMerge = ($label != false) ? ['label_format' => "{$this->domain}.form.{$label}", 'widget' => 'single_text', 'html5' => true, 'attr' => ['class' => 'datepicker']] : ['label_format' => false, 'widget' => 'single_text', 'html5' => true, 'attr' => ['class' => 'datepicker']];
+        }
 
         return ($options != null) ? array_merge_recursive($options, $optionsToMerge) : $optionsToMerge;
     }

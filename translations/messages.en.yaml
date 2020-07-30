@@ -17,7 +17,8 @@ setting:
     title:
         title: Edit - Settings 
         h1: Edit administration settings
-        localeForm: Language setting
+        parameter: Settings
+        module: Modules
 
 dashboard:
     list: 
@@ -56,26 +57,83 @@ nav:
     table:
         title: Navigations
 
+navLink:
+    list:
+        title: List - Navigations
+        h1: List of links for navigation
+
+    table:
+        title: Navigation links
+
+    empty: To add links to the menu, click the "Add" button above.
+
+subNav:
+    add:
+        title: Add - Sub-navigation
+        h1: New sub-navigation
+
+    list:
+        title: List - Sub-navigation
+        h1: List of sub-navigation
+
+    table:
+        title: The sub-navigation
+
+homePage:
+    edit:
+        title: Edit - Home Page
+        h1: Edit the home page
+
+module:
+    add:
+        title: Add - Module
+        h1: New module
+
+
+    edit:
+        title: Edit - Module
+        h1: edit the module
+
 form:
     title: 
         content: General informations
         aside: Further information
 
+        navLinks: Manage links
+    
+    homePage:
+        aboutSection: Section "About"
+
 button:
     add: Add
+    addEdit: Add / Edit
+    remove: Remove
+
+    addModule: Ad a new module
+
 
 table:
     title: Title
     slug: Url
+    link: Url
+    templateName: Page template
+    parent: Parent element
     visible: Visible ?
+    position: Position
     createdAt: Created on
     updatedAt: Modified on
     action: Actions
 
     keyname: Key
-    numberElement: Number of element
+    main: Main navigation ?
+    numberLinks: Number of links
+    numberSubnavs: Number of sub-navigations
 
 tooltip:
     edit: Edit
     remove: Remove
     view: View
+    details: Details
+
+    addLink: Manage links
+    addSubNav: Add a sub-navigation

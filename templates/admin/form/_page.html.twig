@@ -1,6 +1,6 @@
 {% block _page_slug_widget %}
 	<div class="mb-2">
-		<p class="font-weight-bold mb-1">{{ app.request.getSchemeAndHttpHost() ~ "/page/" }}</p>
+		<p class="font-weight-bold mb-1">{{ app.request.getSchemeAndHttpHost() ~ "/" }}</p>
 		{{ form_widget(form) }}
 	</div>
 {% endblock %}

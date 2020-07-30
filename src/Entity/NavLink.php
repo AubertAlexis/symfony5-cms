@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\NavLinkRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * @ORM\Entity(repositoryClass=NavLinkRepository::class)
+ * @ORM\HasLifecycleCallbacks()
+ * @ORM\Entity(repositoryClass="App\Repository\NavLinkRepository")
  */
 class NavLink
 {
@@ -18,7 +22,11 @@ class NavLink
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $title;
 
@@ -29,6 +37,10 @@ class NavLink
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $link;
 
@@ -48,10 +60,77 @@ class NavLink
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Nav::class, inversedBy="navLink")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Nav::class, inversedBy="navLinks")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $nav;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Assert\Positive(message = "validators.positive")
+     */
+    private $position;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SubNav::class, mappedBy="parent", orphanRemoval=true)
+     */
+    private $subNavs;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=SubNav::class, inversedBy="navLinks")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $subNav;
+
+    /**
+     * @Assert\Callback()
+     *
+     * @param ExecutionContextInterface $context
+     */
+    public function internalValidation(ExecutionContextInterface $context)
+    {
+        if ($this->getInternal() == '1') {
+
+            if ($this->getPage() === null) {
+                $context->buildViolation(_('validators.nav.callback.page'))
+                    ->atPath('page')
+                    ->addViolation();
+            }
+
+            if ($this->getTitle() === null && $this->getPage() !== null) {
+                $pageTitle = $this->getPage()->getTitle();
+
+                $this->setTitle($pageTitle);
+            }
+
+            $this->setLink(null);
+
+        } else {
+            if ($this->getTitle() === null) {
+                $context->buildViolation(_('validators.nav.callback.title'))
+                    ->atPath('title')
+                    ->addViolation();
+            }
+
+            $this->setPage(null);
+        }
+
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->subNavs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,7 +142,7 @@ class NavLink
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -111,23 +190,9 @@ class NavLink
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     public function getNav(): ?Nav
@@ -138,6 +203,61 @@ class NavLink
     public function setNav(?Nav $nav): self
     {
         $this->nav = $nav;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SubNav[]
+     */
+    public function getSubNavs(): Collection
+    {
+        return $this->subNavs;
+    }
+
+    public function addSubNav(SubNav $subNav): self
+    {
+        if (!$this->subNavs->contains($subNav)) {
+            $this->subNavs[] = $subNav;
+            $subNav->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubNav(SubNav $subNav): self
+    {
+        if ($this->subNavs->contains($subNav)) {
+            $this->subNavs->removeElement($subNav);
+            // set the owning side to null (unless already changed)
+            if ($subNav->getParent() === $this) {
+                $subNav->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSubNav(): ?SubNav
+    {
+        return $this->subNav;
+    }
+
+    public function setSubNav(?SubNav $subNav): self
+    {
+        $this->subNav = $subNav;
 
         return $this;
     }

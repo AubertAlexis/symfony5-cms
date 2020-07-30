@@ -1,7 +1,16 @@
 validators:
     notNull: Ce champ ne peut pas être vide.
+    unique: La valeur {{ value }} doit être unique.
+    positive: La valeur doit être positive.
     length: 
         min: La valeur {{ value }} doit contenir au moins {{ limit }} caractères.
         max: La valeur {{ value }} ne peut pas dépasser les {{ limit }} caractères.
     page:
         slug: Le lien est déjà utilisé pour une autre page, vérifier le lien ou le titre.
+        forbiddenSlug: Le lien est interdit, veuillez le changer.
+    nav:
+        main: Une navigation est déjà définie en tant que principale.
+        callback:
+            title: Le titre est obligatoire.
+            page: Vous devez associer une page.
+    

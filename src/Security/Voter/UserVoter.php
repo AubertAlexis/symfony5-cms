@@ -3,12 +3,15 @@
 namespace App\Security\Voter;
 
 use App\Entity\User;
+use App\Traits\SecurityTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserVoter extends Voter
 {
+    use SecurityTrait;
+
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, [
@@ -27,10 +30,10 @@ class UserVoter extends Voter
 
         switch ($attribute) {
             case 'USER_ADMIN':
-                return in_array("ROLE_ADMIN", $user->getRoles());
+                return $this->isAdminSecurity();
                 break;
             case 'USER_PROFIL':
-                return in_array("ROLE_ADMIN", $user->getRoles()) && $user == $subject;
+                return $this->isAdminSecurity() && $user == $subject;
                 break;
         }
 

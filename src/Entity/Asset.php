@@ -32,10 +32,10 @@ class Asset
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="assets")
+     * @ORM\ManyToOne(targetEntity="App\Entity\InternalTemplate", inversedBy="assets")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $page;
+    private $internalTemplate;
 
     /**
      * @ORM\PreUpdate
@@ -79,14 +79,14 @@ class Asset
         return $this->updatedAt;
     }
 
-    public function getPage(): ?Page
+    public function getInternalTemplate(): ?InternalTemplate
     {
-        return $this->page;
+        return $this->internalTemplate;
     }
 
-    public function setPage(?Page $page): self
+    public function setInternalTemplate(?InternalTemplate $internalTemplate): self
     {
-        $this->page = $page;
+        $this->internalTemplate = $internalTemplate;
 
         return $this;
     }

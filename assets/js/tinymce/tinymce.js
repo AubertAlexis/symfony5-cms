@@ -6,7 +6,7 @@ import "tinymce/plugins/code";
 
 let form = document.querySelector("#text_editor");
 let currentLanguage = document.querySelector("#userLocale").textContent == "fr" ? "fr_FR" : "en";
-
+console.log(+form.dataset.internalTemplateId)
 tinymce.init({
     selector: "textarea",
     language: currentLanguage,
@@ -18,7 +18,7 @@ tinymce.init({
     fontsize_formats: "8px 10px 12px 14px 18px 24px 36px 48px 56px 64px 72px 80px 88px 92px 100px 110px 120px",
     branding: false,
     automatic_uploads: true,
-    images_upload_url: `image/${+form.dataset.pageId}`,
+    images_upload_url: `image/${+form.dataset.internalTemplateId}`,
     file_picker_types: 'image',
     file_picker_callback: function (cb, value, meta) {
         var input = document.createElement('input');

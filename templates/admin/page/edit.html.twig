@@ -11,8 +11,12 @@
 {% block title_h1 "page.edit.h1"|trans %}
 
 {% block body %}
-
-	{{ form_start(form, {'attr': {'id': 'text_editor', 'data-page-id': app.request.attributes.get('id') }}) }}
+	{% if form.internalTemplate is defined %}
+		{{ form_start(form, {'attr': {'id': 'text_editor', 'data-internal-template-id': app.request.attributes.get('page').internalTemplate.id }}) }}
+	{% else %}
+		{{ form_start(form) }}
+	{% endif %}
+	
 	
 	<div class="row">
 
@@ -33,11 +37,24 @@
 						</div>
 					</div>
 
-					<div class="row">
-						<div class="col-lg-12">
-							{{ form_row(form.content) }}
+					<hr>
+
+					{% if form.internalTemplate is defined %}
+						{{ form_widget(form.internalTemplate) }}
+					{% endif %}
+
+					{% if form.articleTemplate is defined %}
+						<div class="row">
+							<div class="col-8">
+								{{ form_widget(form.articleTemplate) }}
+							</div>
+							{% if page.articleTemplate %}
+								<div class="col-4 text-center">
+									<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
+								</div>
+							{% endif %}	
 						</div>
-					</div>
+					{% endif %}
 					
 				</div>
 			</div>
@@ -91,5 +108,10 @@
 {% endblock %}
 
 {% block javascripts %}
-	{{ encore_entry_script_tags("tinymce") }}
+
+	{% if form.internalTemplate is defined %}
+		{{ encore_entry_script_tags("tinymce") }}
+	{% endif %}
+
 {% endblock %}
+

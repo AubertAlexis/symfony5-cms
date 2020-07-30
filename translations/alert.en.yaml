@@ -21,3 +21,23 @@ alert:
             edit: The navigation informations has been changed.
             add: The navigation has been added.
             delete: The navigation has been deleted.
+
+    subNav:
+        success:
+            edit: The sub-nav informations has been changed.
+            add: The sub-nav has been added.
+            delete: The sub-nav has been deleted.
+
+    navLink:
+        success:
+            delete: Navigation link has been deleted.
+
+    homePage:
+        success:
+            edit: The home page informations has been changed.
+
+    module:
+        success:
+            edit: The module informations has been changed.
+            add: The module has been added.
+            delete: The module has been deleted.

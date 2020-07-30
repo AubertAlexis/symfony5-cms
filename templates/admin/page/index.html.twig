@@ -27,6 +27,7 @@
                         <tr>
                             <th>{{ "table.title"|trans }}</th>
                             <th>{{ "table.slug"|trans }}</th>
+                            <th>{{ "table.templateName"|trans }}</th>
                             <th class="visible">{{ "table.visible"|trans }}</th>
                             <th class="entry-date">{{ "table.createdAt"|trans }}</th>
                             <th class="entry-date">{{ "table.updatedAt"|trans }}</th>
@@ -42,6 +43,7 @@
                                     /{{ page.slug }}
                                 </a>
                             </td>
+                            <td>{{ page.template.title }}</td>
                             <td class="visible">{{ icon_from_bool(page.enabled) }}</td>
                             <td>{{ page.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
                             <td>{{ page.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
