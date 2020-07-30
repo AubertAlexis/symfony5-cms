@@ -23,6 +23,10 @@ class NavLink
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $title;
 
@@ -33,6 +37,10 @@ class NavLink
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $link;
 
@@ -59,6 +67,7 @@ class NavLink
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Positive(message = "validators.positive")
      */
     private $position;
 

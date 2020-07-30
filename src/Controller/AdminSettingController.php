@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Form\LocaleType;
+use App\Form\ModuleType;
+use App\Repository\ModuleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -33,7 +32,7 @@ class AdminSettingController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function edit(Request $request, TokenStorageInterface $tokenStorage, SessionInterface $session): Response
+    public function edit(Request $request, ModuleRepository $moduleRepository): Response
     {
         $user = $this->getUser();
 
@@ -51,6 +50,7 @@ class AdminSettingController extends AbstractController
         }
 
         return $this->render('admin/setting/edit.html.twig', [
+            'modules' => $moduleRepository->findAll(),
             'localeForm' => $localeForm->createView()
         ]);
     }

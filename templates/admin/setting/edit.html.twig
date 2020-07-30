@@ -5,29 +5,84 @@
 {% block title_h1 "setting.title.h1"|trans %}
 
 {% block body %}
-	<div class="card shadow mt-3">
-		<div class="card-header d-flex align-items-center">
-			<h6 class="m-0 font-weight-bold text-primary">{{ "setting.title.localeForm"|trans }}</h5>
+
+	<div class="row mt-5">
+		<div class="col-lg-8 col-md-8 col-sm-12">
+			<div class="card shadow">
+				<div class="card-header d-flex align-items-center">
+					<h6 class="m-0 font-weight-bold text-primary">{{ "setting.title.parameter"|trans }}</h5>
+				</div>
+				<div class="card-body">
+					{{ form_start(localeForm) }}
+					<div class="row">
+						<div class="col-lg-6 col-md-8 col-sm-12">
+							{{ form_row(localeForm.locale) }}
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12 text-center mt-3">
+							{{ form_row(localeForm.submit) }}
+						</div>
+					</div>
+
+					{{ form_row(localeForm._token) }}
+
+					{{ form_end(localeForm, {"render_rest": false}) }}
+				</div>
+			</div>
 		</div>
-		<div class="card-body">
-			{{ form_start(localeForm) }}
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-sm-12">
-					{{ form_row(localeForm.locale) }}
+
+		<div class="col-lg-4 col-md-4 col-sm-12">
+			<div class="card shadow">
+				<div class="card-header d-flex align-items-center">
+					<h6 class="m-0 font-weight-bold text-primary">{{ "setting.title.module"|trans }}</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 text-right">
+							{% if is_granted("ROLE_DEV") %}
+								<a href="{{ path("admin_module_add") }}" class="btn btn-success btn-icon-split ml-auto btn-sm">
+									<span class="icon text-white-50">
+										<i class="fas fa-plus"></i>
+									</span>
+									<span class="text">{{ "button.addModule"|trans }}</span>
+								</a>
+							{% endif %}
+						</div>
+					</div>
+
+					<div class="table-responsive mt-3">
+						<table class="table" id="pageTable" width="100%" cellspacing="0">
+							<thead>
+								<tr>
+									<th>{{ "table.title"|trans }}</th>
+									<th>{{ "table.keyname"|trans }}</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for module in modules %}
+									<tr>
+										<td>
+											<span class="font-weight-bold">{{ module.title }}</span>
+										</td>
+										<td>{{ module.keyname }}</td>
+										<td>
+											<label class="switch">
+												<input type="checkbox" {{ module.enabled ? "checked" : "" }}>
+												<span class="slider round"></span>
+											</label>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="col-12 text-center mt-3">
-					{{ form_row(localeForm.submit) }}
-				</div>
-			</div>
-
-			{{ form_row(localeForm._token) }}
-
-			{{ form_end(localeForm, {"render_rest": false}) }}
 		</div>
 	</div>
-
 
 {% endblock %}

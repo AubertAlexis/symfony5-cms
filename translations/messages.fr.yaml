@@ -17,7 +17,8 @@ setting:
     title:
         title: Édition - Paramètres 
         h1: Modifier les paramètres d'administration
-        localeForm: Paramètre de langue
+        parameter: Paramètres
+        module: Modules
 
 dashboard:
     list: 
@@ -85,6 +86,16 @@ homePage:
         title: Édition - Accueil
         h1: Modifier la page d'accueil
 
+module:
+    add:
+        title: Ajout - Module
+        h1: Nouveau module
+
+
+    edit:
+        title: Édition - Module
+        h1: Modifier le module
+
 form:
     title: 
         content: Informations générales
@@ -99,6 +110,8 @@ button:
     add: Ajouter
     addEdit: Ajouter / Editer
     remove: Supprimer
+
+    addModule: Ajouter un module
 
 table:
     title: Titre

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -22,11 +23,23 @@ class HomePage
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 255,
+     *      minMessage = "validators.length.min",
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 255,
+     *      minMessage = "validators.length.min",
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $aboutTitle;
 
@@ -45,11 +58,19 @@ class HomePage
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $aboutImageName;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(
+     *      max = 65535,
+     *      maxMessage = "validators.length.max"
+     * )
      */
     private $aboutText;
 
@@ -65,6 +86,7 @@ class HomePage
 
     /**
      * @ORM\OneToOne(targetEntity=Seo::class, inversedBy="homePage", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $seo;
 

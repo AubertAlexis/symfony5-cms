@@ -2,21 +2,23 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\HomePage;
+use App\Entity\Module;
 use App\Traits\SecurityTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class HomePageVoter extends Voter
+class ModuleVoter extends Voter
 {
     use SecurityTrait;
 
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, [
-            'HOME_PAGE_EDIT'
-        ]) && ($subject instanceof HomePage || $subject === null);
+            'MODULE_ADD',
+            'MODULE_EDIT',
+            'MODULE_DELETE'
+        ]) && ($subject instanceof Module || $subject === null);
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -28,8 +30,14 @@ class HomePageVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'HOME_PAGE_EDIT':
-                return $this->isAdminSecurity();
+            case 'MODULE_ADD':
+                return $this->isDeveloper();
+                break;
+            case 'MODULE_EDIT':
+                return $this->isDeveloper();
+                break;
+            case 'MODULE_DELETE':
+                return $this->isDeveloper();
                 break;
         }
 

@@ -1,6 +1,7 @@
 validators:      
     notNull: This field cannot be empty.
     unique: The {{ value }} value must be unique.
+    positive: The value should be positive.
     length:
         min: The value {{ value }} must be at least {{ limit }} characters long.
         max: The value {{ value }} cannot be longer than {{ limit }} characters.

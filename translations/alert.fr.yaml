@@ -35,3 +35,9 @@ alert:
     homePage:
         success:
             edit: Les informations de la page d'accueil ont bien été modifiées.
+
+    module:
+        success:
+            add: Le module a bien été ajouté.
+            edit: Les informations du module ont bien été modifiées.
+            delete: Le module a bien été supprimé.

@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Module;
 use App\Entity\User;
 use App\Traits\FormTrait;
 use Symfony\Component\Form\AbstractType;
@@ -23,6 +24,7 @@ class LocaleType extends AbstractType
                     "user.form.locale.localeChoices.english" => "en"
                 ]
             ]))
+
             ->add('submit', SubmitType::class, $this->setOptions('locale.%name%'))
         ;
     }

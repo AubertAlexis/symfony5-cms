@@ -2,16 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\ArticleTemplate;
-use App\Entity\Asset;
 use App\Entity\HomePage;
-use App\Entity\InternalTemplate;
-use App\Entity\Page;
 use App\Form\HomePageType;
-use App\Form\PageType;
 use App\Repository\AssetRepository;
 use App\Repository\PageRepository;
-use App\Repository\TemplateRepository;
 use App\Services\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
