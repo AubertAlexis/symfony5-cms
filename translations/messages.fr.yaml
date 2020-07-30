@@ -80,12 +80,20 @@ subNav:
     table:
         title: Les sous menu
 
+homePage:
+    edit:
+        title: Édition - Accueil
+        h1: Modifier la page d'accueil
+
 form:
     title: 
         content: Informations générales
         aside: Informations complémentaires
 
         navLinks: Gérer les liens
+
+    homePage:
+        aboutSection: Section "À propos"
 
 button: 
     add: Ajouter
@@ -96,6 +104,7 @@ table:
     title: Titre
     slug: Url
     link: Url
+    templateName: Type de page
     parent: Élément parent
     visible: Visible ? 
     position: Position

@@ -1,0 +1,5 @@
+articleTemplate:
+    form:
+        articleTemplate:
+            imageFile: Image
+            content: Contenu de la page

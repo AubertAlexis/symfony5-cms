@@ -5,3 +5,4 @@ navigation:
     logout: Logout
     page: Pages
     nav: Navigations
+    homePage: Home

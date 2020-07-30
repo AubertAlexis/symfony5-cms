@@ -3,13 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Page;
+use App\Entity\Template;
 use App\Traits\FormTrait;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageType extends AbstractType
@@ -28,12 +31,14 @@ class PageType extends AbstractType
                 "required" => false,
                 "help" => "page.form.page.helpEnabled"
             ]))
-            ->add('content', TextareaType::class, $this->setOptions('page.%name%', [
-                'required' => false
-            ]))
+            
             ->add('submit', SubmitType::class, $this->setOptions('page.%name%'))
+
         ;
-    }
+
+            $builder
+                ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {$this->manageElements($event);});
+        }
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -43,5 +48,33 @@ class PageType extends AbstractType
         ]);
 
         $this->defaultOptions($resolver->resolve()["translation_domain"]);
+    }
+
+    protected function manageElements(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $data = $event->getData();
+
+        $templateName = (null !== $data->getTemplate()) ? $data->getTemplate()->getKeyname() : "internal";
+
+        if ($data->getId() === null) {
+            $form 
+                ->add('template', EntityType::class, $this->setOptions('page.%name%', [
+                    'class' => Template::class,
+                    'choice_label' => 'title',
+                ]));
+        } else {
+            if ($templateName === "internal") {
+                $form
+                    ->add("internalTemplate", InternalTemplateType::class, $this->setOptions(false, [
+                        "data" => $data->getInternalTemplate()
+                    ]));
+            } else if ($templateName === "article") {
+                $form
+                    ->add("articleTemplate", ArticleTemplateType::class, $this->setOptions(false, [
+                        "data" => $data->getArticleTemplate()
+                    ]));
+            }
+        }
     }
 }

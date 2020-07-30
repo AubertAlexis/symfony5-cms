@@ -187,3 +187,7 @@ label.required:after {
     border-left: .3em solid transparent;
     top: 50%;
 }
+
+.image-min {
+    max-width: 150px;
+}
