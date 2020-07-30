@@ -1,0 +1,12 @@
+module:
+    form:
+        module:
+            title: Titre du module
+            keyname: Clé du module
+            enabled: Activer le module ?
+
+            submit: Enregistrer
+
+            helpKeyname: Clé utilisé pour l'affichage du module dans les templates Twig.
+            helpEnabled: En désactivant le module, ses fonctionnalités seront inutilisable.
+            

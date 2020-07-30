@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Page;
-use App\Repository\PageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

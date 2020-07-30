@@ -28,6 +28,10 @@ class ArticleTemplate
     private $imageFile;
 
     /**
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "validators.length.max"
+     * )
      * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
@@ -52,11 +56,13 @@ class ArticleTemplate
 
     /**
      * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="articleTemplate")
+     * @Assert\Valid
      */
     private $template;
 
     /**
      * @ORM\OneToOne(targetEntity=Page::class, mappedBy="articleTemplate", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $page;
 

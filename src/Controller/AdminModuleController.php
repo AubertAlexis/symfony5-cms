@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\ArticleTemplate;
 use App\Entity\Asset;
 use App\Entity\InternalTemplate;
+use App\Entity\Module;
 use App\Entity\Page;
+use App\Form\ModuleType;
 use App\Form\PageType;
 use App\Repository\AssetRepository;
 use App\Repository\PageRepository;
@@ -19,9 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("admin/pages/")
+ * @Route("admin/modules/")
  */
-class AdminPageController extends AbstractController
+class AdminModuleController extends AbstractController
 {
     /**
      * @var TranslatorInterface
@@ -69,85 +71,60 @@ class AdminPageController extends AbstractController
         $this->assetRepository = $assetRepository;
     }
 
-    /**
-     * @Route("", name="admin_page_index")
-     * 
-     * @return Response
-     */
-    public function index(): Response
-    {
-        $this->denyAccessUnlessGranted("PAGE_LIST");
-
-        return $this->render('admin/page/index.html.twig', [
-            'pages' => $this->pageRepository->findAll()
-        ]);
-    }
 
     /**
-     * @Route("nouveau", name="admin_page_add")
+     * @Route("nouveau", name="admin_module_add")
      * 
      * @return Response
      */
     public function add(): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_ADD");
+        $this->denyAccessUnlessGranted("MODULE_ADD");
 
-        $page = new Page();
+        $module = new Module();
 
-        $form = $this->createForm(PageType::class, $page);
+        $form = $this->createForm(ModuleType::class, $module);
 
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->handleTemplate($page);
-
-            $this->manager->persist($page);
+            $this->manager->persist($module);
             $this->manager->flush();
 
-            $this->addFlash("success", $this->translator->trans("alert.page.success.add", [], "alert"));
+            $this->addFlash("success", $this->translator->trans("alert.module.success.add", [], "alert"));
 
-            return $this->redirectToRoute("admin_page_edit", ["id" => $page->getId()]);
+            return $this->redirectToRoute("admin_setting_edit");
         }
 
-        return $this->render('admin/page/add.html.twig', [
+        return $this->render('admin/module/add.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("{id}", name="admin_page_edit", requirements={"id": "\d+"})
+     * @Route("{id}", name="admin_module_edit", requirements={"id": "\d+"})
      * 
-     * @param Page $page
+     * @param Module $module
      * @return Response
      */
-    public function edit(Page $page): Response
+    public function edit(Module $module): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_EDIT");
+        $this->denyAccessUnlessGranted("MODULE_EDIT");
 
-        $form = $this->createForm(PageType::class, $page);
+        $form = $this->createForm(ModuleType::class, $module);
 
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $templateName = $page->getTemplate()->getKeyname();
-
-            if ($templateName === "internal") {
-                $uselessAssets = $this->assetRepository->findByInternalTemplate(null);
-
-                $this->removeAssets($uselessAssets);
-                $this->manageAssets($page->getInternalTemplate());
-            }
-
             $this->manager->flush();
 
-            $this->addFlash("success", $this->translator->trans("alert.page.success.edit", [], "alert"));
+            $this->addFlash("success", $this->translator->trans("alert.module.success.edit", [], "alert"));
 
-            return $this->redirectToRoute("admin_page_index");
+            return $this->redirectToRoute("admin_setting_edit");
         }
 
-        return $this->render('admin/page/edit.html.twig', [
-            "page" => $page,
+        return $this->render('admin/module/edit.html.twig', [
+            "module" => $module,
             'form' => $form->createView()
         ]);
     }

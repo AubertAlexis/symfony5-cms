@@ -35,11 +35,13 @@ class InternalTemplate
 
     /**
      * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="internalTemplate")
+     * @Assert\Valid
      */
     private $template;
 
     /**
      * @ORM\OneToOne(targetEntity=Page::class, mappedBy="internalTemplate", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $page;
 

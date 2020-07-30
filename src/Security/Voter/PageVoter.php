@@ -3,12 +3,15 @@
 namespace App\Security\Voter;
 
 use App\Entity\Page;
+use App\Traits\SecurityTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class PageVoter extends Voter
 {
+    use SecurityTrait;
+
     protected function supports($attribute, $subject)
     {
         return in_array($attribute, [
@@ -29,16 +32,16 @@ class PageVoter extends Voter
 
         switch ($attribute) {
             case 'PAGE_LIST':
-                return in_array("ROLE_ADMIN", $user->getRoles());
+                return $this->isAdminSecurity();
                 break;
             case 'PAGE_ADD':
-                return in_array("ROLE_ADMIN", $user->getRoles());
+                return $this->isAdminSecurity();
                 break;
             case 'PAGE_EDIT':
-                return in_array("ROLE_ADMIN", $user->getRoles());
+                return $this->isAdminSecurity();
                 break;
             case 'PAGE_DELETE':
-                return in_array("ROLE_ADMIN", $user->getRoles());
+                return $this->isAdminSecurity();
                 break;
         }
 

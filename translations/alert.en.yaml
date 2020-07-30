@@ -35,3 +35,9 @@ alert:
     homePage:
         success:
             edit: The home page informations has been changed.
+
+    module:
+        success:
+            edit: The module informations has been changed.
+            add: The module has been added.
+            delete: The module has been deleted.

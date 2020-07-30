@@ -79,12 +79,12 @@ class Asset
         return $this->updatedAt;
     }
 
-    public function getInternalTemplate(): InternalTemplate
+    public function getInternalTemplate(): ?InternalTemplate
     {
         return $this->internalTemplate;
     }
 
-    public function setInternalTemplate(InternalTemplate $internalTemplate): self
+    public function setInternalTemplate(?InternalTemplate $internalTemplate): self
     {
         $this->internalTemplate = $internalTemplate;
 

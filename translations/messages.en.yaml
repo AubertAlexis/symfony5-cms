@@ -17,7 +17,8 @@ setting:
     title:
         title: Edit - Settings 
         h1: Edit administration settings
-        localeForm: Language setting
+        parameter: Settings
+        module: Modules
 
 dashboard:
     list: 
@@ -83,6 +84,15 @@ homePage:
         title: Edit - Home Page
         h1: Edit the home page
 
+module:
+    add:
+        title: Add - Module
+        h1: New module
+
+
+    edit:
+        title: Edit - Module
+        h1: edit the module
 
 form:
     title: 
@@ -98,6 +108,8 @@ button:
     add: Add
     addEdit: Add / Edit
     remove: Remove
+
+    addModule: Ad a new module
 
 
 table:
