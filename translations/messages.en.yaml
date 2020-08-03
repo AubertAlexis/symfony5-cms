@@ -104,10 +104,15 @@ form:
     homePage:
         aboutSection: Section "About"
 
+    page:
+        seo: Seo
+
+
 button:
     add: Add
     addEdit: Add / Edit
     remove: Remove
+    return: Return
 
     addModule: Ad a new module
 

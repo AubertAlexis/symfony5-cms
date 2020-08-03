@@ -48,9 +48,6 @@
                             <td>{{ nav.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
                             <td>{{ nav.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
                             <td>
-								{# <a href="{{ path("admin_nav_edit", {id: nav.id}) }}" class="btn btn-info rounded with-icon mr-4" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.addLink"|trans }}">
-									<i class="fas fa-plus"></i>
-								</a> #}
 								<a href="{{ path("admin_nav_edit", {id: nav.id}) }}" class="btn btn-primary rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.edit"|trans }}">
 									<i class="far fa-edit"></i>
 								</a>

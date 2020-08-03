@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\Nav;
 use App\Entity\NavLink;
 use App\Entity\SubNav;
+use App\Repository\NavLinkRepository;
 use App\Repository\NavRepository;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,19 +16,19 @@ use Twig\TwigFunction;
 class AppExtension extends AbstractExtension
 {
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * @var NavRepository
      */
     private $navRepository;
 
-    public function __construct(TranslatorInterface $translator, NavRepository $navRepository)
+    /**
+     * @var NavLinkRepository
+     */
+    private $navLinkRepository;
+
+    public function __construct(NavRepository $navRepository, NavLinkRepository $navLinkRepository)
     {
-        $this->translator = $translator;
         $this->navRepository = $navRepository;
+        $this->navLinkRepository = $navLinkRepository;
     }
 
     public function getFunctions()
@@ -151,20 +152,20 @@ class AppExtension extends AbstractExtension
         $title = $navLink->getTitle();
 
         $dropdown = ($navLink->getSubNavs()->count() !== 0);
-
-        if (!$dropdown) {
+        
+        if (!$dropdown || $navLink->getPage() && !$navLink->getPage()->getEnabled()) {
             $htmlNavigation .= "<li class='nav-item'><a href='{$link}' class='nav-link'>{$title}</a></li>";
         } else {
-
             $subNavParentTitle = $navLink->getTitle();
+            $subNavParentLink = $navLink->getPage() !== null ? "/{$navLink->getPage()->getSlug()}" : $navLink->getLink();
 
-            $htmlNavigation .= "<li class='nav-item dropdown-submenu'><a href='#' class='nav-link dropdown-click'>{$subNavParentTitle}</a><ul class='dropdown-menu'>";
+            $htmlNavigation .= "<li class='nav-item dropdown-submenu'><i class='fas fa-caret-down'></i><a href='{$subNavParentLink}' class='nav-link dropdown-hover'>{$subNavParentTitle}</a><ul class='dropdown-menu'>";
             
             /**
              * @var SubNav $subNav
              */
             foreach ($navLink->getSubNavs() as $subNav) {
-                    
+
                 /**
                  * @var NavLink $subNavItem
                  */
@@ -172,7 +173,10 @@ class AppExtension extends AbstractExtension
                     $subNavLink = $subNavItem->getPage() !== null ? "/{$subNavItem->getPage()->getSlug()}" : $subNavItem->getLink();
                     $subNavTitle = $subNavItem->getTitle();
 
-                    if ($subNavItem->getSubNavs()->count() !== 0) $htmlNavigation = $this->renderSubNavs($subNavItem, $htmlNavigation);
+
+
+                    if ($subNavItem->getPage() && !$subNavItem->getPage()->getEnabled()) continue;
+                    else if ($subNavItem->getSubNavs()->count() !== 0) $htmlNavigation = $this->renderSubNavs($subNavItem, $htmlNavigation);
                     else $htmlNavigation .= "<li class='nav-item dropdown'><a class='dropdown-item' href='{$subNavLink}'>{$subNavTitle}</a></li>";
                 }
                 

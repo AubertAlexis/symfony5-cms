@@ -64,6 +64,11 @@ class PageType extends AbstractType
                     'choice_label' => 'title',
                 ]));
         } else {
+            $form 
+                ->add('seo', SeoType::class, $this->setOptions('page.%name%', [
+                    "data" => $data->getSeo()
+                ]));
+                
             if ($templateName === "internal") {
                 $form
                     ->add("internalTemplate", InternalTemplateType::class, $this->setOptions(false, [

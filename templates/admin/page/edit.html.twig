@@ -17,6 +17,7 @@
 		{{ form_start(form) }}
 	{% endif %}
 	
+	{% set seo = form.seo %}
 	
 	<div class="row">
 
@@ -25,37 +26,76 @@
 		</div>
 
 		<div class="col-md-9 col-sm-12">
-			<div class="card shadow mt-3">
-				<div class="card-header d-flex align-items-center">
-					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
-				</div>
-				<div class="card-body">
-					
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12">
-							{{ form_row(form.title) }}
+			<div class="row">
+				<div class="col-12">
+					<div class="card shadow mb-4">
+						<a href="#SeoPageCard" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="SeoPageCard">
+							<h6 class="m-0 font-weight-bold text-primary">{{ "form.page.seo"|trans }}</h6>
+						</a>
+						<div class="collapse" id="SeoPageCard">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-lg-5 col-md-12">
+										{{ form_row(seo.metaTitle) }}
+									</div>
+									<div class="col-lg-7 col-md-12">
+										{{ form_row(seo.metaKeywords) }}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										{{ form_row(seo.metaDescription) }}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-4 col-md-12">
+										{{ form_row(seo.noIndex) }}
+									</div>
+									<div class="col-lg-4 col-md-12">
+										{{ form_row(seo.noFollow) }}
+									</div>
+									<div class="col-lg-4 col-md-12">
+										{{ form_row(seo.hideOnSitemap) }}
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-
-					<hr>
-
-					{% if form.internalTemplate is defined %}
-						{{ form_widget(form.internalTemplate) }}
-					{% endif %}
-
-					{% if form.articleTemplate is defined %}
-						<div class="row">
-							<div class="col-8">
-								{{ form_widget(form.articleTemplate) }}
-							</div>
-							{% if page.articleTemplate %}
-								<div class="col-4 text-center">
-									<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
-								</div>
-							{% endif %}	
+				</div>
+				<div class="col-12">
+					<div class="card shadow mt-3">
+						<div class="card-header d-flex align-items-center">
+							<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
 						</div>
-					{% endif %}
-					
+						<div class="card-body">
+							
+							<div class="row">
+								<div class="col-lg-6 col-md-6 col-sm-12">
+									{{ form_row(form.title) }}
+								</div>
+							</div>
+
+							<hr>
+
+							{% if form.internalTemplate is defined %}
+								{{ form_widget(form.internalTemplate) }}
+							{% endif %}
+
+							{% if form.articleTemplate is defined %}
+								<div class="row">
+									<div class="col-8">
+										{{ form_widget(form.articleTemplate) }}
+									</div>
+									{% if page.articleTemplate %}
+										<div class="col-4 text-center">
+											<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
+										</div>
+									{% endif %}	
+								</div>
+							{% endif %}
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
