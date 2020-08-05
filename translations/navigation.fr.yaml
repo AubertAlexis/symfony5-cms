@@ -6,3 +6,4 @@ navigation:
     page: Pages
     nav: Navigations
     homePage: Accueil
+    template: Modèle de page

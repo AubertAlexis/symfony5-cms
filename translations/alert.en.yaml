@@ -43,3 +43,8 @@ alert:
             delete: The module has been deleted.
             enabled: The module has been enabled.
             disabled: The module has been disabled.
+
+    template:
+        success:
+            edit: The template informations has been changed.
+            add: The template has been added.

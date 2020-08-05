@@ -43,3 +43,8 @@ alert:
             delete: Le module a bien été supprimé.
             enabled: Le module a bien été activé.
             disabled: Le module a bien été désactivé.
+
+    template:
+        success:
+            add: Le modèle de page a bien été ajouté.
+            edit: Les informations du modèle de page ont bien été modifiées.

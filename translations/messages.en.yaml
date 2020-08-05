@@ -94,6 +94,16 @@ module:
         title: Edit - Module
         h1: edit the module
 
+template:
+    add:
+        title: Add - Template
+        h1: New template
+
+
+    edit:
+        title: Edit - Template
+        h1: edit the template
+
 form:
     title: 
         content: General informations
@@ -126,6 +136,7 @@ table:
     parent: Parent element
     visible: Visible ?
     position: Position
+    pages: Pages
     createdAt: Created on
     updatedAt: Modified on
     action: Actions
