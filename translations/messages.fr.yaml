@@ -105,11 +105,16 @@ form:
 
     homePage:
         aboutSection: Section "À propos"
+        seo: Seo
+        
+    page:
+        seo: Seo
 
 button: 
     add: Ajouter
     addEdit: Ajouter / Editer
     remove: Supprimer
+    return: Retour
 
     addModule: Ajouter un module
 

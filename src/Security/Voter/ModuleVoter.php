@@ -17,6 +17,7 @@ class ModuleVoter extends Voter
         return in_array($attribute, [
             'MODULE_ADD',
             'MODULE_EDIT',
+            'MODULE_MANAGE',
             'MODULE_DELETE'
         ]) && ($subject instanceof Module || $subject === null);
     }
@@ -35,6 +36,9 @@ class ModuleVoter extends Voter
                 break;
             case 'MODULE_EDIT':
                 return $this->isDeveloper();
+                break;
+            case 'MODULE_MANAGE':
+                return $this->isAdminSecurity();
                 break;
             case 'MODULE_DELETE':
                 return $this->isDeveloper();

@@ -25,8 +25,10 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('front_app', './assets/js/front_app.js')
     .addEntry('collection', './assets/js/collection.js')
     .addEntry('manageNavForm', './assets/js/manage-nav-form.js')
+    .addEntry('manageModule', './assets/js/manage-module.js')
     .addEntry('sort', './assets/js/sort.js')
     .addEntry('tinymce', './assets/js/tinymce/tinymce.js')
     .addEntry('datatable_page', './assets/js/datatable/page.js')

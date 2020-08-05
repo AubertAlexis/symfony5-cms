@@ -33,11 +33,10 @@ class PageType extends AbstractType
             ]))
             
             ->add('submit', SubmitType::class, $this->setOptions('page.%name%'))
-
         ;
 
-            $builder
-                ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {$this->manageElements($event);});
+        $builder
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {$this->manageElements($event);});
         }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -64,6 +63,9 @@ class PageType extends AbstractType
                     'choice_label' => 'title',
                 ]));
         } else {
+
+            if ($this->isModuleEnabled("seo")) $form->add('seo', SeoType::class, $this->setOptions('homePage.%name%'));
+                
             if ($templateName === "internal") {
                 $form
                     ->add("internalTemplate", InternalTemplateType::class, $this->setOptions(false, [

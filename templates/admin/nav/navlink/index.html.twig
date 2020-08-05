@@ -50,7 +50,11 @@
                                 {% endif %}
                             </td>
                             <td class="number-element">
-                                <a href="{{ path('admin_sub_nav_details', { id: navLink.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ navLink.subNavs|length }}</a>
+                                {% if navLink.subNavs|length != 0 %}
+                                    <a href="{{ path('admin_sub_nav_details', { id: navLink.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ navLink.subNavs|length }}</a>
+                                {% else %}
+                                    <span class="badge badge-primary">{{ navLink.subNavs|length }}</span>    
+                                {% endif %}
                             </td>
                             <td class="entry-position">
                                 <div class="bullet">{{ navLink.position }}</div>

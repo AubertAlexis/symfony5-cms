@@ -6,7 +6,7 @@ import "tinymce/plugins/code";
 
 let form = document.querySelector("#text_editor");
 let currentLanguage = document.querySelector("#userLocale").textContent == "fr" ? "fr_FR" : "en";
-console.log(+form.dataset.internalTemplateId)
+
 tinymce.init({
     selector: "textarea",
     language: currentLanguage,

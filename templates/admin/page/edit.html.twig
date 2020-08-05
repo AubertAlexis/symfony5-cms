@@ -17,7 +17,6 @@
 		{{ form_start(form) }}
 	{% endif %}
 	
-	
 	<div class="row">
 
 		<div class="col-12">
@@ -25,37 +24,46 @@
 		</div>
 
 		<div class="col-md-9 col-sm-12">
-			<div class="card shadow mt-3">
-				<div class="card-header d-flex align-items-center">
-					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
-				</div>
-				<div class="card-body">
-					
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12">
-							{{ form_row(form.title) }}
+			<div class="row">
+				
+				{% if is_module_enabled("seo") %}
+					{% include "admin/form/_seo.html.twig" %}
+				{% endif %}
+
+				<div class="col-12">
+					<div class="card shadow mt-3">
+						<div class="card-header d-flex align-items-center">
+							<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
+						</div>
+						<div class="card-body">
+							
+							<div class="row">
+								<div class="col-lg-6 col-md-6 col-sm-12">
+									{{ form_row(form.title) }}
+								</div>
+							</div>
+
+							<hr>
+
+							{% if form.internalTemplate is defined %}
+								{{ form_widget(form.internalTemplate) }}
+							{% endif %}
+
+							{% if form.articleTemplate is defined %}
+								<div class="row">
+									<div class="col-8">
+										{{ form_widget(form.articleTemplate) }}
+									</div>
+									{% if page.articleTemplate %}
+										<div class="col-4 text-center">
+											<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
+										</div>
+									{% endif %}	
+								</div>
+							{% endif %}
+							
 						</div>
 					</div>
-
-					<hr>
-
-					{% if form.internalTemplate is defined %}
-						{{ form_widget(form.internalTemplate) }}
-					{% endif %}
-
-					{% if form.articleTemplate is defined %}
-						<div class="row">
-							<div class="col-8">
-								{{ form_widget(form.articleTemplate) }}
-							</div>
-							{% if page.articleTemplate %}
-								<div class="col-4 text-center">
-									<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
-								</div>
-							{% endif %}	
-						</div>
-					{% endif %}
-					
 				</div>
 			</div>
 		</div>

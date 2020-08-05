@@ -25,9 +25,9 @@ class PageController extends AbstractController
      * @param Page $page
      * @return Response
      */
-    public function index(Page $page): Response
+    public function index(Page $page = null): Response
     {
-        if (!$page->getEnabled()) throw new NotFoundHttpException();
+        if (!$page || !$page->getEnabled()) throw new NotFoundHttpException("Not found");
 
         $templateName = $page->getTemplate()->getKeyname();
         
