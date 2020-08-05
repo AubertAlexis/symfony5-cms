@@ -41,3 +41,5 @@ alert:
             add: Le module a bien été ajouté.
             edit: Les informations du module ont bien été modifiées.
             delete: Le module a bien été supprimé.
+            enabled: Le module a bien été activé.
+            disabled: Le module a bien été désactivé.

@@ -13,12 +13,12 @@
 	<div class="card shadow my-4">
         <div class="card-header py-2 d-flex align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">{{ "subNav.table.title"|trans }}</h6>
-            {# <a href="{{ path("admin_nav_add") }}" class="btn btn-success btn-icon-split ml-auto btn-sm">
+            <a href="{{ returnUrl }}" class="btn btn-info btn-icon-split ml-auto btn-sm">
                 <span class="icon text-white-50">
-                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-arrow-left"></i>
                 </span>
-                <span class="text">{{ "button.add"|trans }}</span>
-            </a> #}
+                <span class="text">{{ "button.return"|trans }}</span>
+            </a>
         </div>
         <div class="card-body">
             {% for subNav in subNavs %}
@@ -26,6 +26,17 @@
                 {% if loop.index != 1 %}
                     <hr class="my-4">
                 {% endif %}
+
+                <div class="text-right">
+                    <a href="{{ path("admin_sub_nav_edit", {id: subNav.id}) }}" class="btn btn-primary btn-icon-split btn-sm ml-3">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                        <span class="text">{{ "button.addEdit"|trans }}</span>
+                    </a>
+
+                    <hr>
+                </div>
 
                 <div class="table-responsive">
                     <table class="table table-bordered subNavLinkTable" width="100%" cellspacing="0">
@@ -56,7 +67,12 @@
                                     {% endif %}
                                 </td>
                                 <td class="number-element">
-                                    <a href="{{ path('admin_sub_nav_details', { id: navLink.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ navLink.subNavs|length }}</a>
+                                    {% if navLink.subNavs|length != 0 %}
+                                        <a href="{{ path('admin_sub_nav_details', { id: navLink.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ navLink.subNavs|length }}</a>
+                                    {% else %}
+                                        <span class="badge badge-primary">{{ navLink.subNavs|length }}</span>    
+                                    {% endif %}
+                                    
                                 </td>
                                 <td class="entry-position">
                                     <div class="bullet">{{ navLink.position }}</div>

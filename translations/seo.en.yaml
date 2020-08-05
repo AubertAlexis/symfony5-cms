@@ -1,0 +1,13 @@
+seo:
+    form:
+        seo:
+            metaTitle: Meta Title
+            metaDescription: Meta description
+            metaKeywords: Meta keywords
+            noIndex: No index
+            noFollow: No follow
+            hideOnSitemap: Hide on sitemap
+
+            helpNoIndex: Define if the search engine robot should index the page.
+            helpNoFollow: Define if the search engine robot should follow the page.
+            helpHideOnSitemap: Define if the page should be hidden in the sitemap.

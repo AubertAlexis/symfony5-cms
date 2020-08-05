@@ -2,12 +2,25 @@
 
 namespace App\Traits;
 
+use App\Repository\ModuleRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 trait FormTrait
 {
     /**
      * @var string
      */
     private $domain = "";
+
+    /**
+     * @var ModuleRepository $moduleRepository
+     */
+    private $moduleRepository;
+
+    public function __construct(ModuleRepository $moduleRepository)
+    {
+        $this->moduleRepository = $moduleRepository;
+    }
 
     /**
      * Define the translate domain
@@ -37,5 +50,14 @@ trait FormTrait
         }
 
         return ($options != null) ? array_merge_recursive($options, $optionsToMerge) : $optionsToMerge;
+    }
+
+    public function isModuleEnabled(string $key): bool
+    {
+        $module = $this->moduleRepository->findOneByKeyname($key);
+
+        if (!$module) throw new NotFoundHttpException("Not found");
+        
+        return $module->getEnabled();
     }
 }

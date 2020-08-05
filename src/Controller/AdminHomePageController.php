@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use App\Entity\HomePage;
 use App\Form\HomePageType;
-use App\Repository\AssetRepository;
-use App\Repository\PageRepository;
-use App\Services\FileManager;
+use App\Repository\HomePageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,19 +25,9 @@ class AdminHomePageController extends AbstractController
     private $translator;
 
     /**
-     * @var PageRepository
-     */
-    private $pageRepository;
-
-    /**
      * @var Request
      */
     private $request;
-
-    /**
-     * @var FileManager
-     */
-    private $fileManager;
 
     /**
      * @var EntityManagerInterface
@@ -46,35 +35,32 @@ class AdminHomePageController extends AbstractController
     private $manager;
 
     /**
-     * @var AssetRepository
+     * @var HomePageRepository
      */
-    private $assetRepository;
+    private $homePageRepository;
 
     public function __construct(
         TranslatorInterface $translator,
-        PageRepository $pageRepository,
         RequestStack $requestStack,
-        FileManager $fileManager,
-        AssetRepository $assetRepository,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        HomePageRepository $homePageRepository
     ) {
         $this->translator = $translator;
-        $this->pageRepository = $pageRepository;
         $this->request = $requestStack->getCurrentRequest();
-        $this->fileManager = $fileManager;
         $this->manager = $manager;
-        $this->assetRepository = $assetRepository;
+        $this->homePageRepository = $homePageRepository;
     }
 
     /**
-     * @Route("{id}", name="admin_home_page_edit", requirements={"id": "\d+"})
+     * @Route("", name="admin_home_page_edit")
      * 
-     * @param HomePage $homePage
      * @return Response
      */
-    public function edit(HomePage $homePage): Response
+    public function edit(): Response
     {
         $this->denyAccessUnlessGranted("HOME_PAGE_EDIT");
+
+        $homePage = $this->getHomePage();
 
         $form = $this->createForm(HomePageType::class, $homePage);
 
@@ -92,5 +78,16 @@ class AdminHomePageController extends AbstractController
             "homePage" => $homePage,
             'form' => $form->createView()
         ]);
+    }
+
+    private function getHomePage()
+    {
+        $homePages = $this->homePageRepository->findAll();
+
+        if (sizeof($homePages) !== 1) {
+            throw new NonUniqueResultException("There is an error in the database, we were expecting a single entry for the HomePage table, zero or more than one was found");
+        }
+
+        return $homePages[0];
     }
 }

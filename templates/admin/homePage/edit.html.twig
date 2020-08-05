@@ -7,12 +7,16 @@
 {% block body %}
 
 	{{ form_start(form) }}
-	
+
 	<div class="row">
 
 		<div class="col-12">
 			<hr>
 		</div>
+
+		{% if is_module_enabled("seo") %}
+			{% include "admin/form/_seo.html.twig" %}
+		{% endif %}
 
 		<div class="col-md-12 col-sm-12">
 			<div class="card shadow mt-3">
@@ -20,7 +24,7 @@
 					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
 				</div>
 				<div class="card-body">
-					
+
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-12">
 							{{ form_row(form.title) }}
@@ -28,41 +32,41 @@
 					</div>
 
 					<hr>
-					
+
 				</div>
 			</div>
 		</div>
 
 		<div class="col-md-12 col-sm-12">
 			<div class="card shadow mt-3">
-				<div class="card-header d-flex align-items-center">
-					<h6 class="m-0 font-weight-bold text-primary">{{ "form.homePage.aboutSection"|trans }}</h5>
-				</div>
-				<div class="card-body">
-
-					<div class="row">
-						<div class="col-lg-6 col-md-8 col-sm-12">
-							{{ form_row(form.aboutTitle) }}
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-8">
-							{{ form_row(form.aboutImageFile) }}
-						</div>
-						{% if homePage %}
-							<div class="col-4 text-center">
-								<img src="{{ vich_uploader_asset(homePage, "aboutImageFile") }}" class="mt-2 image-min">
+				<a href="#AboutSectionCard" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="AboutSectionCard">
+					<h6 class="m-0 font-weight-bold text-primary">{{ "form.homePage.aboutSection"|trans }}</h6>
+				</a>
+				<div class="collapse" id="AboutSectionCard">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-lg-6 col-md-8 col-sm-12">
+								{{ form_row(form.aboutTitle) }}
 							</div>
-						{% endif %}	
-					</div>
+						</div>
 
-					<div class="row">
-						<div class="col-lg-12">
-							{{ form_row(form.aboutText) }}
+						<div class="row">
+							<div class="col-8">
+								{{ form_row(form.aboutImageFile) }}
+							</div>
+							{% if homePage %}
+								<div class="col-4 text-center">
+									<img src="{{ vich_uploader_asset(homePage, "aboutImageFile") }}" class="mt-2 image-min">
+								</div>
+							{% endif %}
+						</div>
+
+						<div class="row">
+							<div class="col-lg-12">
+								{{ form_row(form.aboutText) }}
+							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -84,7 +88,7 @@
 		</div>
 
 	</div>
-	
+
 	{{ form_end(form, {"render_rest": false}) }}
 
 {% endblock %}

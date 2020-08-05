@@ -149,7 +149,7 @@ label.required:after {
     margin-top: -1px;
 }
 
-.dropdown-menu .dropdown-click {
+.dropdown-menu .dropdown-hover {
     display: block;
     width: 100%;
     padding: .5rem 1.5rem!important;
@@ -176,7 +176,7 @@ label.required:after {
     color: rgba(255,255,255,.5)
 }
 
-.dropdown-menu .dropdown-click::after {
+.dropdown-menu .dropdown-hover::after {
     position: absolute;
     margin-left: .255em;
     vertical-align: .255em;
@@ -264,4 +264,21 @@ input:checked + .slider:before {
   
 .slider.round:before {
     border-radius: 50%;
+}
+.dropdown-submenu::after, .dropdown-hover::after {
+    border: none!important;
+}
+
+.dropdown-submenu svg {
+    color: rgba(255,255,255,.5);
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.dropdown-menu .dropdown-submenu svg {
+    color: black;
+    right: 15px;
 }

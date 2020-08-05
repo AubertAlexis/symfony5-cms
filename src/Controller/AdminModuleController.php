@@ -130,124 +130,23 @@ class AdminModuleController extends AbstractController
     }
 
     /**
-     * @Route("{id}/suppression", name="admin_page_delete", requirements={"id": "\d+"}, methods="POST")
+     * @Route("changement/{id}", name="admin_module_change", requirements={"id": "\d+"})
      * 
-     * @param Request $request
-     * @param Page $page
+     * @param Module $module
      * @return Response
      */
-    public function delete(Request $request, Page $page): Response
+    public function change(Module $module): Response
     {
-        $this->denyAccessUnlessGranted("PAGE_DELETE");
+        $this->denyAccessUnlessGranted("MODULE_MANAGE");
 
-        if ($this->isCsrfTokenValid("delete-page", $request->request->get('token'))) {
-            $templateName = $page->getTemplate()->getKeyname();
-
-            if ($templateName === "internal") {
-                $pageAssets = $this->assetRepository->findByInternalTemplate($page->getInternalTemplate());
-
-                $this->removeAssets($pageAssets);
-            }
-
-            $this->manager->remove($page);
-            $this->manager->flush();
-
-            $this->addFlash("success", $this->translator->trans("alert.page.success.delete", [], "alert"));
-
-            return $this->redirectToRoute("admin_page_index");
-        }
-
-        $this->addFlash("danger", $this->translator->trans("error.invalidCsrf", [], "error"));
-
-        return $this->redirectToRoute("admin_page_index");
-    }
-
-    /**
-     * Upload image from textEditor
-     *
-     * @Route("image/{id}", name="admin_page_upload_image", requirements={"id": "\d+"})
-     * 
-     * @param InternalTemplate $internalTemplate
-     * @return Response
-     */
-    public function uploadImage(InternalTemplate $internalTemplate = null): Response
-    {
-        $templateName = $internalTemplate->getTemplate()->getKeyname();
-
-        $file = $this->fileManager->uploadFile($this->request->files->get('file'));
-
-        $asset = new Asset();
-        $asset->setFileName($file['filename']);
-
-        if ($templateName === "internal") $asset->setInternalTemplate($internalTemplate);
-
-        $this->manager->persist($asset);
+        $module->setEnabled(!$module->getEnabled());
+        
         $this->manager->flush();
+        
+        $newState = $module->getEnabled() ? "enabled" : "disabled";
 
-        return $this->json(
-            [
-                'location' => $file['path']
-            ]
-        );
-    }
+        $this->addFlash("success", $this->translator->trans("alert.module.success.{$newState}", [], "alert"));
 
-    /**
-     * Manage assets from the content
-     *
-     * @param $template
-     * @return void
-     */
-    public function manageAssets($template): void
-    {
-        $regex = '/uploads\/[a-zA-Z0-9]+\.[a-z]{3,4}/';
-        $matches = [];
-
-        if (preg_match_all($regex, $template->getContent(), $matches)) {
-            $filenames = array_map(function ($match) {
-                return basename($match);
-            }, $matches[0]);
-
-            $assets = $this->assetRepository->findAssetToRemove($filenames, $template->getId());
-
-            $this->removeAssets($assets);
-        } else if ($template->getAssets()->count() > 0 && $matches) {
-            foreach ($template->getAssets() as $asset) {
-                $this->manager->remove($asset);
-                $this->fileManager->removeFile($asset->getFileName());
-            }
-        }
-    }
-
-    /**
-     * Remove assets from database and upload dir
-     *
-     * @param array $assets
-     * @return void
-     */
-    private function removeAssets(array $assets)
-    {
-        foreach ($assets as $asset) {
-            $this->manager->remove($asset);
-            $this->fileManager->removeFile($asset->getFileName());
-        }
-    }
-
-    private function handleTemplate(Page $page)
-    {
-        $templateName = $page->getTemplate()->getKeyname();
-
-        if ($templateName == 'internal') {
-            $template = new InternalTemplate();
-            $page->setInternalTemplate($template);
-        } else if ($templateName == 'article') {
-            $template = new ArticleTemplate();
-            $page->setArticleTemplate($template);
-        }
-
-
-        $this->manager->persist($template);
-        $this->manager->flush();
-
-        $template->setTemplate($page->getTemplate());
+        return $this->redirectToRoute("admin_setting_edit");
     }
 }

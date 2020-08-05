@@ -6,6 +6,7 @@ use App\Entity\ArticleTemplate;
 use App\Entity\Asset;
 use App\Entity\InternalTemplate;
 use App\Entity\Page;
+use App\Entity\Seo;
 use App\Form\PageType;
 use App\Repository\AssetRepository;
 use App\Repository\PageRepository;
@@ -99,9 +100,12 @@ class AdminPageController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $seo = new Seo();
+            $seo->setPage($page);
 
             $this->handleTemplate($page);
 
+            $this->manager->persist($seo);
             $this->manager->persist($page);
             $this->manager->flush();
 
@@ -266,7 +270,6 @@ class AdminPageController extends AbstractController
             $template = new ArticleTemplate();
             $page->setArticleTemplate($template);
         }
-
 
         $this->manager->persist($template);
         $this->manager->flush();

@@ -13,8 +13,6 @@ inputs.forEach(((input) => {
             .find('.custom-file-label')
             .html(inputFile.files[0].name);
     });
-
-    console.log(input.files);
 }));
 
 // Enable tooltip

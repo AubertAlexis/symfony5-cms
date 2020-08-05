@@ -53,7 +53,7 @@
 					</div>
 
 					<div class="table-responsive mt-3">
-						<table class="table" id="pageTable" width="100%" cellspacing="0">
+						<table class="table" id="moduleTable" width="100%" cellspacing="0">
 							<thead>
 								<tr>
 									<th>{{ "table.title"|trans }}</th>
@@ -70,7 +70,7 @@
 										<td>{{ module.keyname }}</td>
 										<td>
 											<label class="switch">
-												<input type="checkbox" {{ module.enabled ? "checked" : "" }}>
+												<input type="checkbox" {{ module.enabled ? "checked" : "" }} class="input-switch" data-url="{{ path("admin_module_change", { id: module.id }) }}">
 												<span class="slider round"></span>
 											</label>
 										</td>
@@ -85,4 +85,8 @@
 		</div>
 	</div>
 
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags("manageModule") }}
 {% endblock %}

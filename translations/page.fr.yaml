@@ -5,6 +5,7 @@ page:
             slug: Lien de la page
             enabled: Rendre la page visible ?
             template: Type de page
+            seo: Seo
             submit: Sauvegarder
 
             helpSlug: Si vous ne remplissez pas ce champ, il sera rempli automatiquement.

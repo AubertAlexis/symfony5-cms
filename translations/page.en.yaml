@@ -5,6 +5,7 @@ page:
             slug: Link of the page
             enabled: Make the page visible ?
             template: Page template
+            seo: Seo
             submit: Save
 
             helpSlug: If you do not fill in this field, it will be filled in automatically.

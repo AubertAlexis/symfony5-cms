@@ -7,5 +7,7 @@ homePage:
             aboutImageFile: Image of "About" section
             aboutText: Content of "About" section
 
+            seo: Seo
+
             submit: Save
             

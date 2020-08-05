@@ -32,8 +32,11 @@ class HomePageType extends AbstractType
             ->add('aboutText', TextareaType::class, $this->setOptions('homePage.%name%', [
                 "required" => false
             ]))
+
             ->add('submit', SubmitType::class, $this->setOptions('homePage.%name%'))
         ;
+
+        if ($this->isModuleEnabled("seo")) $builder->add('seo', SeoType::class, $this->setOptions('homePage.%name%'));
     }
 
     public function configureOptions(OptionsResolver $resolver)

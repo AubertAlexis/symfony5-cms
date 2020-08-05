@@ -200,19 +200,8 @@ class AdminNavController extends AbstractController
 
         if ($this->isCsrfTokenValid("delete-nav-link", $request->request->get('token'))) {
 
-            if ($navLink->getSubNav() !== null) {
-
-                $subNavLinks = $navLink->getSubNav()->getNavlinks();
-
-                /**
-                 * @var NavLink $navLink
-                 */
-                foreach ($subNavLinks as $subNavLink) {
-                    $this->manager->remove($subNavLink);
-                }
-
+            if ($navLink->getSubNav()->getNavlinks()->count() == 1) {
                 $this->manager->remove($navLink->getSubNav());
-
             }
 
             $this->manager->remove($navLink);
@@ -230,7 +219,7 @@ class AdminNavController extends AbstractController
     }
 
     /**
-     * @Route("sous-menu/{id}/nouveau", name="admin_sub_nav_add")
+     * @Route("sous-menu/{id}/nouveau", name="admin_sub_nav_add", requirements={"id": "\d+"})
      * 
      * @param NavLink $navLink
      * @return Response
@@ -273,6 +262,44 @@ class AdminNavController extends AbstractController
     }
 
     /**
+     * @Route("sous-menu/{id}", name="admin_sub_nav_edit", requirements={"id": "\d+"})
+     * 
+     * @param SubNav $subNav
+     * @return Response
+     */
+    public function subNavEdit(SubNav $subNav): Response
+    {
+        $this->denyAccessUnlessGranted("NAV_EDIT");
+
+        $form = $this->createForm(SubNavType::class, $subNav);
+
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            /**
+             * @var NavLink $navLinkChildren
+             */
+            foreach ($subNav->getNavLinks() as $navLinkChildren) {
+                $subNav->addNavlink($navLinkChildren);
+                $navLinkChildren->setSubNav($subNav);
+                $this->manager->persist($navLinkChildren);
+            }
+            
+            $this->manager->flush();
+
+            $this->addFlash("success", $this->translator->trans("alert.subNav.success.edit", [], "alert"));
+
+            return $this->redirectToRoute("admin_sub_nav_details", ["id" => $subNav->getParent()->getId()]);
+        }
+
+        return $this->render('admin/nav/subnav/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
+    /**
     * @Route("sous-menu/liens/{id}", name="admin_sub_nav_details", requirements={"id": "\d+"})
     * @param NavLink $navLink
     * @return Response
@@ -281,7 +308,21 @@ class AdminNavController extends AbstractController
     {
         $this->denyAccessUnlessGranted("NAV_LIST");
 
+        if ($navLink->getNav() !== null) {
+            $navLinkRoute = "admin_nav_details";
+            $navLinkId = $navLink->getNav()->getId();
+        } else {
+            $navLinkRoute = "admin_sub_nav_details";
+            $navLinkId = $navLink->getSubNav()->getParent()->getId();
+        }
+
+        $returnUrl = $this->generateUrl($navLinkRoute, [
+            "id" => $navLinkId
+        ]);
+        
         return $this->render('admin/nav/subnav/index.html.twig', [
+            'returnUrl' => $returnUrl,
+            'navLink' => $navLink,
             'subNavs' => $navLink->getSubNavs()
         ]);
     }
