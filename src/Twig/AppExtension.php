@@ -5,10 +5,12 @@ namespace App\Twig;
 use App\Entity\Nav;
 use App\Entity\NavLink;
 use App\Entity\SubNav;
-use App\Repository\NavLinkRepository;
+use App\Repository\HomePageRepository;
+use App\Repository\ModuleRepository;
 use App\Repository\NavRepository;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Extension\AbstractExtension;
 use Twig\Markup;
 use Twig\TwigFunction;
@@ -21,14 +23,26 @@ class AppExtension extends AbstractExtension
     private $navRepository;
 
     /**
-     * @var NavLinkRepository
+     * @var ModuleRepository
      */
-    private $navLinkRepository;
+    private $moduleRepository;
 
-    public function __construct(NavRepository $navRepository, NavLinkRepository $navLinkRepository)
+    /**
+     * @var RequestStack
+     */
+    private $request;
+
+    /**
+     * @var HomePageRepository
+     */
+    private $homePageRepository;
+
+    public function __construct(NavRepository $navRepository, ModuleRepository $moduleRepository, RequestStack $request, HomePageRepository $homePageRepository)
     {
         $this->navRepository = $navRepository;
-        $this->navLinkRepository = $navLinkRepository;
+        $this->moduleRepository = $moduleRepository;
+        $this->request = $request->getCurrentRequest();
+        $this->homePageRepository = $homePageRepository;
     }
 
     public function getFunctions()
@@ -38,7 +52,9 @@ class AppExtension extends AbstractExtension
             new TwigFunction('get_main_navigation', [$this, 'getMainNavigation']),
             new TwigFunction('render_main_navigation', [$this, 'renderMainNavigation']),
             new TwigFunction('get_navigation_by_key', [$this, 'getNavigationByKey']),
-            new TwigFunction('render_navigation_by_key', [$this, 'renderNavigationByKey'])
+            new TwigFunction('render_navigation_by_key', [$this, 'renderNavigationByKey']),
+            new TwigFunction('is_module_enabled', [$this, 'isModuleEnabled']),
+            new TwigFunction('render_seo', [$this, 'renderSeo'])
         ];
     }
 
@@ -137,6 +153,49 @@ class AppExtension extends AbstractExtension
     }
 
     /**
+     * Render SEO meta tag
+     */
+    public function renderSeo() 
+    {
+        if (!$this->isModuleEnabled("seo")) {
+            return;
+        }
+
+        if ($this->request->attributes->get('_route') !== "page_index" && $this->request->attributes->get('_route') !== "home_index") {
+            return;
+        }
+
+        $htmlSeo = "";
+        
+        $resource = $this->request->attributes->get("page") ?? $this->getHomePage();
+        
+        $seo = $resource->getSeo();
+        
+        $description = htmlentities($seo->getMetaDescription());
+        $index = $seo->getNoIndex() ? "noindex" : "index";
+        $follow = $seo->getNoFollow() ? "nofollow" : "follow";
+
+        $htmlSeo .= '<meta name="description" content="' . $description . '"><meta name="robots" content="' . $index.', ' . $follow . '"><meta property="og:title" content="'. $seo->getMetaTitle() . '">';
+        
+        return $htmlSeo;
+    }
+
+    /**
+     * Check if is an enabled module
+     * 
+     * @param string $key
+     * @return boolean
+     */
+    public function isModuleEnabled(string $key): bool
+    {
+        $module = $this->moduleRepository->findOneByKeyname($key);
+
+        if (!$module) throw new NotFoundHttpException("Not found");
+        
+        return $module->getEnabled();
+    }
+
+    /**
      * Return as HTML element
      *
      * @return Markup
@@ -146,6 +205,12 @@ class AppExtension extends AbstractExtension
         return new Markup($data, "UTF-8");
     }
 
+    /**
+     * sub navigation system 
+     *
+     * @param NavLink $navLink
+     * @param string $htmlNavigation
+     */
     private function renderSubNavs(NavLink $navLink, string $htmlNavigation)
     {
         $link = $navLink->getPage() !== null ? "/{$navLink->getPage()->getSlug()}" : $navLink->getLink();
@@ -186,5 +251,16 @@ class AppExtension extends AbstractExtension
         }
 
         return $htmlNavigation;
+    }
+
+    private function getHomePage() 
+    {
+        $homePages = $this->homePageRepository->findAll();
+
+        if (sizeof($homePages) !== 1) {
+            throw new NonUniqueResultException("There is an error in the database, we were expecting a single entry for the HomePage table, zero or more than one was found");
+        }
+
+        return $homePages[0];
     }
 }

@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\HomePage;
 use App\Entity\Module;
+use App\Entity\Seo;
 use App\Entity\Template;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -62,13 +63,17 @@ class AppFixtures extends Fixture
         $articleTemplate->setTitle("Page article")
             ->setKeyname("article");
 
-        $seo = new Module();
+        $seoModule = new Module();
 
-        $seo->setTitle("SEO")
+        $seoModule->setTitle("SEO")
             ->setKeyname("seo")
             ->setEnabled(true);
 
         $homePage = new HomePage();
+        $seo = new Seo();
+
+        $seo
+            ->setHomePage($homePage);
 
         $manager->persist($admin);
         $manager->persist($dev);
@@ -76,6 +81,7 @@ class AppFixtures extends Fixture
         $manager->persist($articleTemplate);
         $manager->persist($homePage);
         $manager->persist($seo);
+        $manager->persist($seoModule);
 
         $manager->flush();
     }

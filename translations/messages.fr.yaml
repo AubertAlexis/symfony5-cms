@@ -105,7 +105,8 @@ form:
 
     homePage:
         aboutSection: Section "À propos"
-
+        seo: Seo
+        
     page:
         seo: Seo
 

@@ -41,3 +41,5 @@ alert:
             edit: The module informations has been changed.
             add: The module has been added.
             delete: The module has been deleted.
+            enabled: The module has been enabled.
+            disabled: The module has been disabled.

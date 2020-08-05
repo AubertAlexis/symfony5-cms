@@ -103,6 +103,7 @@ form:
     
     homePage:
         aboutSection: Section "About"
+        seo: Seo
 
     page:
         seo: Seo
