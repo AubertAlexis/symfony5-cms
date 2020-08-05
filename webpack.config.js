@@ -33,6 +33,7 @@ Encore
     .addEntry('tinymce', './assets/js/tinymce/tinymce.js')
     .addEntry('datatable_page', './assets/js/datatable/page.js')
     .addEntry('datatable_nav', './assets/js/datatable/nav.js')
+    .addEntry('datatable_template', './assets/js/datatable/template.js')
     
     .addPlugin(new CopyWebpackPlugin([
         // Copy the skins from tinymce to the build/skins directory

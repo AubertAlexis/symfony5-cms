@@ -59,6 +59,9 @@
 									<th>{{ "table.title"|trans }}</th>
 									<th>{{ "table.keyname"|trans }}</th>
 									<th></th>
+									{% if is_granted("ROLE_DEV") %}
+										<th></th>
+									{% endif %}
 								</tr>
 							</thead>
 							<tbody>
@@ -74,6 +77,13 @@
 												<span class="slider round"></span>
 											</label>
 										</td>
+										{% if is_granted("ROLE_DEV") %}
+											<td>
+												<a href="{{ path("admin_module_edit", { id: module.id }) }}" class="btn btn-primary rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.edit"|trans }}">
+													<i class="fas fa-edit"></i>
+												</a>
+											</td>
+										{% endif %}	
 									</tr>
 								{% endfor %}
 							</tbody>

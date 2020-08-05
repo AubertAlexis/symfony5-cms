@@ -55,6 +55,17 @@
         </a>
     </li>
 
+    {% if is_granted("ROLE_DEV") %}
+        <hr class="sidebar-divider my-0">
+
+        <li class="nav-item {{ macros.is_active('admin_template') }}">
+            <a class="nav-link" href="{{ path('admin_template_index') }}">
+                <i class="fas fa-fw fa-clone"></i>
+                <span>{{ "navigation.template"|trans }}</span>
+            </a>
+        </li>
+    {% endif %}
+
     <hr class="sidebar-divider d-none d-md-block">
 
     <div class="text-center d-none d-md-inline">

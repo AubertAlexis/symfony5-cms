@@ -1,0 +1,60 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title "template.add.title"|trans %}
+
+{% block title_h1 "template.add.h1"|trans %}
+
+{% block body %}
+
+	{{ form_start(form) }}
+	
+	<div class="row">
+
+		<div class="col-12">
+			<hr>
+		</div>
+
+		<div class="col-md-12 col-sm-12">
+			<div class="card shadow mt-3">
+				<div class="card-header d-flex align-items-center">
+					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
+				</div>
+				<div class="card-body">
+					
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							{{ form_row(form.title) }}
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							{{ form_row(form.keyname) }}
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		{{ form_row(form._token) }}
+
+		<div class="col-12">
+			<hr>
+		</div>
+
+		<div class="col-12">
+			<div class="card shadow">
+				<div class="card-body">
+					<div class="d-flex justify-content-center align-items center">
+						{{ form_row(form.submit) }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+	{{ form_end(form, {"render_rest": false}) }}
+
+{% endblock %}
