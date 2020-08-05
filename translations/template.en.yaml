@@ -1,0 +1,7 @@
+template:
+    form:
+        template:
+            title: Title of the template
+            keyname: Key of the template
+
+            submit: Save

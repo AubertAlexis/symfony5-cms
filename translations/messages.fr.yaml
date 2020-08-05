@@ -96,6 +96,20 @@ module:
         title: Édition - Module
         h1: Modifier le module
 
+template:
+    list:
+        title: Liste - Modèle de page
+        h1: Liste des modèles de page
+
+    add:
+        title: Ajout - Modèle de page
+        h1: Nouveau modèle de page
+
+
+    edit:
+        title: Édition - Modèle de page
+        h1: Modifier le modèle de page
+
 form:
     title: 
         content: Informations générales
@@ -126,6 +140,7 @@ table:
     parent: Élément parent
     visible: Visible ? 
     position: Position
+    pages: Pages
     createdAt: Créé le
     updatedAt: Modifié le
     action: Actions

@@ -6,3 +6,4 @@ navigation:
     page: Pages
     nav: Navigations
     homePage: Home
+    template: Template

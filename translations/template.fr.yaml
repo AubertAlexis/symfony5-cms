@@ -1,0 +1,8 @@
+template:
+    form:
+        template:
+            title: Titre du modèle de page
+            keyname: Clé du modèle de page
+
+            submit: Enregistrer
+            
