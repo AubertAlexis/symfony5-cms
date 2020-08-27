@@ -22,6 +22,21 @@ $(function () {
     })
 })
 
+// Manage card height
+const cards = document.querySelectorAll(".card-same-height");
+const cardsHeight = [];
+var maxHeight = 0;
+
+cards.forEach((card) => {
+    cardsHeight.push(card.clientHeight);
+
+    maxHeight = Math.max(...cardsHeight);
+})
+
+cards.forEach((card) => {
+    card.style.height = Math.max(...cardsHeight) + "px";
+})
+
 const inputLabel = document.querySelectorAll(".custom-file-label");
 
 inputLabel.forEach((label) => {
