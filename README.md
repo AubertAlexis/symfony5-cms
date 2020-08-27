@@ -7,7 +7,7 @@
 git clone https://github.com/AubertAlexis/symfony5-cms.git
 cd symfony5-cms
 composer install
-yarn install or npm install
+yarn install
 composer prepare-cms
 ```
 
