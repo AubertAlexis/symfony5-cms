@@ -139,6 +139,10 @@ label.required:after {
     padding-top: 3px;
 }
 
+.card-seo .card-body {
+    height: 308px;
+}
+
 .dropdown-submenu {
     position: relative;
 }

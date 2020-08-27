@@ -1,0 +1,31 @@
+{% block content %}
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			{{ form_row(form.title) }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			{{ form_row(form.keyname) }}
+		</div>
+	</div>
+{% endblock content %}
+
+{% block submit %}
+	{{ form_row(form._token) }}
+
+	<div class="col-12">
+		<hr>
+	</div>
+
+	<div class="col-12">
+		<div class="card shadow">
+			<div class="card-body">
+				<div class="d-flex justify-content-center align-items center">
+					{{ form_row(form.submit) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock submit %}

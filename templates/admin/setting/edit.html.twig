@@ -14,19 +14,10 @@
 				</div>
 				<div class="card-body">
 					{{ form_start(localeForm) }}
-					<div class="row">
-						<div class="col-lg-6 col-md-8 col-sm-12">
-							{{ form_row(localeForm.locale) }}
-						</div>
-					</div>
+					
+						{{ block("content", "admin/setting/_form.html.twig") }}
 
-					<div class="row">
-						<div class="col-12 text-center mt-3">
-							{{ form_row(localeForm.submit) }}
-						</div>
-					</div>
-
-					{{ form_row(localeForm._token) }}
+						{{ block("submit", "admin/setting/_form.html.twig") }}
 
 					{{ form_end(localeForm, {"render_rest": false}) }}
 				</div>

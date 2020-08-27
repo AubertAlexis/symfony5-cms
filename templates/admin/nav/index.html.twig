@@ -25,29 +25,29 @@
                 <table class="table table-bordered" id="navTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>{{ "table.title"|trans }}</th>
-                            <th>{{ "table.keyname"|trans }}</th>
-                            <th class="main">{{ "table.main"|trans }}</th>
-                            <th class="visible">{{ "table.visible"|trans }}</th>
-                            <th class="number-element">{{ "table.numberLinks"|trans }}</th>
-                            <th class="entry-date">{{ "table.createdAt"|trans }}</th>
-                            <th class="entry-date">{{ "table.updatedAt"|trans }}</th>
-                            <th class="action">{{ "table.action"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.title"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.keyname"|trans }}</th>
+                            <th class="text-center text-uppercase main">{{ "table.main"|trans }}</th>
+                            <th class="text-center text-uppercase visible">{{ "table.visible"|trans }}</th>
+                            <th class="text-center text-uppercase number-element">{{ "table.numberLinks"|trans }}</th>
+                            <th class="text-center text-uppercase entry-date">{{ "table.createdAt"|trans }}</th>
+                            <th class="text-center text-uppercase entry-date">{{ "table.updatedAt"|trans }}</th>
+                            <th class="text-center text-uppercase action">{{ "table.action"|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for nav in navs %}
                         <tr>
-                            <td><span class="font-weight-bold">{{ nav.title }}</span></td>
-                            <td>{{ nav.keyname }}</td>
-                            <td class="main">{{ icon_from_bool(nav.main) }}</td>
-                            <td class="visible">{{ icon_from_bool(nav.enabled) }}</td>
-                            <td class="number-element">
+                            <td class="text-center align-middle"><span class="font-weight-bold">{{ nav.title }}</span></td>
+                            <td class="text-center align-middle">{{ nav.keyname }}</td>
+                            <td class="text-center align-middle main">{{ icon_from_bool(nav.main) }}</td>
+                            <td class="text-center align-middle visible">{{ icon_from_bool(nav.enabled) }}</td>
+                            <td class="text-center align-middle number-element">
                                 <a href="{{ path('admin_nav_details', { id: nav.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ nav.navlinks|length }}</a>
                             </td>
-                            <td>{{ nav.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
-                            <td>{{ nav.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
-                            <td>
+                            <td class="text-center align-middle">{{ nav.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                            <td class="text-center align-middle">{{ nav.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                            <td class="text-center align-middle">
 								<a href="{{ path("admin_nav_edit", {id: nav.id}) }}" class="btn btn-primary rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.edit"|trans }}">
 									<i class="far fa-edit"></i>
 								</a>

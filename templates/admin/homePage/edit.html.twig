@@ -15,7 +15,20 @@
 		</div>
 
 		{% if is_module_enabled("seo") %}
-			{% include "admin/form/_seo.html.twig" %}
+			<div class="col-12">
+				<div class="card shadow card-seo mb-3">
+					<a href="#SeoPageCard" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="SeoPageCard">
+						<h6 class="m-0 font-weight-bold text-primary">{{ "form.homePage.seo"|trans }}</h6>
+					</a>
+					<div class="collapse" id="SeoPageCard">
+						<div class="card-body">
+
+							{{ block("seo", "admin/form/_seo.html.twig") }}
+
+						</div>
+					</div>
+				</div>
+			</div>
 		{% endif %}
 
 		<div class="col-md-12 col-sm-12">
@@ -25,13 +38,7 @@
 				</div>
 				<div class="card-body">
 
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-12">
-							{{ form_row(form.title) }}
-						</div>
-					</div>
-
-					<hr>
+					{{ block("header", "admin/homePage/_form.html.twig") }}
 
 				</div>
 			</div>
@@ -44,48 +51,15 @@
 				</a>
 				<div class="collapse" id="AboutSectionCard">
 					<div class="card-body">
-						<div class="row">
-							<div class="col-lg-6 col-md-8 col-sm-12">
-								{{ form_row(form.aboutTitle) }}
-							</div>
-						</div>
+						
+						{{ block("about", "admin/homePage/_form.html.twig") }}
 
-						<div class="row">
-							<div class="col-8">
-								{{ form_row(form.aboutImageFile) }}
-							</div>
-							{% if homePage %}
-								<div class="col-4 text-center">
-									<img src="{{ vich_uploader_asset(homePage, "aboutImageFile") }}" class="mt-2 image-min">
-								</div>
-							{% endif %}
-						</div>
-
-						<div class="row">
-							<div class="col-lg-12">
-								{{ form_row(form.aboutText) }}
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		{{ form_row(form._token) }}
-
-		<div class="col-12">
-			<hr>
-		</div>
-
-		<div class="col-12">
-			<div class="card shadow">
-				<div class="card-body">
-					<div class="d-flex justify-content-center align-items center">
-						{{ form_row(form.submit) }}
-					</div>
-				</div>
-			</div>
-		</div>
+		{{ block("submit", "admin/homePage/_form.html.twig") }}
 
 	</div>
 
