@@ -15,7 +15,7 @@ composer prepare-cms
 ```
 composer create-project aubert-alexis/symfony5-cms
 cd symfony5-cms
-yarn install or npm install
+yarn install
 composer prepare-cms
 ```
 
