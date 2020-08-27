@@ -148,7 +148,7 @@ table:
     keyname: Clé
     main: Navigation principale
     numberLinks: Nombre de liens
-    numberSubnavs: Nombre de sous-menus
+    numberSubnavs: Sous-menus
 
 tooltip:
     edit: Éditer

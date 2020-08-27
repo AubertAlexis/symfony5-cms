@@ -1,5 +1,5 @@
 {% extends "admin/base.html.twig" %}
-{% form_theme form "admin/form/_page.html.twig" %}
+{% form_theme form "admin/page/_form.html.twig" %}
 
 {% block stylesheets %}
 	<link href="{{ asset('build/skins/content/default/content.min.css') }}"></link>
@@ -23,11 +23,24 @@
 			<hr>
 		</div>
 
-		<div class="col-md-9 col-sm-12">
+		<div class="col-md-12 col-sm-12">
 			<div class="row">
 				
 				{% if is_module_enabled("seo") %}
-					{% include "admin/form/_seo.html.twig" %}
+					<div class="col-12">
+						<div class="card shadow card-seo mb-3">
+							<a href="#SeoPageCard" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="SeoPageCard">
+								<h6 class="m-0 font-weight-bold text-primary">{{ "form.homePage.seo"|trans }}</h6>
+							</a>
+							<div class="collapse" id="SeoPageCard">
+								<div class="card-body">
+
+									{{ block("seo", "admin/form/_seo.html.twig") }}
+
+								</div>
+							</div>
+						</div>
+					</div>
 				{% endif %}
 
 				<div class="col-12">
@@ -37,30 +50,9 @@
 						</div>
 						<div class="card-body">
 							
-							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-12">
-									{{ form_row(form.title) }}
-								</div>
-							</div>
+							{{ block("header", "admin/page/_form.html.twig") }}
 
-							<hr>
-
-							{% if form.internalTemplate is defined %}
-								{{ form_widget(form.internalTemplate) }}
-							{% endif %}
-
-							{% if form.articleTemplate is defined %}
-								<div class="row">
-									<div class="col-8">
-										{{ form_widget(form.articleTemplate) }}
-									</div>
-									{% if page.articleTemplate %}
-										<div class="col-4 text-center">
-											<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
-										</div>
-									{% endif %}	
-								</div>
-							{% endif %}
+							{{ block("content", "admin/page/_form.html.twig") }}
 							
 						</div>
 					</div>
@@ -69,45 +61,19 @@
 		</div>
 
 		<div class="col-md-3 col-sm-12">
-			<div class="card shadow mt-3">
+			<div class="card shadow">
 				<div class="card-header d-flex align-items-center">
 					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.aside"|trans }}</h5>
 				</div>
 				<div class="card-body">
 
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12">
-							{{ form_row(form.slug) }}
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="row">
-						<div class="col-lg-12">
-							{{ form_row(form.enabled) }}
-						</div>
-					</div>
+					{{ block("aside", "admin/page/_form.html.twig") }}
 
 				</div>
 			</div>
 		</div>
 
-		{{ form_row(form._token) }}
-
-		<div class="col-12">
-			<hr>
-		</div>
-
-		<div class="col-12">
-			<div class="card shadow">
-				<div class="card-body">
-					<div class="d-flex justify-content-center align-items center">
-						{{ form_row(form.submit) }}
-					</div>
-				</div>
-			</div>
-		</div>
+		{{ block("submit", "admin/page/_form.html.twig") }}
 
 	</div>
 	

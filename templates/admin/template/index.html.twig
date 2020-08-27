@@ -25,19 +25,19 @@
                 <table class="table table-bordered" id="templateTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>{{ "table.title"|trans }}</th>
-                            <th>{{ "table.keyname"|trans }}</th>
-                            <th>{{ "table.pages"|trans }}</th>
-                            <th class="action">{{ "table.action"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.title"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.keyname"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.pages"|trans }}</th>
+                            <th class="text-center text-uppercase action">{{ "table.action"|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for template in templates %}
                         <tr>
-                            <td><span class="font-weight-bold">{{ template.title }}</span></td>
-                            <td>{{ template.keyname }}</td>
-                            <td><span class="badge badge-primary">{{ template.pages|length }}</span></td>
-                            <td>
+                            <td class="text-center align-middle"><span class="font-weight-bold">{{ template.title }}</span></td>
+                            <td class="text-center align-middle">{{ template.keyname }}</td>
+                            <td class="text-center align-middle"><span class="badge badge-primary">{{ template.pages|length }}</span></td>
+                            <td class="text-center align-middle">
 								<a href="{{ path("admin_template_edit", {id: template.id}) }}" class="btn btn-primary rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.edit"|trans }}">
 									<i class="far fa-edit"></i>
 								</a>

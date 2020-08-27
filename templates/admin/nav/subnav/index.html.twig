@@ -42,20 +42,20 @@
                     <table class="table table-bordered subNavLinkTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>{{ "table.title"|trans }}</th>
-                                <th>{{ "table.link"|trans }}</th>
-                                <th class="number-element">{{ "table.numberSubnavs"|trans }}</th>
-                                <th class="entry-position">{{ "table.position"|trans }}</th>
-                                <th class="entry-date">{{ "table.createdAt"|trans }}</th>
-                                <th class="entry-date">{{ "table.updatedAt"|trans }}</th>
-                                <th class="action">{{ "table.action"|trans }}</th>
+                                <th class="text-center text-uppercase">{{ "table.title"|trans }}</th>
+                                <th class="text-center text-uppercase">{{ "table.link"|trans }}</th>
+                                <th class="text-center text-uppercase number-element">{{ "table.numberSubnavs"|trans }}</th>
+                                <th class="text-center text-uppercase entry-position">{{ "table.position"|trans }}</th>
+                                <th class="text-center text-uppercase entry-date">{{ "table.createdAt"|trans }}</th>
+                                <th class="text-center text-uppercase entry-date">{{ "table.updatedAt"|trans }}</th>
+                                <th class="text-center text-uppercase action">{{ "table.action"|trans }}</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for navLink in subNav.navLinks %}
                             <tr>
-                                <td><span class="font-weight-bold">{{ navLink.title }}</span></td>
-                                <td>
+                                <td class="text-center align-middle"><span class="font-weight-bold">{{ navLink.title }}</span></td>
+                                <td class="text-center align-middle">
                                     {% if navLink.page %}
                                         <a href="{{ path("page_index", {slug: navLink.page.slug}) }}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.view"|trans }}">
                                             /{{ navLink.page.slug }}
@@ -66,7 +66,7 @@
                                         </a>
                                     {% endif %}
                                 </td>
-                                <td class="number-element">
+                                <td class="text-center align-middle number-element">
                                     {% if navLink.subNavs|length != 0 %}
                                         <a href="{{ path('admin_sub_nav_details', { id: navLink.id }) }}" class="badge badge-primary" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.details"|trans }}">{{ navLink.subNavs|length }}</a>
                                     {% else %}
@@ -74,12 +74,12 @@
                                     {% endif %}
                                     
                                 </td>
-                                <td class="entry-position">
+                                <td class="text-center align-middle entry-position">
                                     <div class="bullet">{{ navLink.position }}</div>
                                 </td>
-                                <td>{{ navLink.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
-                                <td>{{ navLink.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
-                                <td>
+                                <td class="text-center align-middle">{{ navLink.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                                <td class="text-center align-middle">{{ navLink.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                                <td class="text-center align-middle">
                                     <a href="{{ path('admin_sub_nav_add', { id: navLink.id }) }}" class="btn btn-success rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.addSubNav"|trans }}">
                                         <i class="fas fa-ellipsis-h"></i>
                                     </a>

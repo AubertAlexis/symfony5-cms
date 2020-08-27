@@ -1,0 +1,23 @@
+{% block content %}
+	<div class="row">
+		<div class="col-lg-6 col-md-8 col-sm-12">
+			{{ form_row(localeForm.locale) }}
+		</div>
+	</div>
+{% endblock content %}
+
+{% block submit %}
+	{{ form_row(localeForm._token) }}
+
+    <div class="row">
+        <div class="col-12">
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center mt-3">
+            {{ form_row(localeForm.submit) }}
+        </div>
+    </div>
+{% endblock submit %}

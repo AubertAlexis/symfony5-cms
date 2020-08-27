@@ -144,7 +144,7 @@ table:
     keyname: Key
     main: Main navigation ?
     numberLinks: Number of links
-    numberSubnavs: Number of sub-navigations
+    numberSubnavs: Sub-navigations
 
 tooltip:
     edit: Edit
