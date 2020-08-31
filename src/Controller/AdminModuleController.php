@@ -9,6 +9,7 @@ use App\Entity\Module;
 use App\Entity\Page;
 use App\Form\ModuleType;
 use App\Form\PageType;
+use App\Handler\ModuleHandler;
 use App\Repository\AssetRepository;
 use App\Repository\PageRepository;
 use App\Services\FileManager;
@@ -31,44 +32,23 @@ class AdminModuleController extends AbstractController
     private $translator;
 
     /**
-     * @var PageRepository
-     */
-    private $pageRepository;
-
-    /**
      * @var Request
      */
     private $request;
-
-    /**
-     * @var FileManager
-     */
-    private $fileManager;
 
     /**
      * @var EntityManagerInterface
      */
     private $manager;
 
-    /**
-     * @var AssetRepository
-     */
-    private $assetRepository;
-
     public function __construct(
         TranslatorInterface $translator,
-        PageRepository $pageRepository,
         RequestStack $requestStack,
-        FileManager $fileManager,
-        AssetRepository $assetRepository,
         EntityManagerInterface $manager
     ) {
         $this->translator = $translator;
-        $this->pageRepository = $pageRepository;
         $this->request = $requestStack->getCurrentRequest();
-        $this->fileManager = $fileManager;
         $this->manager = $manager;
-        $this->assetRepository = $assetRepository;
     }
 
 
@@ -77,27 +57,19 @@ class AdminModuleController extends AbstractController
      * 
      * @return Response
      */
-    public function add(): Response
+    public function add(ModuleHandler $moduleHandler): Response
     {
         $this->denyAccessUnlessGranted("MODULE_ADD");
 
         $module = new Module();
 
-        $form = $this->createForm(ModuleType::class, $module);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($module);
-            $this->manager->flush();
-
+        if ($moduleHandler->handle($this->request, $module)) {
             $this->addFlash("success", $this->translator->trans("alert.module.success.add", [], "alert"));
-
             return $this->redirectToRoute("admin_setting_edit");
         }
 
         return $this->render('admin/module/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $moduleHandler->createView()
         ]);
     }
 
@@ -107,25 +79,18 @@ class AdminModuleController extends AbstractController
      * @param Module $module
      * @return Response
      */
-    public function edit(Module $module): Response
+    public function edit(Module $module, ModuleHandler $moduleHandler): Response
     {
         $this->denyAccessUnlessGranted("MODULE_EDIT");
 
-        $form = $this->createForm(ModuleType::class, $module);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->flush();
-
+        if ($moduleHandler->handle($this->request, $module)) {
             $this->addFlash("success", $this->translator->trans("alert.module.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_setting_edit");
         }
 
         return $this->render('admin/module/edit.html.twig', [
             "module" => $module,
-            'form' => $form->createView()
+            'form' => $moduleHandler->createView()
         ]);
     }
 
@@ -140,13 +105,10 @@ class AdminModuleController extends AbstractController
         $this->denyAccessUnlessGranted("MODULE_MANAGE");
 
         $module->setEnabled(!$module->getEnabled());
-        
         $this->manager->flush();
-        
         $newState = $module->getEnabled() ? "enabled" : "disabled";
-
+        
         $this->addFlash("success", $this->translator->trans("alert.module.success.{$newState}", [], "alert"));
-
         return $this->redirectToRoute("admin_setting_edit");
     }
 }

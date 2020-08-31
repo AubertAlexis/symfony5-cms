@@ -125,7 +125,7 @@ button:
     remove: Remove
     return: Return
 
-    addModule: Ad a new module
+    addModule: Add a new module
 
 
 table:

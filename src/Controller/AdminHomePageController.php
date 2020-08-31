@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\HomePage;
 use App\Form\HomePageType;
+use App\Handler\HomeHandler;
 use App\Repository\HomePageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -56,30 +57,27 @@ class AdminHomePageController extends AbstractController
      * 
      * @return Response
      */
-    public function edit(): Response
+    public function edit(HomeHandler $homeHandler): Response
     {
         $this->denyAccessUnlessGranted("HOME_PAGE_EDIT");
 
         $homePage = $this->getHomePage();
 
-        $form = $this->createForm(HomePageType::class, $homePage);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->flush();
-
+        if ($homeHandler->handle($this->request, $homePage)) {
             $this->addFlash("success", $this->translator->trans("alert.homePage.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_home_page_edit", ["id" => $homePage->getId()]);
         }
 
         return $this->render('admin/homePage/edit.html.twig', [
             "homePage" => $homePage,
-            'form' => $form->createView()
+            'form' => $homeHandler->createView()
         ]);
     }
 
+    /**
+     * @return HomePage
+     * @throws NonUniqueResultException
+     */
     private function getHomePage()
     {
         $homePages = $this->homePageRepository->findAll();

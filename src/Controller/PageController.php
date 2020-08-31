@@ -25,10 +25,21 @@ class PageController extends AbstractController
      * @param Page $page
      * @return Response
      */
-    public function index(Page $page = null): Response
+    public function __invoke(Page $page = null): Response
     {
         if (!$page || !$page->getEnabled()) throw new NotFoundHttpException("Not found");
 
+        [$template, $templateName] = $this->handlePage($page);
+
+        return $this->render("page/{$templateName}.html.twig", compact('page', 'template'));
+    }
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    private function handlePage(Page $page)
+    {
         $templateName = $page->getTemplate()->getKeyname();
         
         if ($templateName === "internal") {
@@ -37,6 +48,6 @@ class PageController extends AbstractController
             $template = $page->getArticleTemplate();
         }
 
-        return $this->render("page/{$templateName}.html.twig", compact('page', 'template'));
+        return [$template, $templateName];
     }
 }

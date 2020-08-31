@@ -12,7 +12,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home_index")
      */
-    public function index(HomePageRepository $homePageRepository)
+    public function __invoke(HomePageRepository $homePageRepository)
     {
         return $this->render("home/index.html.twig", [
             "home" => $homePageRepository->findAll()[0]

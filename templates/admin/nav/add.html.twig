@@ -1,5 +1,5 @@
 {% extends "admin/base.html.twig" %}
-{% form_theme form "admin/form/_collection_nav.html.twig" %}
+{% form_theme form "admin/nav/_prototype.html.twig" %}
 
 {% block title "nav.add.title"|trans %}
 
@@ -46,9 +46,13 @@
 		</div>
 
 		<div class="col-12">
-			<div class="card shadow collection">
+			<div class="card shadow collection-group">
 				<div class="card-header d-flex align-items-center">
-					<h6 class="m-0 font-weight-bold text-primary collection-title">{{ "form.title.navLinks"|trans }}</h5>
+					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.navLinks"|trans }}</h5>
+					<button type="button" class="btn btn-success btn-icon-split ml-auto btn-sm collection-add" data-collection="{{ form.navLinks.vars.id }}">
+						<span class="icon text-white-50"><i class="fas fa-plus"></i></span>
+						<span class="text">{{ "button.add"|trans }}</span>
+					</button>
 				</div>
 				<div class="card-body">
 					
@@ -69,11 +73,6 @@
 {% block javascripts %}
 
 	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
-
-	<script>
-		var collectionButtonTextAdd = '{{ "button.add"|trans }}';
-		var collectionButtonTextRemove = '{{ "button.remove"|trans }}';
-	</script>
 
 	{{ encore_entry_script_tags('manageNavForm') }}
 	{{ encore_entry_script_tags('collection') }}

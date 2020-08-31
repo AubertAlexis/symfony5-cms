@@ -1,89 +1,79 @@
-var $collectionHolder;
 
-var $addNavLinkButton = $('<button type="button" class="btn btn-success btn-icon-split ml-auto btn-sm add-nav-link"><span class="icon text-white-50"><i class="fas fa-plus"></i></span><span class="text">' + collectionButtonTextAdd + '</span></button>');
-var $newLinkDiv = $addNavLinkButton.insertAfter('.collection-title');
+// on remove item
+$("body").on("click", ".collection-item-delete", e => {
+    let collection = $(e.currentTarget).closest(".collection");
+    let position = collection.hasClass("handle-position") ? true : false;
+    
+    $(e.currentTarget).closest("li").remove();
+    $(e.currentTarget).closest("hr").remove();
 
-$(document).ready(function() {
-    $collectionHolder = $('ul.nav-links-collection');
+    handleEmpty(collection, false);
 
-    $collectionHolder.find('li').each(function() {
-        addNavLinkFormDeleteLink($(this));
-    });
-
-    $collectionHolder.data('index', $collectionHolder.find('input').length);
-
-    handlePosition();
-
-    $addNavLinkButton.on('click', function(e) {
-        $("#sort").height($("#sort").height("auto"));
-
-        $(".empty-navlink").hide();
-
-        addNavLinkForm($collectionHolder);
-    });
+    if (position) {
+        handlePosition();
+    }
 });
 
-function addNavLinkForm($collectionHolder) {
-    // Get the data-prototype explained earlier
-    var prototype = $collectionHolder.data('prototype');
+// on load items
+$(document).ready(function(e) {
+    let collections = $(".collection");
 
-    // get the new index
-    var index = $collectionHolder.data('index');
+    collections.each(function(index, collection) {
+        let id = `#${$(collection).attr("id")}`;
+        let collectionItem = $(`${id}.collection`);
+        let position = collectionItem.hasClass("handle-position") ? true : false;
 
-    var newForm = prototype;
-    // You need this only if you didn't set 'label' => false in your tags field in TaskType
-    // Replace '__name__label__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    // newForm = newForm.replace(/__name__label__/g, index);
+        handleEmpty(collectionItem, false);
 
-    // Replace '__name__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    newForm = newForm.replace(/__name__/g, index);
+        if (position) {
+            handlePosition();
+        }
+    })
+});
 
-    // increase the index with one for the next item
-    $collectionHolder.data('index', index + 1);
+// on add item
+$("body").on("click", ".collection-add", e => {
+    let collection = $(`#${e.currentTarget.dataset.collection}`);
+    let position = collection.hasClass("handle-position") ? true : false;
+    let prototype = collection.data('prototype');
+    let index = collection.data('index');
 
-    // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<li></li>').append(newForm);
-    $collectionHolder.append($newFormLi);
+    collection.append(prototype.replace(/__name__/g, index));
 
-    setTimeout(() => {
+    handleEmpty(collection, true)
+
+    if (position) {
         handlePosition();
+    }
 
-    }, 1);
+    index++;
+    collection.data('index', index);
+})
 
-    addNavLinkFormDeleteLink($newFormLi);
-}
-
-function addNavLinkFormDeleteLink($tagFormLi) {
-    var $removeFormButton = $('<button type="button" class="btn btn-danger btn-icon-split ml-auto btn-sm collection-remove-link"><span class="icon text-white-50"><i class="fas fa-trash"></i></span><span class="text">' + collectionButtonTextRemove + '</span></button>');
-    $tagFormLi.find(".nav-item-content").append($removeFormButton);
-
-    $removeFormButton.on('click', function(e) {
-        // remove the li for the tag form
-        $tagFormLi.remove();
-
-        $("#sort").height($("#sort").height("auto"));
-
-        var navLinkEmpty = $(".empty-navlink");
-
-        $(".collection .nav-item").length == 0 ? navLinkEmpty.show() : navLinkEmpty.hide();
-
-       handlePosition();
-    });
-}
+// 
+// Functions
+// 
 
 function handlePosition() {
-    $(".nav-input-position input").each(function(index, elem) {
+    $(".position input").each(function(index, elem) {
         var newVal = index + 1;
 
         elem.value = newVal;
-        $(".nav-bullet-position").last().html(newVal);
     })
 
-    $(".nav-bullet-position").each(function (index, elem) {
+    $(".bullet-position").each(function (index, elem) {
         var newVal = index + 1;
 
         elem.textContent = newVal;
     })
+}
+
+function handleEmpty(selector, add = false) {
+    let empty = selector.find(".empty-collection");
+
+    if (add === true) {
+        empty.hide();
+    } else {
+        selector.find(".collection-item").length == 0 ? empty.show() : empty.hide();
+    }
 }

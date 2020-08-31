@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Template;
 use App\Form\TemplateType;
+use App\Handler\TemplateHandler;
 use App\Repository\AssetRepository;
 use App\Repository\TemplateRepository;
 use App\Services\FileManager;
@@ -43,16 +44,12 @@ class AdminTemplateController extends AbstractController
         TranslatorInterface $translator,
         TemplateRepository $templateRepository,
         RequestStack $requestStack,
-        FileManager $fileManager,
-        AssetRepository $assetRepository,
         EntityManagerInterface $manager
     ) {
         $this->translator = $translator;
         $this->templateRepository = $templateRepository;
         $this->request = $requestStack->getCurrentRequest();
-        $this->fileManager = $fileManager;
         $this->manager = $manager;
-        $this->assetRepository = $assetRepository;
     }
 
 
@@ -75,27 +72,19 @@ class AdminTemplateController extends AbstractController
      * 
      * @return Response
      */
-    public function add(): Response
+    public function add(TemplateHandler $templateHandler): Response
     {
         $this->denyAccessUnlessGranted("TEMPLATE_ADD");
 
         $template = new Template();
 
-        $form = $this->createForm(TemplateType::class, $template);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($template);
-            $this->manager->flush();
-
+        if ($templateHandler->handle($this->request, $template)) {
             $this->addFlash("success", $this->translator->trans("alert.template.success.add", [], "alert"));
-
             return $this->redirectToRoute("admin_template_index");
         }
 
         return $this->render('admin/template/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $templateHandler->createView()
         ]);
     }
 
@@ -105,25 +94,18 @@ class AdminTemplateController extends AbstractController
      * @param Template $template
      * @return Response
      */
-    public function edit(Template $template): Response
+    public function edit(Template $template, TemplateHandler $templateHandler): Response
     {
         $this->denyAccessUnlessGranted("TEMPLATE_EDIT");
 
-        $form = $this->createForm(TemplateType::class, $template);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->flush();
-
+        if ($templateHandler->handle($this->request, $template)) {
             $this->addFlash("success", $this->translator->trans("alert.template.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_template_index");
         }
 
         return $this->render('admin/template/edit.html.twig', [
             "template" => $template,
-            'form' => $form->createView()
+            'form' => $templateHandler->createView()
         ]);
     }
 }
