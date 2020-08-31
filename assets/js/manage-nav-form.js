@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var items = document.querySelectorAll(".collection select[id*=_internal]");
-    var buttonAdd = document.querySelector(".add-nav-link");
+    var buttonAdd = document.querySelector(".collection-add");
 
     manageInputs(items);
 
@@ -27,7 +27,7 @@ function manageInputs (elements)
 
 function changeState (item)
 {
-    var navItem = item.closest('.nav-item');
+    var navItem = item.closest('.collection-item');
     var internal = item.value == 1 ? true : false;
 
     if (internal === true) {

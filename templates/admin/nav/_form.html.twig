@@ -29,18 +29,26 @@
 {% endblock aside %}
 
 {% block collection %}
-	<ul class="collection nav-links-collection pl-0" id="sort" data-prototype="{{ form_widget(form.navLinks.vars.prototype)|e('html_attr') }}">
+	<ul 
+		class="collection handle-position pl-0" 
+		id="{{ form.navLinks.vars.id }}"
+		data-sort="{{ form.navLinks.vars.id }}" 
+		data-index="{{ form.navLinks|length == 0 ? 0 : form.navLinks|last.vars.name + 1 }}"
+		data-prototype="{{ form_widget(form.navLinks.vars.prototype)|e('html_attr') }}"
+	>
+
+		<p class="mb-0 unsortable empty-collection">{{ "navLink.empty"|trans }}</p>
 
 		{% for navLink in form.navLinks|sort((a, b) => a.position <=> b.position) %}
 
-			<li>
+			<li class="collection-item {{ form.vars.id }}" id="navLink-{{ form.vars.id }} ">
 				<span class="move-icon">
 					<i class="fas fa-arrows-alt"></i>
 				</span>
 
-				<div class="nav-item nav-item-sortable">
+				<div class="collection-item-sortable">
 
-					<div class="bullet nav-bullet-position"></div>
+					<div class="bullet bullet-position"></div>
 
 					<div class="row">
 						<div class="col-lg-4 col-md-6 col-sm-12">
@@ -57,18 +65,19 @@
 						<div class="col-lg-4 col-md-4 col-sm-12 nav-input-page">
 							{{ form_row(navLink.page) }}
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12 nav-input-position d-none">
+						<div class="col-lg-4 col-md-4 col-sm-12 position nav-input-position d-none">
 							{{ form_row(navLink.position) }}
 						</div>
+						<button type="button" class="btn btn-danger btn-icon-split ml-auto btn-sm collection-item-delete">
+							<span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+							<span class="text">{{ "button.remove"|trans }}</span>
+						</button>
 					</div>
 				</div>
 
-				<hr>
-
 			</li>
-
-        {% else %}
-            <p class="mb-0 unsortable empty-navlink">{{ "navLink.empty"|trans }}</p>
+			
+			<hr>
 		{% endfor %}
 
 	</ul>

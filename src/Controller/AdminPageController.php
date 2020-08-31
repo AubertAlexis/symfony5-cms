@@ -8,11 +8,13 @@ use App\Entity\InternalTemplate;
 use App\Entity\Page;
 use App\Entity\Seo;
 use App\Form\PageType;
+use App\Handler\PageHandler;
 use App\Repository\AssetRepository;
 use App\Repository\PageRepository;
 use App\Services\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,35 +89,22 @@ class AdminPageController extends AbstractController
     /**
      * @Route("nouveau", name="admin_page_add")
      * 
+     * @param PageHandler $pageHandler
      * @return Response
      */
-    public function add(): Response
+    public function add(PageHandler $pageHandler): Response
     {
         $this->denyAccessUnlessGranted("PAGE_ADD");
 
         $page = new Page();
 
-        $form = $this->createForm(PageType::class, $page);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $seo = new Seo();
-            $seo->setPage($page);
-
-            $this->handleTemplate($page);
-
-            $this->manager->persist($seo);
-            $this->manager->persist($page);
-            $this->manager->flush();
-
+        if ($pageHandler->handle($this->request, $page)) {
             $this->addFlash("success", $this->translator->trans("alert.page.success.add", [], "alert"));
-
             return $this->redirectToRoute("admin_page_edit", ["id" => $page->getId()]);
         }
 
         return $this->render('admin/page/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $pageHandler->createView()
         ]);
     }
 
@@ -123,36 +112,21 @@ class AdminPageController extends AbstractController
      * @Route("{id}", name="admin_page_edit", requirements={"id": "\d+"})
      * 
      * @param Page $page
+     * @param PageHandler $pageHandler
      * @return Response
      */
-    public function edit(Page $page): Response
+    public function edit(Page $page, PageHandler $pageHandler): Response
     {
         $this->denyAccessUnlessGranted("PAGE_EDIT");
 
-        $form = $this->createForm(PageType::class, $page);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $templateName = $page->getTemplate()->getKeyname();
-
-            if ($templateName === "internal") {
-                $uselessAssets = $this->assetRepository->findByInternalTemplate(null);
-
-                $this->removeAssets($uselessAssets);
-                $this->manageAssets($page->getInternalTemplate());
-            }
-
-            $this->manager->flush();
-
+        if ($pageHandler->handle($this->request, $page)) {
             $this->addFlash("success", $this->translator->trans("alert.page.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_page_index");
         }
 
         return $this->render('admin/page/edit.html.twig', [
             "page" => $page,
-            'form' => $form->createView()
+            'form' => $pageHandler->createView()
         ]);
     }
 
@@ -180,7 +154,6 @@ class AdminPageController extends AbstractController
             $this->manager->flush();
 
             $this->addFlash("success", $this->translator->trans("alert.page.success.delete", [], "alert"));
-
             return $this->redirectToRoute("admin_page_index");
         }
 
@@ -190,90 +163,20 @@ class AdminPageController extends AbstractController
     }
 
     /**
-     * Upload image from textEditor
-     *
      * @Route("image/{id}", name="admin_page_upload_image", requirements={"id": "\d+"})
      * 
      * @param InternalTemplate $internalTemplate
+     * @param PageHandler $pageHandler
      * @return Response
      */
-    public function uploadImage(InternalTemplate $internalTemplate = null): Response
+    public function uploadImage(InternalTemplate $internalTemplate = null, PageHandler $pageHandler): JsonResponse
     {
-        $templateName = $internalTemplate->getTemplate()->getKeyname();
-
-        $file = $this->fileManager->uploadFile($this->request->files->get('file'));
-
-        $asset = new Asset();
-        $asset->setFileName($file['filename']);
-
-        if ($templateName === "internal") $asset->setInternalTemplate($internalTemplate);
-
-        $this->manager->persist($asset);
-        $this->manager->flush();
+        $path = $pageHandler->uploadImage($internalTemplate);
 
         return $this->json(
             [
-                'location' => $file['path']
+                'location' => $path
             ]
         );
-    }
-
-    /**
-     * Manage assets from the content
-     *
-     * @param $template
-     * @return void
-     */
-    public function manageAssets($template): void
-    {
-        $regex = '/uploads\/[a-zA-Z0-9]+\.[a-z]{3,4}/';
-        $matches = [];
-
-        if (preg_match_all($regex, $template->getContent(), $matches)) {
-            $filenames = array_map(function ($match) {
-                return basename($match);
-            }, $matches[0]);
-
-            $assets = $this->assetRepository->findAssetToRemove($filenames, $template->getId());
-
-            $this->removeAssets($assets);
-        } else if ($template->getAssets()->count() > 0 && $matches) {
-            foreach ($template->getAssets() as $asset) {
-                $this->manager->remove($asset);
-                $this->fileManager->removeFile($asset->getFileName());
-            }
-        }
-    }
-
-    /**
-     * Remove assets from database and upload dir
-     *
-     * @param array $assets
-     * @return void
-     */
-    private function removeAssets(array $assets)
-    {
-        foreach ($assets as $asset) {
-            $this->manager->remove($asset);
-            $this->fileManager->removeFile($asset->getFileName());
-        }
-    }
-
-    private function handleTemplate(Page $page)
-    {
-        $templateName = $page->getTemplate()->getKeyname();
-
-        if ($templateName == 'internal') {
-            $template = new InternalTemplate();
-            $page->setInternalTemplate($template);
-        } else if ($templateName == 'article') {
-            $template = new ArticleTemplate();
-            $page->setArticleTemplate($template);
-        }
-
-        $this->manager->persist($template);
-        $this->manager->flush();
-
-        $template->setTemplate($page->getTemplate());
     }
 }

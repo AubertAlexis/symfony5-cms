@@ -100,6 +100,10 @@ label.required:after {
     max-width: 150px;
 }
 
+.collection-item > div {
+    width: 100%;
+}
+
 .collection-remove-link {
     max-height: 29px;
     align-self: center;
@@ -127,6 +131,15 @@ label.required:after {
     display: inline-block;
     vertical-align: top;
     width: calc(100% - 47px);
+}
+
+.collection .nav-item-content {
+    align-items: center;
+}
+
+.collection-item {
+    display: flex;
+    flex-wrap: initial;
 }
 
 .bullet {
@@ -286,3 +299,4 @@ input:checked + .slider:before {
     color: black;
     right: 15px;
 }
+
