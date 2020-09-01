@@ -32,4 +32,10 @@ class HomeHandler extends AbstractHandler
     {
         $this->entityManager->flush();
     }
+
+    /**
+     * @inheritDoc
+     */
+    function remove($data): void 
+    {}
 }

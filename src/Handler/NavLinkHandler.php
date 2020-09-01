@@ -2,10 +2,10 @@
 
 namespace App\Handler;
 
-use App\Form\UserType;
+use App\Form\NavType;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ProfilHandler extends AbstractHandler
+class NavLinkHandler extends AbstractHandler
 {
     /**
      * @var EntityManagerInterface
@@ -22,20 +22,25 @@ class ProfilHandler extends AbstractHandler
      */
     function getFormType(): string
     {
-        return UserType::class;
+        return NavType::class;
     }
 
     /**
      * @inheritDoc
      */
     function process($data): void
-    {
-        $this->entityManager->flush();
-    }
+    {}
 
     /**
      * @inheritDoc
      */
     function remove($data): void 
-    {}
+    {
+        if ($data->getSubNav() && $data->getSubNav()->getNavlinks()->count() == 1) {
+            $this->entityManager->remove($data->getSubNav());
+        }
+
+        $this->entityManager->remove($data);
+        $this->entityManager->flush();
+    }
 }

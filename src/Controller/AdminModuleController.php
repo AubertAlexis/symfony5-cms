@@ -2,23 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\ArticleTemplate;
-use App\Entity\Asset;
-use App\Entity\InternalTemplate;
 use App\Entity\Module;
-use App\Entity\Page;
-use App\Form\ModuleType;
-use App\Form\PageType;
 use App\Handler\ModuleHandler;
-use App\Repository\AssetRepository;
-use App\Repository\PageRepository;
-use App\Services\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -31,39 +21,24 @@ class AdminModuleController extends AbstractController
      */
     private $translator;
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
-
-    public function __construct(
-        TranslatorInterface $translator,
-        RequestStack $requestStack,
-        EntityManagerInterface $manager
-    ) {
+    public function __construct(TranslatorInterface $translator)
+    {
         $this->translator = $translator;
-        $this->request = $requestStack->getCurrentRequest();
-        $this->manager = $manager;
     }
-
 
     /**
      * @Route("nouveau", name="admin_module_add")
-     * 
+     * @param Request $request
+     * @param ModuleHandler $moduleHandler
      * @return Response
      */
-    public function add(ModuleHandler $moduleHandler): Response
+    public function add(Request $request, ModuleHandler $moduleHandler): Response
     {
         $this->denyAccessUnlessGranted("MODULE_ADD");
 
         $module = new Module();
 
-        if ($moduleHandler->handle($this->request, $module)) {
+        if ($moduleHandler->handle($request, $module)) {
             $this->addFlash("success", $this->translator->trans("alert.module.success.add", [], "alert"));
             return $this->redirectToRoute("admin_setting_edit");
         }
@@ -75,15 +50,16 @@ class AdminModuleController extends AbstractController
 
     /**
      * @Route("{id}", name="admin_module_edit", requirements={"id": "\d+"})
-     * 
+     * @param Request $request
      * @param Module $module
+     * @param ModuleHandler $moduleHandler
      * @return Response
      */
-    public function edit(Module $module, ModuleHandler $moduleHandler): Response
+    public function edit(Request $request, Module $module, ModuleHandler $moduleHandler): Response
     {
         $this->denyAccessUnlessGranted("MODULE_EDIT");
 
-        if ($moduleHandler->handle($this->request, $module)) {
+        if ($moduleHandler->handle($request, $module)) {
             $this->addFlash("success", $this->translator->trans("alert.module.success.edit", [], "alert"));
             return $this->redirectToRoute("admin_setting_edit");
         }
@@ -97,15 +73,18 @@ class AdminModuleController extends AbstractController
     /**
      * @Route("changement/{id}", name="admin_module_change", requirements={"id": "\d+"})
      * 
+     * @param EntityManagerInterface $entityManager
      * @param Module $module
      * @return Response
      */
-    public function change(Module $module): Response
+    public function change(EntityManagerInterface $entityManager, Module $module): Response
     {
         $this->denyAccessUnlessGranted("MODULE_MANAGE");
 
         $module->setEnabled(!$module->getEnabled());
-        $this->manager->flush();
+
+        $entityManager->flush();
+
         $newState = $module->getEnabled() ? "enabled" : "disabled";
         
         $this->addFlash("success", $this->translator->trans("alert.module.success.{$newState}", [], "alert"));

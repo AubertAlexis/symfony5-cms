@@ -32,4 +32,10 @@ class SettingHandler extends AbstractHandler
     {
         $this->entityManager->flush();
     }
+
+    /**
+     * @inheritDoc
+     */
+    function remove($data): void 
+    {}
 }

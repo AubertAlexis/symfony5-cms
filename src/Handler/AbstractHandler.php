@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 abstract class AbstractHandler implements HandlerInterface
@@ -38,11 +39,17 @@ abstract class AbstractHandler implements HandlerInterface
     abstract protected function process($data): void;
 
     /**
+     * @param $data
+     * @return void
+     */
+    abstract protected function remove($data): void;
+
+    /**
      * @inheritDoc
      */
     function handle(Request $request, $data, array $options = []): bool
     {
-        $this->form = $this->formFactory->create($this->getFormType(), $data)->handleRequest($this->request);
+        $this->form = $this->formFactory->create($this->getFormType(), $data, $options)->handleRequest($this->request);
 
         if($this->form->isSubmitted() && $this->form->isValid()) {
             $this->process($data);
@@ -55,15 +62,15 @@ abstract class AbstractHandler implements HandlerInterface
     /**
      * @inheritDoc
      */
-    function remove(CsrfTokenManagerInterface $tokenManager, $token, $data): bool
+    function validateToken(CsrfTokenManagerInterface $tokenManager, string $tokenId, string $token, $data): bool
     {
-        if($tokenManager->isTokenValid($token)) {
-            $this->process($data);
+        if ($tokenManager->isTokenValid(new CsrfToken($tokenId, $token))) {
+            $this->remove($data);
             return true;
         }
-
+        
         return false;
-    }
+    } 
 
     /**
      * @inheritDoc

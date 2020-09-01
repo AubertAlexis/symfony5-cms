@@ -2,11 +2,11 @@
 
 namespace App\Handler;
 
-use App\Form\ModuleType;
+use App\Form\NavType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
 
-class ModuleHandler extends AbstractHandler
+class NavHandler extends AbstractHandler
 {
     /**
      * @var EntityManagerInterface
@@ -23,7 +23,7 @@ class ModuleHandler extends AbstractHandler
      */
     function getFormType(): string
     {
-        return ModuleType::class;
+        return NavType::class;
     }
 
     /**
@@ -33,6 +33,15 @@ class ModuleHandler extends AbstractHandler
     {
         if($this->entityManager->getUnitOfWork()->getEntityState($data) == UnitOfWork::STATE_NEW) {
             $this->entityManager->persist($data);
+        } 
+
+        /**
+         * @var NavLink $navLink
+         */
+        foreach ($data->getNavLinks() as $navLink) {
+            $navLink->setNav($data);
+
+            $this->entityManager->persist($navLink);
         }
 
         $this->entityManager->flush();
@@ -42,5 +51,8 @@ class ModuleHandler extends AbstractHandler
      * @inheritDoc
      */
     function remove($data): void 
-    {}
+    {
+        $this->entityManager->remove($data);
+        $this->entityManager->flush();
+    }
 }

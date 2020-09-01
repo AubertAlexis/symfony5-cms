@@ -55,4 +55,10 @@ class PasswordChangeHandler extends AbstractHandler
             $this->flashBag->add("danger", $this->translator->trans("alert.profile.danger.passwordReset", [], "alert"));
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    function remove($data): void 
+    {}
 }
