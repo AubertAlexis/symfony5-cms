@@ -3,25 +3,24 @@
 namespace App\Services;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class FileManager
 {
     /**
-     * @var ContainerInterface
+     * @var ParameterBagInterface
      */
-    private $container;
+    private $parameterBag;
 
     /**
      * Constructor
      *
-     * @param ContainerInterface $container
+     * @param ParameterBagInterface $paramterBag
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ParameterBagInterface $parameterBag)
     {
-        $this->container = $container;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -64,7 +63,7 @@ class FileManager
      */
     public function getUploadDirectory(): string
     {
-        return $this->container->getParameter('uploads_directory');
+        return $this->parameterBag->get('uploads_directory');
     }
 
     /**
@@ -74,7 +73,7 @@ class FileManager
      */
     public function getUploadNameDirectory(): string
     {
-        return $this->container->getParameter('uploads_name_directory');
+        return $this->parameterBag->get('uploads_name_directory');
     }
 
     /**

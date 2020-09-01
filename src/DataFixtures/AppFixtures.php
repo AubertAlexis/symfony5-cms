@@ -19,15 +19,9 @@ class AppFixtures extends Fixture
      */
     private $encoder;
 
-    /**
-     * @var ContainerInterface $container
-     */
-    private $container;
-
-    public function __construct(UserPasswordEncoderInterface $encoder, ContainerInterface $container)
+    public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
-        $this->container = $container;
     }
 
 
@@ -41,7 +35,7 @@ class AppFixtures extends Fixture
             ->setUsername("admin")
             ->setRoles(["ROLE_ADMIN"])
             ->setPassword($this->encoder->encodePassword($admin, "admin"))
-            ->setLocale($this->container->getParameter('locale'));
+            ->setLocale("fr");
 
         $dev = new User();
 
@@ -51,7 +45,7 @@ class AppFixtures extends Fixture
             ->setUsername("dev")
             ->setRoles(["ROLE_DEV"])
             ->setPassword($this->encoder->encodePassword($dev, "dev"))
-            ->setLocale($this->container->getParameter('locale'));
+            ->setLocale("fr");
 
         $internalTemplate = new Template();
 

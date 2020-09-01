@@ -37,4 +37,10 @@ class TemplateHandler extends AbstractHandler
 
         $this->entityManager->flush();
     }
+
+    /**
+     * @inheritDoc
+     */
+    function remove($data): void 
+    {}
 }

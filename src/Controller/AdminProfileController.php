@@ -2,16 +2,13 @@
 
 namespace App\Controller;
 
-use App\Form\PasswordUserType;
-use App\Form\UserType;
-use App\Handler\PasswordChangeHandler;
 use App\Handler\ProfilHandler;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Handler\PasswordChangeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("admin/")
@@ -29,12 +26,12 @@ class AdminProfileController extends AbstractController
     }
 
     /**
-     * @Route("profil", name="admin_profile_edit")
-     * 
-     * @param Request $request
-     * @return Response
-     */
-    public function edit(Request $request, ProfilHandler $profilHandler) : Response
+    * @Route("profil", name="admin_profile_edit")
+    * @param Request $request
+    * @param ProfilHandler $profilHandler
+    * @return Response
+    */
+    public function edit(Request $request, ProfilHandler $profilHandler): Response
     {
         $user = $this->getUser();
 
@@ -52,12 +49,11 @@ class AdminProfileController extends AbstractController
 
     /**
      * @Route("profil/mot-de-passe", name="admin_profile_password")
-     * 
      * @param Request $request
      * @param PasswordChangeHandler $passwordChangeHandler
      * @return Response
      */
-    public function passwordChange(Request $request, PasswordChangeHandler $passwordChangeHandler) : Response
+    public function passwordChange(Request $request, PasswordChangeHandler $passwordChangeHandler): Response
     {
         $user = $this->getUser();
 

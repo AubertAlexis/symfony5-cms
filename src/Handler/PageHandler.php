@@ -77,6 +77,23 @@ class PageHandler extends AbstractHandler
     }
 
     /**
+     * @inheritDoc
+     */
+    function remove($data): void
+    {
+        $templateName = $data->getTemplate()->getKeyname();
+
+        if ($templateName === "internal") {
+            $pageAssets = $this->assetRepository->findByInternalTemplate($data->getInternalTemplate());
+
+            $this->removeAssets($pageAssets);
+        }
+
+        $this->entityManager->remove($data);
+        $this->entityManager->flush();
+    }
+
+    /**
      * @param InternalTemplate $internalTemplate
      * @return void
      */

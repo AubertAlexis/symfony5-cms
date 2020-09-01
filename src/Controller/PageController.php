@@ -3,27 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Page;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/")
  */
 class PageController extends AbstractController
 {
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * @Route("{slug}", name="page_index", requirements={"slug": "^[a-z0-9]+(?:-[a-z0-9]+)*$"})
      * 
-     * @param Page $page
+     * @param Page|null $page
      * @return Response
+     * @throws NotFoundHttpException
      */
     public function __invoke(Page $page = null): Response
     {
@@ -38,7 +33,7 @@ class PageController extends AbstractController
      * @param Page $page
      * @return array
      */
-    private function handlePage(Page $page)
+    private function handlePage(Page $page): array
     {
         $templateName = $page->getTemplate()->getKeyname();
         

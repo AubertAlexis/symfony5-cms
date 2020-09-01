@@ -3,18 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Template;
-use App\Form\TemplateType;
 use App\Handler\TemplateHandler;
-use App\Repository\AssetRepository;
 use App\Repository\TemplateRepository;
-use App\Services\FileManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("admin/modeles-de-page/")
@@ -26,59 +21,38 @@ class AdminTemplateController extends AbstractController
      */
     private $translator;
 
-    /**
-     * @var TemplateRepository
-     */
-    private $templateRepository;
-
-    /**
-     * @var Request
-     */
-    private $request;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
-
-    public function __construct(
-        TranslatorInterface $translator,
-        TemplateRepository $templateRepository,
-        RequestStack $requestStack,
-        EntityManagerInterface $manager
-    ) {
+    public function __construct(TranslatorInterface $translator) 
+    {
         $this->translator = $translator;
-        $this->templateRepository = $templateRepository;
-        $this->request = $requestStack->getCurrentRequest();
-        $this->manager = $manager;
     }
-
 
     /**
      * @Route("", name="admin_template_index")
-     * 
+     * @param TemplateRepository $templateRepository
      * @return Response
      */
-    public function list(): Response
+    public function list(TemplateRepository $templateRepository): Response
     {
         $this->denyAccessUnlessGranted("TEMPLATE_LIST");
 
         return $this->render('admin/template/index.html.twig', [
-            'templates' => $this->templateRepository->findAll()
+            'templates' => $templateRepository->findAll()
         ]);
     }
 
     /**
      * @Route("nouveau", name="admin_template_add")
-     * 
+     * @param Request $request
+     * @param TemplateHandler $templateHandler
      * @return Response
      */
-    public function add(TemplateHandler $templateHandler): Response
+    public function add(Request $request, TemplateHandler $templateHandler): Response
     {
         $this->denyAccessUnlessGranted("TEMPLATE_ADD");
 
         $template = new Template();
 
-        if ($templateHandler->handle($this->request, $template)) {
+        if ($templateHandler->handle($request, $template)) {
             $this->addFlash("success", $this->translator->trans("alert.template.success.add", [], "alert"));
             return $this->redirectToRoute("admin_template_index");
         }
@@ -90,15 +64,16 @@ class AdminTemplateController extends AbstractController
 
     /**
      * @Route("{id}", name="admin_template_edit", requirements={"id": "\d+"})
-     * 
+     * @param Request $request
      * @param Template $template
+     * @param TemplateHandler $templateHandler
      * @return Response
      */
-    public function edit(Template $template, TemplateHandler $templateHandler): Response
+    public function edit(Request $request, Template $template, TemplateHandler $templateHandler): Response
     {
         $this->denyAccessUnlessGranted("TEMPLATE_EDIT");
 
-        if ($templateHandler->handle($this->request, $template)) {
+        if ($templateHandler->handle($request, $template)) {
             $this->addFlash("success", $this->translator->trans("alert.template.success.edit", [], "alert"));
             return $this->redirectToRoute("admin_template_index");
         }

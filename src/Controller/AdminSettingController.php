@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-use App\Form\LocaleType;
-use App\Form\ModuleType;
 use App\Handler\SettingHandler;
 use App\Repository\ModuleRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("admin/")
@@ -29,8 +27,9 @@ class AdminSettingController extends AbstractController
     
     /**
      * @Route("parametres", name="admin_setting_edit")
-     * 
      * @param Request $request
+     * @param ModuleRepository $moduleRepository
+     * @param SettingHandler $settingHandler
      * @return Response
      */
     public function edit(Request $request, ModuleRepository $moduleRepository, SettingHandler $settingHandler): Response

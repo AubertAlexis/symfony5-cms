@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Nav;
-use App\Entity\NavLink;
 use App\Entity\SubNav;
-use App\Form\NavType;
-use App\Form\SubNavType;
+use App\Entity\NavLink;
+use App\Handler\NavHandler;
+use App\Handler\SubNavHandler;
+use App\Handler\NavLinkHandler;
 use App\Repository\NavRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("admin/navigations/")
@@ -26,145 +26,82 @@ class AdminNavController extends AbstractController
      */
     private $translator;
 
-    /**
-     * @var NavRepository
-     */
-    private $navRepository;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
-
-    public function __construct(
-        TranslatorInterface $translator,
-        NavRepository $navRepository,
-        RequestStack $requestStack,
-        EntityManagerInterface $manager
-    ) {
+    public function __construct(TranslatorInterface $translator) 
+    {
         $this->translator = $translator;
-        $this->navRepository = $navRepository;
-        $this->request = $requestStack->getCurrentRequest();
-        $this->manager = $manager;
     }
 
     /**
      * @Route("", name="admin_nav_index")
-     * 
+     * @param NavRepository $navRepository
      * @return Response
      */
-    public function index(): Response
+    public function index(NavRepository $navRepository): Response
     {
         $this->denyAccessUnlessGranted("NAV_LIST");
 
         return $this->render('admin/nav/index.html.twig', [
-            'navs' => $this->navRepository->findAll()
+            'navs' => $navRepository->findAll()
         ]);
     }
 
     /**
      * @Route("nouveau", name="admin_nav_add")
-     * 
+     * @param Request $request
+     * @param NavHandler $navHandler
      * @return Response
      */
-    public function add(): Response
+    public function add(Request $request, NavHandler $navHandler): Response
     {
         $this->denyAccessUnlessGranted("NAV_ADD");
 
         $nav = new Nav();
 
-        $form = $this->createForm(NavType::class, $nav, [
-            'isEnabled' => true
-        ]);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($nav);
-
-            /**
-             * @var NavLink $navLink
-             */
-            foreach ($nav->getNavLinks() as $index => $navLink) {
-                $navLink->setNav($nav);
-
-                $this->manager->persist($navLink);
-            }
-            
-            $this->manager->flush();
-
+        if ($navHandler->handle($request, $nav, ['isEnabled' => true])) {
             $this->addFlash("success", $this->translator->trans("alert.nav.success.add", [], "alert"));
-
             return $this->redirectToRoute("admin_nav_index");
         }
 
         return $this->render('admin/nav/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $navHandler->createView()
         ]);
     }
 
     /**
      * @Route("{id}", name="admin_nav_edit", requirements={"id": "\d+"})
-     * 
+     * @param Request $request
      * @param Nav $nav
+     * @param NavHandler $navHandler
      * @return Response
      */
-    public function edit(Nav $nav): Response
+    public function edit(Request $request, Nav $nav, NavHandler $navHandler): Response
     {
         $this->denyAccessUnlessGranted("NAV_EDIT");
 
-        $form = $this->createForm(NavType::class, $nav, [
-            'isEnabled' => $nav->getEnabled()
-        ]);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            /**
-             * @var NavLink $navLink
-             */
-            foreach ($nav->getNavLinks() as $navLink) {
-                $navLink->setNav($nav);
-
-                $this->manager->persist($navLink);
-            }
-
-            $this->manager->flush();
-
+        if ($navHandler->handle($request, $nav, ['isEnabled' => $nav->getEnabled()])) {
             $this->addFlash("success", $this->translator->trans("alert.nav.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_nav_index");
         }
 
         return $this->render('admin/nav/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $navHandler->createView()
         ]);
     }
 
-    /**
-     * @Route("{id}/suppression", name="admin_nav_delete", requirements={"id": "\d+"}, methods="POST")
-     * 
-     * @param Request $request
-     * @param Nav $nav
-     * @return Response
-     */
-    public function delete(Request $request, Nav $nav) : Response
+   /**
+    * @Route("{id}/suppression", name="admin_nav_delete", requirements={"id": "\d+"}, methods="POST")
+    * @param Request $request
+    * @param Nav $nav
+    * @param NavHandler $navHandler
+    * @param CsrfTokenManagerInterface $tokenManager
+    * @return Response
+    */
+    public function delete(Request $request, Nav $nav, NavHandler $navHandler, CsrfTokenManagerInterface $tokenManager) : Response
     {
         $this->denyAccessUnlessGranted("NAV_DELETE");
 
-        if ($this->isCsrfTokenValid("delete-nav", $request->request->get('token'))) {
-            $this->manager->remove($nav);
-
-            $this->manager->flush();
-
+        if ($navHandler->validateToken($tokenManager, "delete-nav", $request->request->get('token'), $nav)) {
             $this->addFlash("success", $this->translator->trans("alert.nav.success.delete", [], "alert"));
-
             return $this->redirectToRoute("admin_nav_index");
         }
 
@@ -189,27 +126,18 @@ class AdminNavController extends AbstractController
 
     /**
      * @Route("liens/{id}/suppression", name="admin_nav_link_delete", requirements={"id": "\d+"}, methods="POST")
-     * 
-     * @param Request $request
      * @param NavLink $navLink
+     * @param Request $request
+     * @param NavLinkHandler $navLinkHandler
+     * @param CsrfTokenManagerInterface $tokenManager
      * @return Response
      */
-    public function deleteLink(NavLink $navLink, Request $request) : Response
+    public function deleteLink(NavLink $navLink, Request $request, NavLinkHandler $navLinkHandler, CsrfTokenManagerInterface $tokenManager) : Response
     {
         $this->denyAccessUnlessGranted("NAV_DELETE");
 
-        if ($this->isCsrfTokenValid("delete-nav-link", $request->request->get('token'))) {
-
-            if ($navLink->getSubNav()->getNavlinks()->count() == 1) {
-                $this->manager->remove($navLink->getSubNav());
-            }
-
-            $this->manager->remove($navLink);
-
-            $this->manager->flush();
-
+        if ($navLinkHandler->validateToken($tokenManager, "delete-nav-link", $request->request->get('token'), $navLink)) {
             $this->addFlash("success", $this->translator->trans("alert.navLink.success.delete", [], "alert"));
-
             return $this->redirectToRoute("admin_nav_index");
         }
 
@@ -220,81 +148,46 @@ class AdminNavController extends AbstractController
 
     /**
      * @Route("sous-menu/{id}/nouveau", name="admin_sub_nav_add", requirements={"id": "\d+"})
-     * 
+     * @param Request $request
      * @param NavLink $navLink
+     * @param SubNavHandler $subNavHandler
      * @return Response
      */
-    public function subNavAdd(NavLink $navLink): Response
+    public function subNavAdd(Request $request, NavLink $navLink, SubNavHandler $subNavHandler): Response
     {
         $this->denyAccessUnlessGranted("NAV_ADD");
 
         $subNav = new SubNav();
 
-        $form = $this->createForm(SubNavType::class, $subNav);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $subNav->setParent($navLink);
-            
-            $this->manager->persist($subNav);
-
-            /**
-             * @var NavLink $navLinkChildren
-             */
-            foreach ($subNav->getNavLinks() as $navLinkChildren) {
-                $subNav->addNavlink($navLinkChildren);
-                $navLinkChildren->setSubNav($subNav);
-                $this->manager->persist($navLinkChildren);
-            }
-            
-            $this->manager->flush();
-
+        if ($subNavHandler->handle($request, $subNav)) {
             $this->addFlash("success", $this->translator->trans("alert.subNav.success.add", [], "alert"));
-
             return $this->redirectToRoute("admin_sub_nav_details", ["id" => $navLink->getId()]);
         }
 
         return $this->render('admin/nav/subnav/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $subNavHandler->createView()
         ]);
 
     }
 
     /**
      * @Route("sous-menu/{id}", name="admin_sub_nav_edit", requirements={"id": "\d+"})
-     * 
+     * @param Request $request
      * @param SubNav $subNav
+     * @param SubNavHandler $subNavHandler
      * @return Response
      */
-    public function subNavEdit(SubNav $subNav): Response
+    public function subNavEdit(Request $request, SubNav $subNav, SubNavHandler $subNavHandler): Response
     {
         $this->denyAccessUnlessGranted("NAV_EDIT");
 
-        $form = $this->createForm(SubNavType::class, $subNav);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            /**
-             * @var NavLink $navLinkChildren
-             */
-            foreach ($subNav->getNavLinks() as $navLinkChildren) {
-                $subNav->addNavlink($navLinkChildren);
-                $navLinkChildren->setSubNav($subNav);
-                $this->manager->persist($navLinkChildren);
-            }
-            
-            $this->manager->flush();
-
+        if ($subNavHandler->handle($request, $subNav)) {
             $this->addFlash("success", $this->translator->trans("alert.subNav.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_sub_nav_details", ["id" => $subNav->getParent()->getId()]);
         }
 
         return $this->render('admin/nav/subnav/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $subNavHandler->createView()
         ]);
 
     }
