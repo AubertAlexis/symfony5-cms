@@ -1,6 +1,8 @@
 {
+    "name": "aubert-alexis/symfony5-cms",
     "type": "project",
     "license": "proprietary",
+    "minimum-stable": "1.0",
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
