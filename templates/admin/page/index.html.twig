@@ -25,29 +25,29 @@
                 <table class="table table-bordered" id="pageTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>{{ "table.title"|trans }}</th>
-                            <th>{{ "table.slug"|trans }}</th>
-                            <th>{{ "table.templateName"|trans }}</th>
-                            <th class="visible">{{ "table.visible"|trans }}</th>
-                            <th class="entry-date">{{ "table.createdAt"|trans }}</th>
-                            <th class="entry-date">{{ "table.updatedAt"|trans }}</th>
-                            <th class="action">{{ "table.action"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.title"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.slug"|trans }}</th>
+                            <th class="text-center text-uppercase">{{ "table.templateName"|trans }}</th>
+                            <th class="text-center text-uppercase visible">{{ "table.visible"|trans }}</th>
+                            <th class="text-center text-uppercase entry-date">{{ "table.createdAt"|trans }}</th>
+                            <th class="text-center text-uppercase entry-date">{{ "table.updatedAt"|trans }}</th>
+                            <th class="text-center text-uppercase action">{{ "table.action"|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
                     {% for page in pages %}
                         <tr>
-                            <td><span class="font-weight-bold">{{ page.title }}</span></td>
-                            <td>
+                            <td class="text-center align-middle"><span class="font-weight-bold">{{ page.title }}</span></td>
+                            <td class="text-center align-middle">
                                 <a href="{{ path("page_index", {slug: page.slug}) }}" target="_blank" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.view"|trans }}">
                                     /{{ page.slug }}
                                 </a>
                             </td>
-                            <td>{{ page.template.title }}</td>
-                            <td class="visible">{{ icon_from_bool(page.enabled) }}</td>
-                            <td>{{ page.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
-                            <td>{{ page.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
-                            <td>
+                            <td class="text-center align-middle">{{ page.template.title }}</td>
+                            <td class="text-center align-middle visible">{{ icon_from_bool(page.enabled) }}</td>
+                            <td class="text-center align-middle">{{ page.createdAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                            <td class="text-center align-middle">{{ page.updatedAt | format_datetime('medium', 'medium', locale = app.request.locale) }}</td>
+                            <td class="text-center align-middle">
 								<a href="{{ path("admin_page_edit", {id: page.id}) }}" class="btn btn-primary rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.edit"|trans }}">
 									<i class="far fa-edit"></i>
 								</a>

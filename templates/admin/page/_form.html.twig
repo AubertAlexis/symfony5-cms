@@ -1,0 +1,75 @@
+{% block header %}
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			{{ form_row(form.title) }}
+		</div>
+
+		{% if form.template is defined %}
+			<div class="col-lg-6 col-md-6 col-sm-12">
+				{{ form_row(form.template) }}
+			</div>
+		{% endif %}
+
+	</div>
+{% endblock header %}
+
+{% block aside %}
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{{ form_row(form.slug) }}
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-lg-12">
+			{{ form_row(form.enabled) }}
+		</div>
+	</div>
+{% endblock aside %}
+
+{% block content %}
+	<hr>
+
+	{% if form.internalTemplate is defined %}
+		{{ form_widget(form.internalTemplate) }}
+	{% endif %}
+
+	{% if form.articleTemplate is defined %}
+		<div class="row">
+			<div class="col-8">
+				{{ form_widget(form.articleTemplate) }}
+			</div>
+			{% if page.articleTemplate %}
+				<div class="col-4 text-center">
+					<img src="{{ vich_uploader_asset(page.articleTemplate, "imageFile") }}" class="mt-2 image-min">
+				</div>
+			{% endif %}
+		</div>
+	{% endif %}
+{% endblock content %}
+
+{% block submit %}
+	{{ form_row(form._token) }}
+	<div class="col-12">
+		<hr>
+	</div>
+	<div class="col-12">
+		<div class="card shadow">
+			<div class="card-body">
+				<div class="d-flex justify-content-center align-items center">
+					{{ form_row(form.submit) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock submit %}
+
+{# ---------------------------- #}
+{# FORM THEME #}
+{# ---------------------------- #}
+
+	{% block _page_slug_widget %}
+		<div class="mb-2"> <p class="font-weight-bold mb-1">{{ app.request.getSchemeAndHttpHost() ~ "/" }}</p>
+		{{ form_widget(form) }}
+	</div>
+{% endblock %}

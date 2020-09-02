@@ -1,0 +1,100 @@
+{% block header %}
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-12">
+			{{ form_row(form.title) }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-4 col-md-4 col-sm-12">
+			{{ form_row(form.keyname) }}
+		</div>
+	</div>
+{% endblock header %}
+
+{% block aside %}
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			{{ form_row(form.main) }}
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row">
+		<div class="col-lg-12">
+			{{ form_row(form.enabled) }}
+		</div>
+	</div>
+{% endblock aside %}
+
+{% block collection %}
+	<ul 
+		class="collection handle-position pl-0" 
+		id="{{ form.navLinks.vars.id }}"
+		data-sort="{{ form.navLinks.vars.id }}" 
+		data-index="{{ form.navLinks|length == 0 ? 0 : form.navLinks|last.vars.name + 1 }}"
+		data-prototype="{{ form_widget(form.navLinks.vars.prototype)|e('html_attr') }}"
+	>
+
+		<p class="mb-0 unsortable empty-collection">{{ "navLink.empty"|trans }}</p>
+
+		{% for navLink in form.navLinks|sort((a, b) => a.position <=> b.position) %}
+
+			<li class="collection-item {{ form.vars.id }}" id="navLink-{{ form.vars.id }} ">
+				<span class="move-icon">
+					<i class="fas fa-arrows-alt"></i>
+				</span>
+
+				<div class="collection-item-sortable">
+
+					<div class="bullet bullet-position"></div>
+
+					<div class="row">
+						<div class="col-lg-4 col-md-6 col-sm-12">
+							{{ form_row(navLink.internal) }}
+						</div>
+					</div>
+					<div class="row nav-item-content">
+						<div class="col-lg-4 col-md-4 col-sm-12 nav-input-title">
+							{{ form_row(navLink.title) }}
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 nav-input-link">
+							{{ form_row(navLink.link) }}
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 nav-input-page">
+							{{ form_row(navLink.page) }}
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12 position nav-input-position d-none">
+							{{ form_row(navLink.position) }}
+						</div>
+						<button type="button" class="btn btn-danger btn-icon-split ml-auto btn-sm collection-item-delete">
+							<span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+							<span class="text">{{ "button.remove"|trans }}</span>
+						</button>
+					</div>
+				</div>
+
+			</li>
+			
+			<hr>
+		{% endfor %}
+
+	</ul>
+{% endblock collection %}
+
+{% block submit %}
+	{{ form_row(form._token) }}
+	<div class="col-12">
+		<hr>
+	</div>
+	<div class="col-12">
+		<div class="card shadow">
+			<div class="card-body">
+				<div class="d-flex justify-content-center align-items center">
+					{{ form_row(form.submit) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock submit %}

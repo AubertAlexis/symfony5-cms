@@ -1,0 +1,54 @@
+{% block _nav_navLinks_entry_widget %}
+
+	{{ block("navLinks_entry") }}
+
+{% endblock %}
+
+{% block _sub_nav_navLinks_entry_widget %}
+
+	{{ block("navLinks_entry") }}
+
+{% endblock %}
+
+{% block navLinks_entry %}
+    <li class="collection-item {{ form.vars.id }}" id="navLink-{{ form.vars.id }} ">
+
+        <span class="move-icon">
+            <i class="fas fa-arrows-alt"></i>
+        </span>
+
+        <div class="collection-item-sortable">
+
+            <div class="bullet bullet-position"></div>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    {{ form_row(form.internal) }}
+                </div>
+            </div>
+            <div class="row nav-item-content">
+                <div class="col-lg-4 col-md-4 col-sm-12 nav-input-title">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 nav-input-link">
+                    {{ form_row(form.link) }}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 nav-input-page">
+                    {{ form_row(form.page) }}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 position nav-input-position d-none">
+                    {{ form_row(form.position) }}
+                </div>
+                <button type="button" class="btn btn-danger btn-icon-split ml-auto btn-sm collection-item-delete">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                    <span class="text">{{ "button.remove"|trans }}</span>
+                </button>
+            </div>
+        </div>
+
+    </li>
+    
+    <hr>
+{% endblock %}

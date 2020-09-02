@@ -1,37 +1,28 @@
-{% set seo = form.seo %}
+{% block seo %}
+	{% set seo = form.seo %}
 
-<div class="col-12">
-	<div class="card shadow mb-3">
-		<a href="#SeoPageCard" class="d-block card-header py-3 collapsed" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="SeoPageCard">
-			<h6 class="m-0 font-weight-bold text-primary">{{ "form.homePage.seo"|trans }}</h6>
-		</a>
-		<div class="collapse" id="SeoPageCard">
-			<div class="card-body">
-				<div class="row">
-					<div class="col-lg-5 col-md-12">
-						{{ form_row(seo.metaTitle) }}
-					</div>
-					<div class="col-lg-7 col-md-12">
-						{{ form_row(seo.metaKeywords) }}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12">
-						{{ form_row(seo.metaDescription) }}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-4 col-md-12">
-						{{ form_row(seo.noIndex) }}
-					</div>
-					<div class="col-lg-4 col-md-12">
-						{{ form_row(seo.noFollow) }}
-					</div>
-					<div class="col-lg-4 col-md-12">
-						{{ form_row(seo.hideOnSitemap) }}
-					</div>
-				</div>
-			</div>
+	<div class="row">
+		<div class="col-lg-5 col-md-12">
+			{{ form_row(seo.metaTitle) }}
+		</div>
+		<div class="col-lg-7 col-md-12">
+			{{ form_row(seo.metaKeywords) }}
 		</div>
 	</div>
-</div>
+	<div class="row">
+		<div class="col-12">
+			{{ form_row(seo.metaDescription) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4 col-md-12">
+			{{ form_row(seo.noIndex) }}
+		</div>
+		<div class="col-lg-4 col-md-12">
+			{{ form_row(seo.noFollow) }}
+		</div>
+		<div class="col-lg-4 col-md-12">
+			{{ form_row(seo.hideOnSitemap) }}
+		</div>
+	</div>
+{% endblock seo %}

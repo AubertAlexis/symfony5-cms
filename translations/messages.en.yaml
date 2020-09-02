@@ -125,7 +125,7 @@ button:
     remove: Remove
     return: Return
 
-    addModule: Ad a new module
+    addModule: Add a new module
 
 
 table:
@@ -144,7 +144,7 @@ table:
     keyname: Key
     main: Main navigation ?
     numberLinks: Number of links
-    numberSubnavs: Number of sub-navigations
+    numberSubnavs: Sub-navigations
 
 tooltip:
     edit: Edit

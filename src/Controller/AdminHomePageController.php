@@ -2,16 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\HomePage;
-use App\Form\HomePageType;
+use App\Handler\HomeHandler;
 use App\Repository\HomePageRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -20,74 +17,37 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AdminHomePageController extends AbstractController
 {
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
-
-    /**
-     * @var HomePageRepository
-     */
-    private $homePageRepository;
-
-    public function __construct(
-        TranslatorInterface $translator,
-        RequestStack $requestStack,
-        EntityManagerInterface $manager,
-        HomePageRepository $homePageRepository
-    ) {
-        $this->translator = $translator;
-        $this->request = $requestStack->getCurrentRequest();
-        $this->manager = $manager;
-        $this->homePageRepository = $homePageRepository;
-    }
-
-    /**
      * @Route("", name="admin_home_page_edit")
-     * 
+     * @param Request $request
+     * @param HomeHandler $homeHandler
+     * @param HomePageRepository $homePageRepository
+     * @param TranslatorInterface $translator
      * @return Response
+     * @throws NotFoundResourceException
      */
-    public function edit(): Response
+    public function __invoke(
+        Request $request, 
+        HomeHandler $homeHandler, 
+        HomePageRepository $homePageRepository, 
+        TranslatorInterface $translator
+    ): Response
     {
         $this->denyAccessUnlessGranted("HOME_PAGE_EDIT");
 
-        $homePage = $this->getHomePage();
+        $homePage = $homePageRepository->findBy([], [
+            "id" => "DESC"
+        ], 1, 0)[0];
 
-        $form = $this->createForm(HomePageType::class, $homePage);
+        if ($homePage === null) throw new NotFoundResourceException("There is no HomePage entry on the database. You need 1, run fixtures to fix this");
 
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->flush();
-
-            $this->addFlash("success", $this->translator->trans("alert.homePage.success.edit", [], "alert"));
-
+        if ($homeHandler->handle($request, $homePage)) {
+            $this->addFlash("success", $translator->trans("alert.homePage.success.edit", [], "alert"));
             return $this->redirectToRoute("admin_home_page_edit", ["id" => $homePage->getId()]);
         }
 
         return $this->render('admin/homePage/edit.html.twig', [
             "homePage" => $homePage,
-            'form' => $form->createView()
+            'form' => $homeHandler->createView()
         ]);
-    }
-
-    private function getHomePage()
-    {
-        $homePages = $this->homePageRepository->findAll();
-
-        if (sizeof($homePages) !== 1) {
-            throw new NonUniqueResultException("There is an error in the database, we were expecting a single entry for the HomePage table, zero or more than one was found");
-        }
-
-        return $homePages[0];
     }
 }

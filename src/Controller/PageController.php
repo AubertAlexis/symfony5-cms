@@ -3,32 +3,38 @@
 namespace App\Controller;
 
 use App\Entity\Page;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/")
  */
 class PageController extends AbstractController
 {
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * @Route("{slug}", name="page_index", requirements={"slug": "^[a-z0-9]+(?:-[a-z0-9]+)*$"})
      * 
-     * @param Page $page
+     * @param Page|null $page
      * @return Response
+     * @throws NotFoundHttpException
      */
-    public function index(Page $page = null): Response
+    public function __invoke(Page $page = null): Response
     {
         if (!$page || !$page->getEnabled()) throw new NotFoundHttpException("Not found");
 
+        [$template, $templateName] = $this->handlePage($page);
+
+        return $this->render("page/{$templateName}.html.twig", compact('page', 'template'));
+    }
+
+    /**
+     * @param Page $page
+     * @return array
+     */
+    private function handlePage(Page $page): array
+    {
         $templateName = $page->getTemplate()->getKeyname();
         
         if ($templateName === "internal") {
@@ -37,6 +43,6 @@ class PageController extends AbstractController
             $template = $page->getArticleTemplate();
         }
 
-        return $this->render("page/{$templateName}.html.twig", compact('page', 'template'));
+        return [$template, $templateName];
     }
 }

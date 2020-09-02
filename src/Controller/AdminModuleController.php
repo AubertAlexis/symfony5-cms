@@ -2,22 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\ArticleTemplate;
-use App\Entity\Asset;
-use App\Entity\InternalTemplate;
 use App\Entity\Module;
-use App\Entity\Page;
-use App\Form\ModuleType;
-use App\Form\PageType;
-use App\Repository\AssetRepository;
-use App\Repository\PageRepository;
-use App\Services\FileManager;
+use App\Handler\ModuleHandler;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -30,123 +21,73 @@ class AdminModuleController extends AbstractController
      */
     private $translator;
 
-    /**
-     * @var PageRepository
-     */
-    private $pageRepository;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var FileManager
-     */
-    private $fileManager;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
-
-    /**
-     * @var AssetRepository
-     */
-    private $assetRepository;
-
-    public function __construct(
-        TranslatorInterface $translator,
-        PageRepository $pageRepository,
-        RequestStack $requestStack,
-        FileManager $fileManager,
-        AssetRepository $assetRepository,
-        EntityManagerInterface $manager
-    ) {
+    public function __construct(TranslatorInterface $translator)
+    {
         $this->translator = $translator;
-        $this->pageRepository = $pageRepository;
-        $this->request = $requestStack->getCurrentRequest();
-        $this->fileManager = $fileManager;
-        $this->manager = $manager;
-        $this->assetRepository = $assetRepository;
     }
-
 
     /**
      * @Route("nouveau", name="admin_module_add")
-     * 
+     * @param Request $request
+     * @param ModuleHandler $moduleHandler
      * @return Response
      */
-    public function add(): Response
+    public function add(Request $request, ModuleHandler $moduleHandler): Response
     {
         $this->denyAccessUnlessGranted("MODULE_ADD");
 
         $module = new Module();
 
-        $form = $this->createForm(ModuleType::class, $module);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->persist($module);
-            $this->manager->flush();
-
+        if ($moduleHandler->handle($request, $module)) {
             $this->addFlash("success", $this->translator->trans("alert.module.success.add", [], "alert"));
-
             return $this->redirectToRoute("admin_setting_edit");
         }
 
         return $this->render('admin/module/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $moduleHandler->createView()
         ]);
     }
 
     /**
      * @Route("{id}", name="admin_module_edit", requirements={"id": "\d+"})
-     * 
+     * @param Request $request
      * @param Module $module
+     * @param ModuleHandler $moduleHandler
      * @return Response
      */
-    public function edit(Module $module): Response
+    public function edit(Request $request, Module $module, ModuleHandler $moduleHandler): Response
     {
         $this->denyAccessUnlessGranted("MODULE_EDIT");
 
-        $form = $this->createForm(ModuleType::class, $module);
-
-        $form->handleRequest($this->request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->manager->flush();
-
+        if ($moduleHandler->handle($request, $module)) {
             $this->addFlash("success", $this->translator->trans("alert.module.success.edit", [], "alert"));
-
             return $this->redirectToRoute("admin_setting_edit");
         }
 
         return $this->render('admin/module/edit.html.twig', [
             "module" => $module,
-            'form' => $form->createView()
+            'form' => $moduleHandler->createView()
         ]);
     }
 
     /**
      * @Route("changement/{id}", name="admin_module_change", requirements={"id": "\d+"})
      * 
+     * @param EntityManagerInterface $entityManager
      * @param Module $module
      * @return Response
      */
-    public function change(Module $module): Response
+    public function change(EntityManagerInterface $entityManager, Module $module): Response
     {
         $this->denyAccessUnlessGranted("MODULE_MANAGE");
 
         $module->setEnabled(!$module->getEnabled());
-        
-        $this->manager->flush();
-        
+
+        $entityManager->flush();
+
         $newState = $module->getEnabled() ? "enabled" : "disabled";
-
+        
         $this->addFlash("success", $this->translator->trans("alert.module.success.{$newState}", [], "alert"));
-
         return $this->redirectToRoute("admin_setting_edit");
     }
 }

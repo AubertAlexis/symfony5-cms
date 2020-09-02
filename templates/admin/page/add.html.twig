@@ -1,5 +1,5 @@
 {% extends "admin/base.html.twig" %}
-{% form_theme form "admin/form/_page.html.twig" %}
+{% form_theme form "admin/page/_form.html.twig" %}
 
 {% block title "page.add.title"|trans %}
 
@@ -18,21 +18,13 @@
 		<div class="col-md-9 col-sm-12">
 			<div class="row">
 				<div class="col-12">
-					<div class="card shadow mt-3">
+					<div class="card shadow card-same-height">
 						<div class="card-header d-flex align-items-center">
 							<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.content"|trans }}</h5>
 						</div>
 						<div class="card-body">
 
-							<div class="row">
-								<div class="col-lg-6 col-md-6 col-sm-12">
-									{{ form_row(form.title) }}
-								</div>
-
-								<div class="col-lg-6 col-md-6 col-sm-12">
-									{{ form_row(form.template) }}
-								</div>
-							</div>
+							{{ block("header", "admin/page/_form.html.twig") }}
 
 						</div>
 					</div>
@@ -41,45 +33,19 @@
 		</div>
 
 		<div class="col-md-3 col-sm-12">
-			<div class="card shadow">
+			<div class="card shadow card-same-height">
 				<div class="card-header d-flex align-items-center">
 					<h6 class="m-0 font-weight-bold text-primary">{{ "form.title.aside"|trans }}</h5>
 				</div>
 				<div class="card-body">
 
-					<div class="row">
-						<div class="col-lg-12 col-md-12 col-sm-12">
-							{{ form_row(form.slug) }}
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="row">
-						<div class="col-lg-12">
-							{{ form_row(form.enabled) }}
-						</div>
-					</div>
+					{{ block("aside", "admin/page/_form.html.twig") }}
 
 				</div>
 			</div>
 		</div>
 
-		{{ form_row(form._token) }}
-
-		<div class="col-12">
-			<hr>
-		</div>
-
-		<div class="col-12">
-			<div class="card shadow">
-				<div class="card-body">
-					<div class="d-flex justify-content-center align-items center">
-						{{ form_row(form.submit) }}
-					</div>
-				</div>
-			</div>
-		</div>
+		{{ block("submit", "admin/page/_form.html.twig") }}
 
 	</div>
 
