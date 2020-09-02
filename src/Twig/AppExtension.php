@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Extension\AbstractExtension;
 use Twig\Markup;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
@@ -54,7 +55,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('get_navigation_by_key', [$this, 'getNavigationByKey']),
             new TwigFunction('render_navigation_by_key', [$this, 'renderNavigationByKey']),
             new TwigFunction('is_module_enabled', [$this, 'isModuleEnabled']),
-            new TwigFunction('render_seo', [$this, 'renderSeo'])
+            new TwigFunction('render_seo', [$this, 'renderSeo']),
+            new TwigFunction('excerpt', [$this, 'excerpt'])
         ];
     }
 
@@ -70,6 +72,12 @@ class AppExtension extends AbstractExtension
 
         if ($bool === 1) return $this->renderAsHtml('<span class="status-icon check-icon"><i class="far fa-check-circle" aria-hidden="true"></i></span>');
         else return $this->renderAsHtml('<span class="status-icon cross-icon"><i class="far fa-times-circle" aria-hidden="true"></i></span>');
+    }
+
+    public function excerpt(string $value, int $limit = 100)
+    {
+        if (strlen($value) < $limit) return $value;
+        else return substr($value, 0, $limit - 4) . " ...";
     }
 
     /**

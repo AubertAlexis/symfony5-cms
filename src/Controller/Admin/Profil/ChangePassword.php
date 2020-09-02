@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin\Profil;
 
-use App\Handler\ProfilHandler;
 use App\Handler\PasswordChangeHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @Route("admin/")
- */
-class AdminProfileController extends AbstractController
+class ChangePassword extends AbstractController
 {
+
     /**
      * @var TranslatorInterface
      */
@@ -24,36 +21,14 @@ class AdminProfileController extends AbstractController
     {
         $this->translator = $translator;
     }
-
+    
     /**
-    * @Route("profil", name="admin_profile_edit")
-    * @param Request $request
-    * @param ProfilHandler $profilHandler
-    * @return Response
-    */
-    public function edit(Request $request, ProfilHandler $profilHandler): Response
-    {
-        $user = $this->getUser();
-
-        $this->denyAccessUnlessGranted("USER_PROFIL", $user);
-
-        if($profilHandler->handle($request, $user)) {
-            $this->addFlash("success", $this->translator->trans("alert.profile.success.edit", [], "alert"));
-        }
-
-        return $this->render('admin/profile/edit.html.twig', [
-            "user" => $user,
-            "form" => $profilHandler->createView()
-        ]);
-    }
-
-    /**
-     * @Route("profil/mot-de-passe", name="admin_profile_password")
+     * @Route("admin/profil/mot-de-passe", name="admin_profile_password")
      * @param Request $request
      * @param PasswordChangeHandler $passwordChangeHandler
      * @return Response
      */
-    public function passwordChange(Request $request, PasswordChangeHandler $passwordChangeHandler): Response
+    public function changePassword(Request $request, PasswordChangeHandler $passwordChangeHandler): Response
     {
         $user = $this->getUser();
 
@@ -69,4 +44,5 @@ class AdminProfileController extends AbstractController
             "form" => $passwordChangeHandler->createView()
         ]);
     }
+
 }

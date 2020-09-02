@@ -68,23 +68,33 @@ class Page
 
     /**
      * @ORM\OneToMany(targetEntity=NavLink::class, mappedBy="page")
+     * @Assert\Valid
      */
     private $navLinks;
 
     /**
      * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="pages")
+     * @Assert\Valid
      */
     private $template;
 
     /**
      * @ORM\OneToOne(targetEntity=InternalTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $internalTemplate;
 
     /**
      * @ORM\OneToOne(targetEntity=ArticleTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $articleTemplate;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ListArticlesTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     * @Assert\Valid
+     */
+    private $listArticlesTemplate;
 
     /**
      * @ORM\OneToOne(targetEntity=Seo::class, inversedBy="page", cascade={"persist", "remove"})
@@ -223,6 +233,18 @@ class Page
     public function setArticleTemplate(?ArticleTemplate $articleTemplate): self
     {
         $this->articleTemplate = $articleTemplate;
+
+        return $this;
+    }
+
+    public function getListArticlesTemplate(): ?ListArticlesTemplate
+    {
+        return $this->listArticlesTemplate;
+    }
+
+    public function setListArticlesTemplate(?ListArticlesTemplate $listArticlesTemplate): self
+    {
+        $this->listArticlesTemplate = $listArticlesTemplate;
 
         return $this;
     }

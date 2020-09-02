@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Traits\FormTrait;
+use App\Form\FormTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;

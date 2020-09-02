@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Nav;
-use App\Traits\FormTrait;
+use App\Form\FormTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

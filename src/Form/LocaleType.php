@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Module;
 use App\Entity\User;
-use App\Traits\FormTrait;
+use App\Form\FormTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

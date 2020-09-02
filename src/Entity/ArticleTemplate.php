@@ -22,6 +22,12 @@ class ArticleTemplate
     private $id;
 
     /**
+     * @Assert\File(
+     *  mimeTypes={"image/jpeg", "image/png"},
+     *  mimeTypesMessage="validators.mimeTypes",
+     *  maxSize="2M",
+     *  maxSizeMessage="validators.maxSize"
+     * )
      * @Vich\UploadableField(mapping="articles", fileNameProperty="imageName", size="imageSize")
      * @var File|null
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Form;
 
 use App\Repository\ModuleRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
