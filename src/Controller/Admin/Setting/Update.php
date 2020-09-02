@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin\Setting;
 
 use App\Handler\SettingHandler;
 use App\Repository\ModuleRepository;
@@ -10,11 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @Route("admin/")
- */
-class AdminSettingController extends AbstractController
+class Update extends AbstractController
 {
+
     /**
      * @var TranslatorInterface
      */
@@ -26,13 +24,13 @@ class AdminSettingController extends AbstractController
     }
     
     /**
-     * @Route("parametres", name="admin_setting_edit")
+     * @Route("admin/parametres", name="admin_setting_edit")
      * @param Request $request
      * @param ModuleRepository $moduleRepository
      * @param SettingHandler $settingHandler
      * @return Response
      */
-    public function edit(Request $request, ModuleRepository $moduleRepository, SettingHandler $settingHandler): Response
+    public function update(Request $request, ModuleRepository $moduleRepository, SettingHandler $settingHandler): Response
     {
         $user = $this->getUser();
 
@@ -48,4 +46,5 @@ class AdminSettingController extends AbstractController
             'localeForm' => $settingHandler->createView()
         ]);
     }
+
 }

@@ -1,21 +1,20 @@
-<?php 
+<?php
 
-namespace App\Controller;
+namespace App\Controller\Front\Home;
 
-use App\Repository\HomePageRepository;
+use App\Application\Repository\HomePageRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-class HomeController extends AbstractController
+class Read extends AbstractController
 {
     /**
      * @Route("/", name="home_index")
      * @param HomePageRepository $homePageRepository
      * @return Response
      */
-    public function __invoke(HomePageRepository $homePageRepository): Response
+    public function read(HomePageRepository $homePageRepository): Response
     {
         return $this->render("home/index.html.twig", [
             "home" => $homePageRepository->findBy([], ["id" => "DESC"], 1, 0)[0]

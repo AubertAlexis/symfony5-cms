@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h1>{{ page.title }}</h1>
+			</div>
+		</div>
+		<div class="row">
+			{% for article in articles %}
+                <div class="col-4">
+                    <div class="card">
+                        {% if article.imageName %}
+                            <img src="{{ vich_uploader_asset(article, "imageFile") | imagine_filter('thumb') }}" class="card-img-top">
+                        {% endif %}
+                        <div class="card-body">
+                            <p>{{ excerpt(article.content) }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path("page_index", { slug: article.page.slug }) }}" class="btn btn-secondary">Voir en détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+		</div>
+	</div>
+	
+{% endblock %}

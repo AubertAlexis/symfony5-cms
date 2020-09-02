@@ -53,10 +53,16 @@ class Template
      */
     private $articleTemplate;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ListArticlesTemplate::class, mappedBy="template")
+     */
+    private $listArticlesTemplate;
+
     public function __construct()
     {
         $this->pages = new ArrayCollection();
         $this->articleTemplate = new ArrayCollection();
+        $this->listArticlesTemplate = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -175,6 +181,37 @@ class Template
             // set the owning side to null (unless already changed)
             if ($articleTemplate->getTemplate() === $this) {
                 $articleTemplate->setTemplate(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ListArticlesTemplate[]
+     */
+    public function getListArticlesTemplate(): Collection
+    {
+        return $this->listArticlesTemplate;
+    }
+
+    public function addListArticlesTemplate(ListArticlesTemplate $listArticlesTemplate): self
+    {
+        if (!$this->listArticlesTemplate->contains($listArticlesTemplate)) {
+            $this->listArticlesTemplate[] = $listArticlesTemplate;
+            $listArticlesTemplate->setTemplate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListArticlesTemplate(ListArticlesTemplate $listArticlesTemplate): self
+    {
+        if ($this->listArticlesTemplate->contains($listArticlesTemplate)) {
+            $this->listArticlesTemplate->removeElement($listArticlesTemplate);
+            // set the owning side to null (unless already changed)
+            if ($listArticlesTemplate->getTemplate() === $this) {
+                $listArticlesTemplate->setTemplate(null);
             }
         }
 

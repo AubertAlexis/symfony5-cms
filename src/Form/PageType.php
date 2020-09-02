@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Page;
 use App\Entity\Template;
-use App\Traits\FormTrait;
+use App\Form\FormTrait;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
