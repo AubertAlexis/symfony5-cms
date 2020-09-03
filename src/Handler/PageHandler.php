@@ -8,6 +8,7 @@ use App\Entity\InternalTemplate;
 use App\Entity\ListArticlesTemplate;
 use App\Entity\Page;
 use App\Entity\Seo;
+use App\Entity\Template;
 use App\Form\PageType;
 use App\Repository\AssetRepository;
 use App\Services\FileManager;
@@ -73,7 +74,7 @@ class PageHandler extends AbstractHandler
         } else if ($this->entityManager->getUnitOfWork()->getEntityState($data) == UnitOfWork::STATE_MANAGED) {
             $templateName = $page->getTemplate()->getKeyname();
 
-            if ($templateName === "internal") {
+            if ($templateName === Template::INTERNAL) {
                 $uselessAssets = $this->assetRepository->findByInternalTemplate(null);
 
                 $this->removeAssets($uselessAssets);
@@ -91,7 +92,7 @@ class PageHandler extends AbstractHandler
     {
         $templateName = $data->getTemplate()->getKeyname();
 
-        if ($templateName === "internal") {
+        if ($templateName === Template::INTERNAL) {
             $pageAssets = $this->assetRepository->findByInternalTemplate($data->getInternalTemplate());
 
             $this->removeAssets($pageAssets);
@@ -102,10 +103,10 @@ class PageHandler extends AbstractHandler
     }
 
     /**
-     * @param InternalTemplate $internalTemplate
-     * @return void
+     * @param null|InternalTemplate $internalTemplate
+     * @return string
      */
-    public function uploadImage(InternalTemplate $internalTemplate)
+    public function uploadImage(?InternalTemplate $internalTemplate): string
     {
         $templateName = $internalTemplate->getTemplate()->getKeyname();
 
@@ -114,7 +115,7 @@ class PageHandler extends AbstractHandler
         $asset = new Asset();
         $asset->setFileName($file['filename']);
 
-        if ($templateName === "internal") $asset->setInternalTemplate($internalTemplate);
+        if ($templateName === Template::INTERNAL) $asset->setInternalTemplate($internalTemplate);
 
         $this->entityManager->persist($asset);
         $this->entityManager->flush();
@@ -129,7 +130,8 @@ class PageHandler extends AbstractHandler
     private function handleTemplate(Page $page)
     {
         $templateName = $page->getTemplate()->getKeyname();
-
+        $template = null;
+        
         if ($templateName == 'internal') {
             $template = new InternalTemplate();
             $page->setInternalTemplate($template);

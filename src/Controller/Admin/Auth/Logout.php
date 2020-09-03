@@ -10,7 +10,9 @@ class Logout extends AbstractController
 
      /**
      * @Route("/admin/deconnexion", name="logout")
+     * @return void
      */
-    public function logout(){}
+    public function logout(): void
+    { }
 
 }

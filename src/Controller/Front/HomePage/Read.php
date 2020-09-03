@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Front\Home;
+namespace App\Controller\Front\HomePage;
 
-use App\Application\Repository\HomePageRepository;
+use App\Repository\HomePageRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin\Template;
 
-use App\Application\Repository\TemplateRepository;
+use App\Repository\TemplateRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

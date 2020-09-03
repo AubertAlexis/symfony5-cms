@@ -6,6 +6,7 @@ use App\Form\PasswordUserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PasswordChangeHandler extends AbstractHandler
 {
@@ -24,11 +25,21 @@ class PasswordChangeHandler extends AbstractHandler
      */
     private $flashBag;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder, FlashBagInterface $flashBag)
-    {
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(
+        EntityManagerInterface $entityManager, 
+        UserPasswordEncoderInterface $encoder, 
+        FlashBagInterface $flashBag,
+        TranslatorInterface $translator
+    ) {
         $this->entityManager = $entityManager;
         $this->encoder = $encoder;
         $this->flashBag = $flashBag;
+        $this->translator = $translator;
     }
 
     /**

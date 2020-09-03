@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Template
 {
+    const INTERNAL = "internal";
+    const ARTICLE = "article";
+    const LIST_ARTICLE = "listArticles";
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
