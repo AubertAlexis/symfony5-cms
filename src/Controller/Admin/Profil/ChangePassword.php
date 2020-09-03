@@ -11,31 +11,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ChangePassword extends AbstractController
 {
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-    
     /**
      * @Route("admin/profil/mot-de-passe", name="admin_profile_password")
      * @param Request $request
      * @param PasswordChangeHandler $passwordChangeHandler
+     * @param TranslatorInterface $translator
      * @return Response
      */
-    public function changePassword(Request $request, PasswordChangeHandler $passwordChangeHandler): Response
+    public function changePassword(Request $request, PasswordChangeHandler $passwordChangeHandler, TranslatorInterface $translator): Response
     {
         $user = $this->getUser();
 
         $this->denyAccessUnlessGranted("USER_PROFIL", $user);
         
         if($passwordChangeHandler->handle($request, $user)) {
-            $this->addFlash("success", $this->translator->trans("alert.profile.success.passwordReset", [], "alert"));
+            $this->addFlash("success", $translator->trans("alert.profile.success.passwordReset", [], "alert"));
             return $this->redirectToRoute("admin_profile_edit");
         }
 

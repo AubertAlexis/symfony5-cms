@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use App\Entity\NavLink;
 use App\Form\NavType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;

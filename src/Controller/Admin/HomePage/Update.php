@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin\HomePage;
 
 use App\Handler\HomeHandler;
 use App\Repository\HomePageRepository;
@@ -11,13 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("admin/accueil/")
- */
-class AdminHomePageController extends AbstractController
+class Update extends AbstractController
 {
     /**
-     * @Route("", name="admin_home_page_edit")
+     * @Route("admin/accueil/", name="admin_home_page_edit")
      * @param Request $request
      * @param HomeHandler $homeHandler
      * @param HomePageRepository $homePageRepository
@@ -25,7 +22,7 @@ class AdminHomePageController extends AbstractController
      * @return Response
      * @throws NotFoundResourceException
      */
-    public function __invoke(
+    public function update(
         Request $request, 
         HomeHandler $homeHandler, 
         HomePageRepository $homePageRepository, 
@@ -38,7 +35,7 @@ class AdminHomePageController extends AbstractController
             "id" => "DESC"
         ], 1, 0)[0];
 
-        if ($homePage === null) throw new NotFoundResourceException("There is no HomePage entry on the database. You need 1, run fixtures to fix this");
+        if ($homePage == null) throw new NotFoundResourceException("There is no HomePage entry on the database. You need 1, run fixtures to fix this");
 
         if ($homeHandler->handle($request, $homePage)) {
             $this->addFlash("success", $translator->trans("alert.homePage.success.edit", [], "alert"));

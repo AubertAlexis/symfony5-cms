@@ -54,7 +54,7 @@ class PageType extends AbstractType
         $form = $event->getForm();
         $data = $event->getData();
 
-        $templateName = (null !== $data->getTemplate()) ? $data->getTemplate()->getKeyname() : "internal";
+        $templateName = (null !== $data->getTemplate()) ? $data->getTemplate()->getKeyname() : Template::INTERNAL;
 
         if ($data->getId() === null) {
             $form 
@@ -66,12 +66,12 @@ class PageType extends AbstractType
 
             if ($this->isModuleEnabled("seo")) $form->add('seo', SeoType::class, $this->setOptions('homePage.%name%'));
                 
-            if ($templateName === "internal") {
+            if ($templateName === Template::INTERNAL) {
                 $form
                     ->add("internalTemplate", InternalTemplateType::class, $this->setOptions(false, [
                         "data" => $data->getInternalTemplate()
                     ]));
-            } else if ($templateName === "article") {
+            } else if ($templateName === Template::ARTICLE) {
                 $form
                     ->add("articleTemplate", ArticleTemplateType::class, $this->setOptions(false, [
                         "data" => $data->getArticleTemplate()

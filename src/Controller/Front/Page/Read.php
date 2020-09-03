@@ -4,6 +4,7 @@ namespace App\Controller\Front\Page;
 
 use App\Entity\ArticleTemplate;
 use App\Entity\Page;
+use App\Entity\Template;
 use App\Repository\ArticleTemplateRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,18 +31,22 @@ class Read extends AbstractController
 
     /**
      * @param Page $page
-     * @return array
+     * @return mixed[]
+     * @throws NotFoundHttpException
      */
     private function handlePage(Page $page): array
     {
+        if (null === $page->getTemplate()) throw new NotFoundHttpException();
+
         $templateName = $page->getTemplate()->getKeyname();
         $articles = null;
+        $template = null;
 
-        if ($templateName === "internal") {
+        if ($templateName === Template::INTERNAL) {
             $template = $page->getInternalTemplate();
-        } else if ($templateName === "article") {
+        } else if ($templateName === Template::ARTICLE) {
             $template = $page->getArticleTemplate();
-        } else if ($templateName === "listArticles") {
+        } else if ($templateName === Template::LIST_ARTICLE) {
             $template = $page->getArticleTemplate();
 
             /** @var ArticleTemplateRepository **/
