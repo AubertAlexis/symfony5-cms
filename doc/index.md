@@ -7,3 +7,6 @@
  
 ### **Navigations**
  - [Affichage d'une nouvelle navigation pour les utilisateurs front](https://github.com/AubertAlexis/symfony5-cms/blob/develop/doc/navigation.md "Affichage d'une nouvelle navigation pour les utilisateurs front")
+
+### **Pages**
+ - [Créer un nouveau modèle de page](https://github.com/AubertAlexis/symfony5-cms/blob/develop/doc/page.md "Créer un nouveau modèle de page")
