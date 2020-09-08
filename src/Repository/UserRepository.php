@@ -20,11 +20,9 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * Count users
-     *
-     * @return integer
+     * @return int
      */
-    public function countUser()
+    public function countUsers(): int
     {
         return $this->createQueryBuilder('u')
             ->select('count(u.id)')

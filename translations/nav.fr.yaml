@@ -1,7 +1,6 @@
 nav:
     form:
         nav:
-            keyname: Clé de navigation
             title: Titre de la navigation
             main: Est-ce la navigation principale ?
             enabled: Voulez-vous activer cette navigation ?
@@ -10,7 +9,6 @@ nav:
 
             submit: Enregistrer
 
-            helpKeyname: Cette clé servira aux développeurs pour afficher la navigation aux utilisateurs.
             helpMain: Une seule navigation seulement peut être définie en tant que principale.
             helpEnabled: Si vous la désactiver, elle ne pourra pas être affiché pour les utilisateurs.
 
