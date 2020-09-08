@@ -19,22 +19,17 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
-    // /**
-    //  * @return Page[] Returns an array of Page objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return int
+     */
+    public function countPages(): int
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder("p")
+            ->select("count(p.id)")
             ->getQuery()
-            ->getResult()
+            ->getSingleScalarResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Page

@@ -1,7 +1,6 @@
 nav:
     form:
         nav:
-            keyname: Navigation key
             title: Navigation title
             main: Is this the main navigation ?
             enabled: Do you want to activate this navigation?
@@ -10,7 +9,6 @@ nav:
 
             submit: Save
 
-            helpKeyname: This key will be used by developers to display navigation to users.
             helpMain: Only one navigation can be defined as main.
             helpEnabled: If you deactivate it, it cannot be displayed to users.
         

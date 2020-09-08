@@ -26,7 +26,9 @@
                     <thead>
                         <tr>
                             <th class="text-center text-uppercase">{{ "table.title"|trans }}</th>
-                            <th class="text-center text-uppercase">{{ "table.keyname"|trans }}</th>
+                            {% if is_granted("ROLE_DEV") %}
+                                <th class="text-center text-uppercase">{{ "table.keyname"|trans }}</th>
+                            {% endif %}
                             <th class="text-center text-uppercase main">{{ "table.main"|trans }}</th>
                             <th class="text-center text-uppercase visible">{{ "table.visible"|trans }}</th>
                             <th class="text-center text-uppercase number-element">{{ "table.numberLinks"|trans }}</th>
@@ -39,7 +41,9 @@
                     {% for nav in navs %}
                         <tr>
                             <td class="text-center align-middle"><span class="font-weight-bold">{{ nav.title }}</span></td>
-                            <td class="text-center align-middle">{{ nav.keyname }}</td>
+                            {% if is_granted("ROLE_DEV") %}
+                                <td class="text-center align-middle">{{ nav.keyname }}</td>
+                            {% endif %}
                             <td class="text-center align-middle main">{{ icon_from_bool(nav.main) }}</td>
                             <td class="text-center align-middle visible">{{ icon_from_bool(nav.enabled) }}</td>
                             <td class="text-center align-middle number-element">

@@ -11,7 +11,7 @@ class Listing extends AbstractController
 {
     
      /**
-     * @Route("", name="admin_nav_index")
+     * @Route("admin/navigations/", name="admin_nav_index")
      * @param NavRepository $navRepository
      * @return Response
      */
