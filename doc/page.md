@@ -1,4 +1,4 @@
-## Créer un nouveau modèle de page
+## Créer un nouveau modèle de pages
 
 ### Côté admin
 
