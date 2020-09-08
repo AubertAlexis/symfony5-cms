@@ -2,7 +2,8 @@
 
 ### Côté admin
 
-1. Il suffit de créer une nouvelle navigation avec un **`keyname`** (clé) simple ex: "footer", "header", "aside" ...
+1. Il suffit de créer une nouvelle navigation et un **`keyname`** (clé) sera auto-généré en Uuid v4.
+- _Il faut se connecter en compte développeur pour voir le keyname dans la liste des navigations dans l'espace d'administration_
 
 ### Côté utilisateur
 
