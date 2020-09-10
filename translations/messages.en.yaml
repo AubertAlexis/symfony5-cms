@@ -41,6 +41,22 @@ page:
     table:
         title: Pages
 
+user:
+    list:
+        title: List - Users
+        h1: List of users
+
+    add:
+        title: Add - Users
+        h1: New user
+
+    edit:
+        title: Edit - Users
+        h1: Edit the user
+
+    table:
+        title: Users
+
 nav:
     list:
         title: List - Navigations
@@ -145,6 +161,12 @@ table:
     main: Main navigation ?
     numberLinks: Number of links
     numberSubnavs: Sub-navigations
+
+    fullName: Full name
+    email: Email
+    username: Username
+    role: Role
+    language: Language
 
 tooltip:
     edit: Edit

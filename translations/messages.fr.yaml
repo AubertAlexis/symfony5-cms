@@ -42,6 +42,23 @@ page:
     table:
         title: Pages
 
+user:
+    list:
+        title: Liste - Utilisateurs
+        h1: Liste des utilisateurs
+
+    add:
+        title: Ajout - Utilisateurs
+        h1: Nouveau utilisateur
+
+
+    edit:
+        title: Édition - Utilisateurs
+        h1: Modifier l'utilisateur
+
+    table:
+        title: Utilisateurs
+
 nav:
     list:
         title: Liste - Navigations
@@ -149,6 +166,12 @@ table:
     main: Navigation principale
     numberLinks: Nombre de liens
     numberSubnavs: Sous-menus
+
+    fullName: Prénom & Nom
+    email: Email
+    username: Nom d'utilisateur
+    role: Rôle
+    language: Langue
 
 tooltip:
     edit: Éditer

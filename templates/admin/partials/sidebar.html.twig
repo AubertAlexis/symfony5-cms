@@ -48,6 +48,15 @@
 
     <hr class="sidebar-divider my-0">
 
+    <li class="nav-item {{ macros.is_active('admin_user') }}">
+        <a class="nav-link" href="{{ path('admin_user_index') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>{{ "navigation.user"|trans }}</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+
     <li class="nav-item {{ macros.is_active('admin_setting') }}">
         <a class="nav-link" href="{{ path('admin_setting_edit') }}">
             <i class="fas fa-fw fa-cogs"></i>
@@ -55,7 +64,7 @@
         </a>
     </li>
 
-    {% if is_granted("ROLE_DEV") %}
+    {% if is_granted(constant("App\\Entity\\User::DEV")) %}
         <hr class="sidebar-divider my-0">
 
         <li class="nav-item {{ macros.is_active('admin_template') }}">

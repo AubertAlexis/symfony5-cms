@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\Nav;
 use App\Entity\NavLink;
 use App\Entity\SubNav;
+use App\Entity\User;
 use App\Repository\HomePageRepository;
 use App\Repository\ModuleRepository;
 use App\Repository\NavRepository;
@@ -57,6 +58,13 @@ class AppExtension extends AbstractExtension
             new TwigFunction('is_module_enabled', [$this, 'isModuleEnabled']),
             new TwigFunction('render_seo', [$this, 'renderSeo']),
             new TwigFunction('excerpt', [$this, 'excerpt'])
+        ];
+    }
+
+    function getFilters()
+    {
+        return [
+            new TwigFilter('role', [$this, 'printRole'])
         ];
     }
 
@@ -201,6 +209,17 @@ class AppExtension extends AbstractExtension
         if (!$module) throw new NotFoundHttpException("Not found");
         
         return $module->getEnabled();
+    }
+
+    /**
+     * @param array $array
+     * @return string
+     */
+    public function printRole(array $array): string
+    {
+        if (in_array(User::ADMIN, $array)) return "Administrateur";
+        else if (in_array(User::DEV, $array)) return "Développeur";
+        else return "Utilisateur";
     }
 
     /**

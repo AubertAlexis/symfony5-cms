@@ -33,7 +33,7 @@ class AppFixtures extends Fixture
             ->setLastName("Istrateur")
             ->setEmail("admin@admin.fr")
             ->setUsername("admin")
-            ->setRoles(["ROLE_ADMIN"])
+            ->setRoles([User::ADMIN])
             ->setPassword($this->encoder->encodePassword($admin, "admin"))
             ->setLocale("fr");
 
@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
             ->setLastName("Loper")
             ->setEmail("dev@dev.fr")
             ->setUsername("dev")
-            ->setRoles(["ROLE_DEV"])
+            ->setRoles([User::DEV])
             ->setPassword($this->encoder->encodePassword($dev, "dev"))
             ->setLocale("fr");
 
