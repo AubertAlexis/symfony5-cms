@@ -4,6 +4,7 @@ navigation:
     profile: Profil
     logout: Déconnexion
     page: Pages
+    user: Utilisateurs
     nav: Navigations
     homePage: Accueil
     template: Modèle de page

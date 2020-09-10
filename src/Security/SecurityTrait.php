@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 trait SecurityTrait
@@ -25,7 +26,7 @@ trait SecurityTrait
     {
         $roles = $this->tokenStorageInterface->getToken()->getUser()->getRoles();
 
-        return in_array("ROLE_ADMIN", $roles) || in_array("ROLE_DEV", $roles);
+        return in_array(User::ADMIN, $roles) || in_array(User::DEV, $roles);
     }
 
     /**
@@ -37,6 +38,6 @@ trait SecurityTrait
     {
         $roles = $this->tokenStorageInterface->getToken()->getUser()->getRoles();
 
-        return in_array("ROLE_DEV", $roles);
+        return in_array(User::DEV, $roles);
     }
 }

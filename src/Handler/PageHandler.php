@@ -14,9 +14,6 @@ use App\Repository\AssetRepository;
 use App\Services\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class PageHandler extends AbstractHandler
 {

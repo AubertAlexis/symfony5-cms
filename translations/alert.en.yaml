@@ -16,6 +16,11 @@ alert:
             edit: The page informations has been changed.
             add: The page has been added.
             delete: The page has been deleted.
+    user:
+        success:
+            edit: The user informations has been changed.
+            add: The user has been added.
+            delete: The user has been deleted.
     nav:
         success:
             edit: The navigation informations has been changed.

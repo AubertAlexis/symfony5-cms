@@ -26,7 +26,7 @@
                     <thead>
                         <tr>
                             <th class="text-center text-uppercase">{{ "table.title"|trans }}</th>
-                            {% if is_granted("ROLE_DEV") %}
+                            {% if is_granted(constant("App\\Entity\\User::DEV")) %}
                                 <th class="text-center text-uppercase">{{ "table.keyname"|trans }}</th>
                             {% endif %}
                             <th class="text-center text-uppercase main">{{ "table.main"|trans }}</th>
@@ -41,7 +41,7 @@
                     {% for nav in navs %}
                         <tr>
                             <td class="text-center align-middle"><span class="font-weight-bold">{{ nav.title }}</span></td>
-                            {% if is_granted("ROLE_DEV") %}
+                            {% if is_granted(constant("App\\Entity\\User::DEV")) %}
                                 <td class="text-center align-middle">{{ nav.keyname }}</td>
                             {% endif %}
                             <td class="text-center align-middle main">{{ icon_from_bool(nav.main) }}</td>
