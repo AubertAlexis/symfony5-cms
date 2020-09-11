@@ -22,6 +22,10 @@ Créer un fichier `.env.local` :
 > N'oubliez pas de modifier avec vos informations.
 ```dotenv
 DATABASE_URL=mysql://root:password@127.0.0.1:3306/symfony5-cms
+
+EMAIL="Votre_email_d_envoie"
+
+MAILER_URL=gmail://${EMAIL}:votre_mot_de_passe_d_email@localhost
 ```
 
 ## 3 - Génération du CMS
