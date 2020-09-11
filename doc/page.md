@@ -12,7 +12,8 @@ _Au préalable, connectez-vous avec le compte développeur et allez dans la sect
 4. Créer le **FormType** correspondant avec la nomenclature : nom de l'entité + "**Type**"
 5. Éditer le **PageType** en ajoutant dans l'event de "**PRE_SET_DATA**" une condition pour ce type de page
 - _Dans la fonction manageElements() il y a des exemples_
-6. Si il y a une logique métier à implementer pour le nouveau **Modèle de page**, il faut l'ajouter dans le : **`src/Handler/PageHandler`**
+6. Dans le **`src/Handler/PageHandler`**, il faut ajouter le nouveau type de template dans la fonction **handleTemplate**
+7. Si il y a une logique métier à implementer pour le nouveau **Modèle de page**, il faut l'ajouter dans le : **`src/Handler/PageHandler`** dans la fonction **process**
 
 ### Côté utilisateur
 
