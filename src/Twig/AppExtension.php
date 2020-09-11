@@ -2,16 +2,21 @@
 
 namespace App\Twig;
 
+use App\Entity\Contact;
 use App\Entity\Nav;
 use App\Entity\NavLink;
 use App\Entity\SubNav;
 use App\Entity\User;
+use App\Handler\ContactHandler;
 use App\Repository\HomePageRepository;
 use App\Repository\ModuleRepository;
 use App\Repository\NavRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Markup;
 use Twig\TwigFilter;
@@ -30,7 +35,7 @@ class AppExtension extends AbstractExtension
     private $moduleRepository;
 
     /**
-     * @var RequestStack
+     * @var Request
      */
     private $request;
 
@@ -39,12 +44,30 @@ class AppExtension extends AbstractExtension
      */
     private $homePageRepository;
 
-    public function __construct(NavRepository $navRepository, ModuleRepository $moduleRepository, RequestStack $request, HomePageRepository $homePageRepository)
-    {
+    /**
+     * @var Contacthandler
+     */
+    private $contactHandler;
+
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    public function __construct(
+        NavRepository $navRepository, 
+        ModuleRepository $moduleRepository, 
+        RequestStack $requestStack, 
+        HomePageRepository $homePageRepository, 
+        ContactHandler $contactHandler,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->navRepository = $navRepository;
         $this->moduleRepository = $moduleRepository;
-        $this->request = $request->getCurrentRequest();
+        $this->request = $requestStack->getCurrentRequest();
         $this->homePageRepository = $homePageRepository;
+        $this->contactHandler = $contactHandler;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function getFunctions()
@@ -57,7 +80,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('render_navigation_by_key', [$this, 'renderNavigationByKey']),
             new TwigFunction('is_module_enabled', [$this, 'isModuleEnabled']),
             new TwigFunction('render_seo', [$this, 'renderSeo']),
-            new TwigFunction('excerpt', [$this, 'excerpt'])
+            new TwigFunction('excerpt', [$this, 'excerpt']),
+            new TwigFunction('get_contact_form', [$this, 'getContactForm'])
         ];
     }
 
@@ -220,6 +244,22 @@ class AppExtension extends AbstractExtension
         if (in_array(User::ADMIN, $array)) return "Administrateur";
         else if (in_array(User::DEV, $array)) return "Développeur";
         else return "Utilisateur";
+    }
+
+    /**
+     * @return FormView
+     */
+    public function getContactForm(): FormView
+    {
+        $contact = new Contact();
+
+        $this->contactHandler->handle(
+            $this->request, 
+            $contact, 
+            ["action" => $this->urlGenerator->generate("contact_send")]
+        );
+
+        return $this->contactHandler->createView();
     }
 
     /**

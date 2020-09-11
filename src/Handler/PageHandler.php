@@ -4,6 +4,7 @@ namespace App\Handler;
 
 use App\Entity\ArticleTemplate;
 use App\Entity\Asset;
+use App\Entity\ContactTemplate;
 use App\Entity\InternalTemplate;
 use App\Entity\ListArticlesTemplate;
 use App\Entity\Page;
@@ -129,15 +130,26 @@ class PageHandler extends AbstractHandler
         $templateName = $page->getTemplate()->getKeyname();
         $template = null;
         
-        if ($templateName == 'internal') {
+        if ($templateName == Template::INTERNAL) {
+
             $template = new InternalTemplate();
             $page->setInternalTemplate($template);
-        } else if ($templateName == 'article') {
+
+        } else if ($templateName == Template::ARTICLE) {
+
             $template = new ArticleTemplate();
             $page->setArticleTemplate($template);
-        } else if ($templateName == 'listArticles') {
+
+        } else if ($templateName == Template::LIST_ARTICLE) {
+
             $template = new ListArticlesTemplate();
             $page->setListArticlesTemplate($template);
+
+        } else if ($templateName == Template::CONTACT) {
+
+            $template = new ContactTemplate();
+            $page->setContactTemplate($template);
+
         }
 
         $template->setTemplate($page->getTemplate());

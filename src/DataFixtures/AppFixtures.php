@@ -9,7 +9,6 @@ use App\Entity\Template;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -56,6 +55,16 @@ class AppFixtures extends Fixture
 
         $articleTemplate->setTitle("Page article")
             ->setKeyname("article");
+
+        $listArticleTemplate = new Template();
+
+        $listArticleTemplate->setTitle("Page liste des d'articles")
+            ->setKeyname("listArticles");
+
+        $contactTemplate = new Template();
+
+        $contactTemplate->setTitle("Page contact")
+            ->setKeyname("contact");
 
         $seoModule = new Module();
 

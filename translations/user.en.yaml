@@ -6,7 +6,7 @@ user:
             username: Username
             email: Email
             submit: Save
-        profile:
+        user:
             firstName: First Name
             lastName: Last Name
             username: Username
