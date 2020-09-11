@@ -26,7 +26,7 @@ class Read extends AbstractController
 
         [$template, $templateName, $articles] = $this->handlePage($page);
 
-        return $this->render("page/{$templateName}.html.twig", compact('page', 'template', 'articles'));
+        return $this->render("page/{$templateName}.html.twig", array_filter(compact('page', 'template', 'articles')));
     }
 
     /**
@@ -43,15 +43,25 @@ class Read extends AbstractController
         $template = null;
 
         if ($templateName === Template::INTERNAL) {
+
             $template = $page->getInternalTemplate();
+
         } else if ($templateName === Template::ARTICLE) {
+
             $template = $page->getArticleTemplate();
+
         } else if ($templateName === Template::LIST_ARTICLE) {
+
             $template = $page->getArticleTemplate();
 
             /** @var ArticleTemplateRepository **/
             $articleRepository = $this->getDoctrine()->getRepository(ArticleTemplate::class);
             $articles = $articleRepository->findByArticlesEnabled();
+
+        } else if ($templateName === Template::CONTACT) {
+
+            $template = $page->getContactTemplate();
+            
         }
 
         return [$template, $templateName, $articles];

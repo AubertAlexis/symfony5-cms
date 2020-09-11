@@ -102,6 +102,11 @@ class Page
     private $seo;
 
     /**
+     * @ORM\OneToOne(targetEntity=ContactTemplate::class, mappedBy="page", cascade={"persist", "remove"})
+     */
+    private $contactTemplate;
+
+    /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
@@ -257,6 +262,24 @@ class Page
     public function setSeo(?Seo $seo): self
     {
         $this->seo = $seo;
+
+        return $this;
+    }
+
+    public function getContactTemplate(): ?ContactTemplate
+    {
+        return $this->contactTemplate;
+    }
+
+    public function setContactTemplate(?ContactTemplate $contactTemplate): self
+    {
+        $this->contactTemplate = $contactTemplate;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPage = null === $contactTemplate ? null : $this;
+        if ($contactTemplate->getPage() !== $newPage) {
+            $contactTemplate->setPage($newPage);
+        }
 
         return $this;
     }

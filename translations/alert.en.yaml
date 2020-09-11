@@ -41,6 +41,10 @@ alert:
         success:
             edit: The home page informations has been changed.
 
+    contact:
+        success:
+            send: Your email as been sent !
+
     module:
         success:
             edit: The module informations has been changed.

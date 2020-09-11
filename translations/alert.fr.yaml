@@ -41,6 +41,10 @@ alert:
         success:
             edit: Les informations de la page d'accueil ont bien été modifiées.
 
+    contact:
+        success:
+            send: Un email a bien été envoyé !
+
     module:
         success:
             add: Le module a bien été ajouté.

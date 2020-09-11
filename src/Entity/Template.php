@@ -16,6 +16,7 @@ class Template
     const INTERNAL = "internal";
     const ARTICLE = "article";
     const LIST_ARTICLE = "listArticles";
+    const CONTACT = "contact";
 
     /**
      * @ORM\Id()
@@ -62,11 +63,17 @@ class Template
      */
     private $listArticlesTemplate;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ContactTemplate::class, mappedBy="template")
+     */
+    private $contactTemplates;
+
     public function __construct()
     {
         $this->pages = new ArrayCollection();
         $this->articleTemplate = new ArrayCollection();
         $this->listArticlesTemplate = new ArrayCollection();
+        $this->contactTemplates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -216,6 +223,37 @@ class Template
             // set the owning side to null (unless already changed)
             if ($listArticlesTemplate->getTemplate() === $this) {
                 $listArticlesTemplate->setTemplate(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ContactTemplate[]
+     */
+    public function getContactTemplates(): Collection
+    {
+        return $this->contactTemplates;
+    }
+
+    public function addContactTemplate(ContactTemplate $contactTemplate): self
+    {
+        if (!$this->contactTemplates->contains($contactTemplate)) {
+            $this->contactTemplates[] = $contactTemplate;
+            $contactTemplate->setTemplate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactTemplate(ContactTemplate $contactTemplate): self
+    {
+        if ($this->contactTemplates->contains($contactTemplate)) {
+            $this->contactTemplates->removeElement($contactTemplate);
+            // set the owning side to null (unless already changed)
+            if ($contactTemplate->getTemplate() === $this) {
+                $contactTemplate->setTemplate(null);
             }
         }
 

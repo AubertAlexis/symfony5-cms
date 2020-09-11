@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% set form = get_contact_form() %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h1>{{ page.title }}</h1>
+			</div>
+		</div>
+		{{ form_start(form) }}
+
+			<div class="row">
+				<div class="col-lg-6 col-md-12">
+					{{ form_row(form.firstName) }}
+				</div>
+				<div class="col-lg-6 col-md-12">
+					{{ form_row(form.lastName) }}
+				</div>
+				<div class="col-md-12">
+					{{ form_row(form.email) }}
+				</div>
+				<div class="col-md-12">
+					{{ form_row(form.message) }}
+				</div>
+				<div class="col-md-12">
+					{{ form_row(form._token) }}
+				</div>
+				<div class="col-md-12">
+					{{ form_row(form.submit) }}
+				</div>
+			</div>
+
+		{{ form_end(form) }}
+	</div>
+
+{% endblock %}
