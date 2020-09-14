@@ -18,7 +18,8 @@ security:
             form_login:
                 login_path: admin_login
                 check_path: admin_login
-                default_target_path: admin_dashboard_index
+                default_target_path: login_success
+                always_use_default_target_path: true
                 csrf_token_generator: security.csrf.token_manager
             logout:
                 path: logout

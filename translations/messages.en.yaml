@@ -24,6 +24,9 @@ dashboard:
     list: 
         title: Dashboard
         h1: Dashboard
+    
+    pages: Number of pages
+    users: Number of users
 
 page:
     list:
@@ -176,3 +179,4 @@ tooltip:
 
     addLink: Manage links
     addSubNav: Add a sub-navigation
+

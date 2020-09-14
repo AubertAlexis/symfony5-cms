@@ -43,7 +43,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min = 5, max = 255, minMessage = "Votre nom d'utilisateur doit faire au minimum {{ limit }} caractères", maxMessage = "Votre nom d'utilisateur doit faire au maximum {{ limit }} caractères")
+     * @Assert\Length(min = 3, max = 255, minMessage = "Votre nom d'utilisateur doit faire au minimum {{ limit }} caractères", maxMessage = "Votre nom d'utilisateur doit faire au maximum {{ limit }} caractères")
      */
     private $username;
 

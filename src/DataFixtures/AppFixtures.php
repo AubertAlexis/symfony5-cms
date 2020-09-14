@@ -82,6 +82,7 @@ class AppFixtures extends Fixture
         $manager->persist($dev);
         $manager->persist($internalTemplate);
         $manager->persist($articleTemplate);
+        $manager->persist($contactTemplate);
         $manager->persist($homePage);
         $manager->persist($seo);
         $manager->persist($seoModule);
