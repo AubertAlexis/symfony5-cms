@@ -9,5 +9,9 @@
 
 		{{ render_main_navigation() }}
 		
+		{% if app.user %}
+			<a href="{{ path("rgpd_delete_user") }}" class="btn btn-danger ml-auto">Supprimer mon compte</a>
+		{% endif %}
+		
 	</div>
 </nav>

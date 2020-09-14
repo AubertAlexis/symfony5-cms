@@ -25,6 +25,9 @@ dashboard:
         title: Tableau de bord
         h1: Tableau de bord
 
+    pages: Nombre de pages
+    users: Nombre d'utilisateurs
+
 page:
     list:
         title: Liste - Pages
