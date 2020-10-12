@@ -19,22 +19,19 @@ class ArticleTemplateRepository extends ServiceEntityRepository
         parent::__construct($registry, ArticleTemplate::class);
     }
 
-    // /**
-    //  * @return ArticleTemplate[] Returns an array of ArticleTemplate objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return ArticleTemplate[]
+     */
+    public function findByArticlesEnabled()
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('a')
+            ->join("a.page", "p")
+            ->andWhere('p.enabled = :val')
+            ->setParameter('val', true)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?ArticleTemplate

@@ -4,9 +4,12 @@ namespace App\Handler;
 
 use App\Entity\ArticleTemplate;
 use App\Entity\Asset;
+use App\Entity\ContactTemplate;
 use App\Entity\InternalTemplate;
+use App\Entity\ListArticlesTemplate;
 use App\Entity\Page;
 use App\Entity\Seo;
+use App\Entity\Template;
 use App\Form\PageType;
 use App\Repository\AssetRepository;
 use App\Services\FileManager;
@@ -30,8 +33,11 @@ class PageHandler extends AbstractHandler
      */
     private $assetRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, AssetRepository $assetRepository, FileManager $fileManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager, 
+        AssetRepository $assetRepository, 
+        FileManager $fileManager
+    ) {
         $this->entityManager = $entityManager;
         $this->assetRepository = $assetRepository;
         $this->fileManager = $fileManager;
@@ -50,6 +56,7 @@ class PageHandler extends AbstractHandler
      */
     function process($data): void
     {
+        /** @var Page $page **/
         $page = $data;
 
         if($this->entityManager->getUnitOfWork()->getEntityState($data) == UnitOfWork::STATE_NEW) {
@@ -65,7 +72,7 @@ class PageHandler extends AbstractHandler
         } else if ($this->entityManager->getUnitOfWork()->getEntityState($data) == UnitOfWork::STATE_MANAGED) {
             $templateName = $page->getTemplate()->getKeyname();
 
-            if ($templateName === "internal") {
+            if ($templateName === Template::INTERNAL) {
                 $uselessAssets = $this->assetRepository->findByInternalTemplate(null);
 
                 $this->removeAssets($uselessAssets);
@@ -83,7 +90,7 @@ class PageHandler extends AbstractHandler
     {
         $templateName = $data->getTemplate()->getKeyname();
 
-        if ($templateName === "internal") {
+        if ($templateName === Template::INTERNAL) {
             $pageAssets = $this->assetRepository->findByInternalTemplate($data->getInternalTemplate());
 
             $this->removeAssets($pageAssets);
@@ -94,10 +101,10 @@ class PageHandler extends AbstractHandler
     }
 
     /**
-     * @param InternalTemplate $internalTemplate
-     * @return void
+     * @param null|InternalTemplate $internalTemplate
+     * @return string
      */
-    public function uploadImage(InternalTemplate $internalTemplate)
+    public function uploadImage(?InternalTemplate $internalTemplate): string
     {
         $templateName = $internalTemplate->getTemplate()->getKeyname();
 
@@ -106,7 +113,7 @@ class PageHandler extends AbstractHandler
         $asset = new Asset();
         $asset->setFileName($file['filename']);
 
-        if ($templateName === "internal") $asset->setInternalTemplate($internalTemplate);
+        if ($templateName === Template::INTERNAL) $asset->setInternalTemplate($internalTemplate);
 
         $this->entityManager->persist($asset);
         $this->entityManager->flush();
@@ -121,13 +128,28 @@ class PageHandler extends AbstractHandler
     private function handleTemplate(Page $page)
     {
         $templateName = $page->getTemplate()->getKeyname();
+        $template = null;
+        
+        if ($templateName == Template::INTERNAL) {
 
-        if ($templateName == 'internal') {
             $template = new InternalTemplate();
             $page->setInternalTemplate($template);
-        } else if ($templateName == 'article') {
+
+        } else if ($templateName == Template::ARTICLE) {
+
             $template = new ArticleTemplate();
             $page->setArticleTemplate($template);
+
+        } else if ($templateName == Template::LIST_ARTICLE) {
+
+            $template = new ListArticlesTemplate();
+            $page->setListArticlesTemplate($template);
+
+        } else if ($templateName == Template::CONTACT) {
+
+            $template = new ContactTemplate();
+            $page->setContactTemplate($template);
+
         }
 
         $template->setTemplate($page->getTemplate());

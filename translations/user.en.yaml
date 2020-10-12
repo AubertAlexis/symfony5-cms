@@ -6,6 +6,14 @@ user:
             username: Username
             email: Email
             submit: Save
+        user:
+            firstName: First Name
+            lastName: Last Name
+            username: Username
+            email: Email
+            roles: Role
+            password: Password
+            submit: Save
         resetPassword:
             password: Current password
             newPassword: 

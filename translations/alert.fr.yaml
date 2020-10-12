@@ -16,6 +16,11 @@ alert:
             edit: Les informations de la page ont bien été modifiées.
             add: La page a bien été ajoutée.
             delete: La page a bien été supprimée.
+    user:
+        success:
+            edit: Les informations de l'utilisateur ont bien été modifiées.
+            add: L'utilisateur a bien été ajoutée.
+            delete: L'utilisateur a bien été supprimée.
     nav:
         success:
             edit: Les informations de la navigation ont bien été modifiées.
@@ -35,6 +40,10 @@ alert:
     homePage:
         success:
             edit: Les informations de la page d'accueil ont bien été modifiées.
+
+    contact:
+        success:
+            send: Un email a bien été envoyé !
 
     module:
         success:

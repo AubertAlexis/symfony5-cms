@@ -32,7 +32,7 @@
 				<div class="card-body">
 					<div class="row">
 						<div class="col-12 text-right">
-							{% if is_granted("ROLE_DEV") %}
+							{% if is_granted(constant("App\\Entity\\User::DEV")) %}
 								<a href="{{ path("admin_module_add") }}" class="btn btn-success btn-icon-split ml-auto btn-sm">
 									<span class="icon text-white-50">
 										<i class="fas fa-plus"></i>
@@ -50,7 +50,7 @@
 									<th>{{ "table.title"|trans }}</th>
 									<th>{{ "table.keyname"|trans }}</th>
 									<th></th>
-									{% if is_granted("ROLE_DEV") %}
+									{% if is_granted(constant("App\\Entity\\User::DEV")) %}
 										<th></th>
 									{% endif %}
 								</tr>
@@ -68,7 +68,7 @@
 												<span class="slider round"></span>
 											</label>
 										</td>
-										{% if is_granted("ROLE_DEV") %}
+										{% if is_granted(constant("App\\Entity\\User::DEV")) %}
 											<td>
 												<a href="{{ path("admin_module_edit", { id: module.id }) }}" class="btn btn-primary rounded with-icon" data-toggle="tooltip" data-placement="top" title="{{ "tooltip.edit"|trans }}">
 													<i class="fas fa-edit"></i>

@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Template;
-use App\Traits\FormTrait;
+use App\Form\FormTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

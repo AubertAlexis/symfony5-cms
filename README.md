@@ -38,3 +38,9 @@ composer prepare-cms
 symfony serve
 yarn encore dev
 ```
+
+---------------
+
+## Documentation technique
+
+ [Voir la documentation ici](https://github.com/AubertAlexis/symfony5-cms/blob/develop/doc/index.md)

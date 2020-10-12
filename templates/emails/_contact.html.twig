@@ -1,0 +1,14 @@
+{% extends "emails/base.html.twig" %}
+
+{% block title_action %}
+    Nouveau message de la part d'un utilisateur
+{% endblock %}
+
+{% block content %}
+    Voici les informations : <br>
+    <br>
+    Prénom: {{ contact.firstName }} <br>
+    Nom: {{ contact.lastName }} <br>
+    Email: {{ contact.email }} <br>
+    Message: {{ contact.message }} <br>
+{% endblock %}

@@ -4,6 +4,7 @@ navigation:
     profile: Profile
     logout: Logout
     page: Pages
+    user: Users
     nav: Navigations
     homePage: Home
     template: Template

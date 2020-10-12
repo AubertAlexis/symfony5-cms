@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Nav;
-use App\Traits\FormTrait;
+use App\Form\FormTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,9 +21,6 @@ class NavType extends AbstractType
         $this->isEnabled = $options['isEnabled'];
 
         $builder
-            ->add('keyname', TextType::class, $this->setOptions('nav.%name%', [
-                "help" => "nav.form.nav.helpKeyname"
-            ]))
             ->add('title', TextType::class, $this->setOptions('nav.%name%'))
             ->add('main', CheckboxType::class, $this->setOptions('nav.%name%', [
                 "required" => false,

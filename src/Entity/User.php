@@ -12,6 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, EquatableInterface
 {
+    const ADMIN = "ROLE_ADMIN";
+    const DEV = "ROLE_DEV";
+    const USER = "ROLE_USER";
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -39,7 +43,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min = 5, max = 255, minMessage = "Votre nom d'utilisateur doit faire au minimum {{ limit }} caractères", maxMessage = "Votre nom d'utilisateur doit faire au maximum {{ limit }} caractères")
+     * @Assert\Length(min = 3, max = 255, minMessage = "Votre nom d'utilisateur doit faire au minimum {{ limit }} caractères", maxMessage = "Votre nom d'utilisateur doit faire au maximum {{ limit }} caractères")
      */
     private $username;
 
@@ -80,7 +84,8 @@ class User implements UserInterface, EquatableInterface
 
     public function getRoleTitle()
     {
-        if(in_array("ROLE_ADMIN", $this->roles)) return "Administrateur";
+        if (in_array(self::ADMIN, $this->roles)) return "Administrateur";
+        else if (in_array(self::DEV, $this->roles)) return "Développeur";
         else return "Utilisateur";
     }
 
@@ -96,6 +101,7 @@ class User implements UserInterface, EquatableInterface
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->locale = "fr";
     }
 
     public function getId() : ? int
@@ -103,7 +109,7 @@ class User implements UserInterface, EquatableInterface
         return $this->id;
     }
 
-    public function getEmail() : string
+    public function getEmail() : ?string
     {
         return $this->email;
     }
@@ -114,7 +120,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function getUsername() : string
+    public function getUsername() : ?string
     {
         return $this->username;
     }
@@ -125,7 +131,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function getRoles() : array
+    public function getRoles() : ?array
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
@@ -140,7 +146,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     
-    public function getPassword() : string
+    public function getPassword() : ?string
     {
         return (string)$this->password;
     }
@@ -162,7 +168,7 @@ class User implements UserInterface, EquatableInterface
     public function eraseCredentials()
     {}
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -174,7 +180,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -196,7 +202,7 @@ class User implements UserInterface, EquatableInterface
         $this->resetToken = $resetToken;
     }
 
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->locale;
     }

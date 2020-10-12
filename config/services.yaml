@@ -7,6 +7,8 @@ parameters:
     locale: fr
     uploads_directory: '%kernel.project_dir%/public/uploads'
     uploads_name_directory: '/uploads'
+    
+    app.email: '%env(resolve:EMAIL)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,3 +27,7 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    App\Subscribers\ImageCacheSubscriber:
+        tags:
+        -   { name: doctrine.event_subscriber }

@@ -9,7 +9,6 @@ use App\Entity\Template;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
@@ -33,7 +32,7 @@ class AppFixtures extends Fixture
             ->setLastName("Istrateur")
             ->setEmail("admin@admin.fr")
             ->setUsername("admin")
-            ->setRoles(["ROLE_ADMIN"])
+            ->setRoles([User::ADMIN])
             ->setPassword($this->encoder->encodePassword($admin, "admin"))
             ->setLocale("fr");
 
@@ -43,7 +42,7 @@ class AppFixtures extends Fixture
             ->setLastName("Loper")
             ->setEmail("dev@dev.fr")
             ->setUsername("dev")
-            ->setRoles(["ROLE_DEV"])
+            ->setRoles([User::DEV])
             ->setPassword($this->encoder->encodePassword($dev, "dev"))
             ->setLocale("fr");
 
@@ -56,6 +55,16 @@ class AppFixtures extends Fixture
 
         $articleTemplate->setTitle("Page article")
             ->setKeyname("article");
+
+        $listArticleTemplate = new Template();
+
+        $listArticleTemplate->setTitle("Page liste des d'articles")
+            ->setKeyname("listArticles");
+
+        $contactTemplate = new Template();
+
+        $contactTemplate->setTitle("Page contact")
+            ->setKeyname("contact");
 
         $seoModule = new Module();
 
@@ -73,6 +82,7 @@ class AppFixtures extends Fixture
         $manager->persist($dev);
         $manager->persist($internalTemplate);
         $manager->persist($articleTemplate);
+        $manager->persist($contactTemplate);
         $manager->persist($homePage);
         $manager->persist($seo);
         $manager->persist($seoModule);

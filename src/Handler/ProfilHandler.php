@@ -2,7 +2,7 @@
 
 namespace App\Handler;
 
-use App\Form\UserType;
+use App\Form\ProfilType;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProfilHandler extends AbstractHandler
@@ -22,7 +22,7 @@ class ProfilHandler extends AbstractHandler
      */
     function getFormType(): string
     {
-        return UserType::class;
+        return ProfilType::class;
     }
 
     /**

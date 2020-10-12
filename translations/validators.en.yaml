@@ -2,6 +2,8 @@ validators:
     notNull: This field cannot be empty.
     unique: The {{ value }} value must be unique.
     positive: The value should be positive.
+    maxSize: The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.
+    mimeTypes: The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.
     length:
         min: The value {{ value }} must be at least {{ limit }} characters long.
         max: The value {{ value }} cannot be longer than {{ limit }} characters.

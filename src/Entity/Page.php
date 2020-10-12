@@ -68,28 +68,43 @@ class Page
 
     /**
      * @ORM\OneToMany(targetEntity=NavLink::class, mappedBy="page")
+     * @Assert\Valid
      */
     private $navLinks;
 
     /**
      * @ORM\ManyToOne(targetEntity=Template::class, inversedBy="pages")
+     * @Assert\Valid
      */
     private $template;
 
     /**
      * @ORM\OneToOne(targetEntity=InternalTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $internalTemplate;
 
     /**
      * @ORM\OneToOne(targetEntity=ArticleTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     * @Assert\Valid
      */
     private $articleTemplate;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ListArticlesTemplate::class, inversedBy="page", cascade={"persist", "remove"})
+     * @Assert\Valid
+     */
+    private $listArticlesTemplate;
 
     /**
      * @ORM\OneToOne(targetEntity=Seo::class, inversedBy="page", cascade={"persist", "remove"})
      */
     private $seo;
+
+    /**
+     * @ORM\OneToOne(targetEntity=ContactTemplate::class, mappedBy="page", cascade={"persist", "remove"})
+     */
+    private $contactTemplate;
 
     /**
      * @ORM\PrePersist
@@ -227,6 +242,18 @@ class Page
         return $this;
     }
 
+    public function getListArticlesTemplate(): ?ListArticlesTemplate
+    {
+        return $this->listArticlesTemplate;
+    }
+
+    public function setListArticlesTemplate(?ListArticlesTemplate $listArticlesTemplate): self
+    {
+        $this->listArticlesTemplate = $listArticlesTemplate;
+
+        return $this;
+    }
+
     public function getSeo(): ?Seo
     {
         return $this->seo;
@@ -235,6 +262,24 @@ class Page
     public function setSeo(?Seo $seo): self
     {
         $this->seo = $seo;
+
+        return $this;
+    }
+
+    public function getContactTemplate(): ?ContactTemplate
+    {
+        return $this->contactTemplate;
+    }
+
+    public function setContactTemplate(?ContactTemplate $contactTemplate): self
+    {
+        $this->contactTemplate = $contactTemplate;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPage = null === $contactTemplate ? null : $this;
+        if ($contactTemplate->getPage() !== $newPage) {
+            $contactTemplate->setPage($newPage);
+        }
 
         return $this;
     }

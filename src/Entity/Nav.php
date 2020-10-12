@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\HasLifecycleCallbacks()
@@ -87,8 +88,8 @@ class Nav
     {
         $this->createdAt = new \DateTime();
         $this->navLinks = new ArrayCollection();
+        $this->keyname = Uuid::v4();
     }
-
 
     public function getId(): ?int
     {
@@ -98,13 +99,6 @@ class Nav
     public function getKeyname(): ?string
     {
         return $this->keyname;
-    }
-
-    public function setKeyname(?string $keyname): self
-    {
-        $this->keyname = $keyname;
-
-        return $this;
     }
 
     public function getTitle(): ?string
